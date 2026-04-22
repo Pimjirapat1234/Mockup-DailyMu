@@ -1252,6 +1252,13 @@
       line-height: 1.1;
     }
 
+    /* ===== iPhone Mockup Scroll ===== */
+    .mockup-scroll { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.15) transparent; }
+    .mockup-scroll::-webkit-scrollbar { width: 3px; }
+    .mockup-scroll::-webkit-scrollbar-track { background: transparent; }
+    .mockup-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
+    .mockup-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
+
     /* ===== Screenshot Grid (Week 3) ===== */
     .screenshot-grid {
       display: grid;
@@ -4870,32 +4877,100 @@
       <span class="section-label">Agenda 3 &middot; Outcome</span>
     </div>
 
-    <div class="slide-content centered column-centered">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--spacing-6);">
-        <div class="section-tag">
-          <div class="dot" style="background:var(--support-sky-fg-low);"></div>
-          <span style="color:var(--support-sky-fg-low);font-size:clamp(10px,0.9cqw,14px);font-weight:600;text-transform:uppercase;letter-spacing:1px;">Agenda 3</span>
+    <div class="slide-content" style="flex-direction:row;gap:var(--spacing-6);padding:0 4%;align-items:stretch;">
+      <!-- Left: Title + Instructions -->
+      <div style="flex:0 0 30%;display:flex;flex-direction:column;justify-content:center;gap:var(--spacing-5);margin-top:-50px;">
+        <div>
+          <div class="section-tag">
+            <div class="dot" style="background:var(--support-sky-fg-low);"></div>
+            <span style="color:var(--support-sky-fg-low);font-size:clamp(10px,0.9cqw,14px);font-weight:600;text-transform:uppercase;letter-spacing:1px;">Outcome</span>
+          </div>
+          <h2 class="title-lg" style="margin-bottom:0;">Outcome</h2>
+          <p class="body-md" style="color:var(--gray-fg-mid-on-white);">ศาสตร์ปาจื้อ &mdash; กดเล่นได้จริง</p>
         </div>
-        <h2 class="title-lg">Outcome &mdash; Week 4</h2>
-        <p class="body-md" style="max-width:500px;text-align:center;">ผลลัพธ์หน้าจอที่ทำ &mdash; รอเพิ่มรูปภาพ</p>
 
-        <!-- Placeholder grid -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-4);width:90%;max-width:800px;">
-          <div style="aspect-ratio:9/16;background:var(--gray-bg-lightgray);border-radius:var(--radius-xl);border:2px dashed var(--gray-bg-midgray);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-2);">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gray-fg-low-on-white)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-            <span style="font-size:clamp(9px,0.8cqw,12px);color:var(--gray-fg-low-on-white);">Screenshot 1</span>
+        <!-- Screen indicator -->
+        <div id="proto-indicator" style="display:flex;flex-direction:column;gap:var(--spacing-3);">
+          <div id="proto-label-0" onclick="event.stopPropagation();protoNav(0);" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:clamp(12px,1.2cqw,20px) clamp(16px,1.4cqw,24px);background:var(--primary-bg-lowest);border-radius:var(--radius-lg);border-left:3px solid var(--primary-fg-high);transition:all 0.3s;">
+            <span style="font-size:clamp(18px,1.7cqw,26px);font-weight:700;color:var(--primary-fg-high);">1</span>
+            <span style="font-size:clamp(17px,1.6cqw,24px);font-weight:600;color:var(--gray-fg-high);">Today &mdash; หน้าหลัก</span>
           </div>
-          <div style="aspect-ratio:9/16;background:var(--gray-bg-lightgray);border-radius:var(--radius-xl);border:2px dashed var(--gray-bg-midgray);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-2);">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gray-fg-low-on-white)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-            <span style="font-size:clamp(9px,0.8cqw,12px);color:var(--gray-fg-low-on-white);">Screenshot 2</span>
+          <div id="proto-label-1" onclick="event.stopPropagation();protoNav(1);" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:clamp(12px,1.2cqw,20px) clamp(16px,1.4cqw,24px);background:var(--gray-bg-lightgray);border-radius:var(--radius-lg);border-left:3px solid transparent;opacity:0.5;transition:all 0.3s;">
+            <span style="font-size:clamp(18px,1.7cqw,26px);font-weight:700;color:var(--gray-fg-mid-on-white);">2</span>
+            <span style="font-size:clamp(17px,1.6cqw,24px);font-weight:600;color:var(--gray-fg-mid-on-white);">Daily Calendar &mdash; ดูเพิ่มเติม</span>
           </div>
-          <div style="aspect-ratio:9/16;background:var(--gray-bg-lightgray);border-radius:var(--radius-xl);border:2px dashed var(--gray-bg-midgray);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-2);">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gray-fg-low-on-white)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-            <span style="font-size:clamp(9px,0.8cqw,12px);color:var(--gray-fg-low-on-white);">Screenshot 3</span>
+          <div id="proto-label-2" onclick="event.stopPropagation();protoNav(2);" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:clamp(12px,1.2cqw,20px) clamp(16px,1.4cqw,24px);background:var(--gray-bg-lightgray);border-radius:var(--radius-lg);border-left:3px solid transparent;opacity:0.5;transition:all 0.3s;">
+            <span style="font-size:clamp(18px,1.7cqw,26px);font-weight:700;color:var(--gray-fg-mid-on-white);">3</span>
+            <span style="font-size:clamp(17px,1.6cqw,24px);font-weight:600;color:var(--gray-fg-mid-on-white);">Share Story &mdash; ธาตุประจำตัว</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Single iPhone Mockup -->
+      <div style="flex:1;display:flex;justify-content:center;align-items:center;" onclick="event.stopPropagation();">
+        <div style="width:clamp(270px,28cqw,450px);">
+          <div style="background:#fff;border-radius:clamp(28px,3cqw,44px);border:3px solid #e0e0e0;padding:clamp(8px,0.7cqw,12px);box-shadow:0 12px 40px rgba(0,0,0,0.12),inset 0 0 0 1px rgba(0,0,0,0.04);position:relative;overflow:hidden;">
+            <!-- Notch -->
+            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:28%;height:clamp(16px,1.6cqw,22px);background:#e0e0e0;border-radius:0 0 14px 14px;z-index:3;"></div>
+
+            <!-- Screen container -->
+            <div id="proto-screen" style="border-radius:clamp(22px,2.6cqw,38px);overflow:hidden;overflow-y:auto;aspect-ratio:390/844;background:#fafafa;-webkit-overflow-scrolling:touch;position:relative;" class="mockup-scroll">
+
+              <!-- Screen 0: Today -->
+              <div id="proto-page-0" style="position:relative;">
+                <img src="Screen Bazi/↳ Homepage/Today.png" alt="Today" style="width:100%;display:block;">
+              </div>
+
+              <!-- Screen 1: DailyCalendar -->
+              <div id="proto-page-1" style="display:none;position:relative;">
+                <img src="Screen Bazi/↳ Homepage/DailyCalendar.png" alt="DailyCalendar" style="width:100%;display:block;">
+              </div>
+
+              <!-- Screen 2: Share Story -->
+              <div id="proto-page-2" style="display:none;position:relative;">
+                <img src="Screen Bazi/↳ Homepage/Share Story.png" alt="Share Story" style="width:100%;display:block;">
+              </div>
+            </div>
+
+            <!-- Home indicator -->
+            <div style="width:30%;height:4px;background:#c0c0c0;border-radius:4px;margin:8px auto 4px;"></div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Prototype Navigation Script -->
+    <script>
+    (function(){
+      window.protoNav = function(idx) {
+        var pages = [document.getElementById('proto-page-0'), document.getElementById('proto-page-1'), document.getElementById('proto-page-2')];
+        var labels = [document.getElementById('proto-label-0'), document.getElementById('proto-label-1'), document.getElementById('proto-label-2')];
+        var screen = document.getElementById('proto-screen');
+        if (!pages[0]) return;
+
+        for (var i = 0; i < 3; i++) {
+          pages[i].style.display = i === idx ? 'block' : 'none';
+          if (labels[i]) {
+            if (i === idx) {
+              labels[i].style.background = 'var(--primary-bg-lowest)';
+              labels[i].style.borderLeftColor = 'var(--primary-fg-high)';
+              labels[i].style.opacity = '1';
+              labels[i].children[0].style.color = 'var(--primary-fg-high)';
+              labels[i].children[1].style.color = 'var(--gray-fg-high)';
+            } else {
+              labels[i].style.background = 'var(--gray-bg-lightgray)';
+              labels[i].style.borderLeftColor = 'transparent';
+              labels[i].style.opacity = '0.5';
+              labels[i].children[0].style.color = 'var(--gray-fg-mid-on-white)';
+              labels[i].children[1].style.color = 'var(--gray-fg-mid-on-white)';
+            }
+          }
+        }
+        screen.scrollTop = 0;
+      };
+    })();
+    </script>
   </div>
 
   <!-- ============================== -->
