@@ -1427,6 +1427,8 @@
     .index-week-btn--secondary:hover { border-color: var(--secondary-fg-high); }
     .index-week-btn--sky { border-color: var(--support-sky-fg-low); }
     .index-week-btn--sky:hover { border-color: var(--info-bg-high); }
+    .index-week-btn--green { border-color: var(--support-green-fg-low); }
+    .index-week-btn--green:hover { border-color: var(--success-fg-high); }
     .index-week-btn .week-num { font-size: clamp(28px,3cqw,42px); font-weight: 800; }
     .index-week-btn .week-label { font-size: clamp(13px,1.2cqw,18px); font-weight: 700; color: var(--gray-fg-high); }
     .index-week-btn .week-date { font-size: clamp(10px,0.85cqw,13px); color: var(--gray-fg-mid-on-white); }
@@ -1611,7 +1613,7 @@
       <h1 class="title-xl"><span class="gradient-text">DailyMu Calendar</span></h1>
       <p class="body-lg" style="color:var(--gray-fg-mid-on-white);max-width:460px;">Muniverse &mdash; Weekly Update Presentations</p>
 
-      <div class="grid-3" style="width:100%;max-width:680px;margin-top:var(--spacing-4);">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-5);width:100%;max-width:860px;margin-top:var(--spacing-4);">
         <!-- Week 1 -->
         <button onclick="goToSlide(1)" class="index-week-btn index-week-btn--primary">
           <span class="week-num" style="color:var(--primary-fg-high);">W1</span>
@@ -1634,6 +1636,14 @@
           <span class="week-label">Week 3</span>
           <span class="week-date">27 Feb 2026</span>
           <span class="tag tag-sky mt-1">View Slides</span>
+        </button>
+
+        <!-- Week 4 (Phase 1.5) -->
+        <button onclick="goToSlide(55)" class="index-week-btn index-week-btn--green">
+          <span class="week-num" style="color:var(--support-green-fg-low);">W4</span>
+          <span class="week-label">Week 4</span>
+          <span class="week-date">22 Apr 2026</span>
+          <span class="tag tag-green mt-1">View Slides</span>
         </button>
       </div>
     </div>
@@ -4526,6 +4536,435 @@
     </div>
   </div>
 
+  <!-- ============================================================ -->
+  <!-- PHASE 1.5 — ปาจื้อ (Ba Zi) Integration                     -->
+  <!-- ============================================================ -->
+
+  <!-- ============================== -->
+  <!-- SLIDE 47: COVER — PHASE 1.5   -->
+  <!-- ============================== -->
+  <div class="slide bg-gradient-pastel" data-slide="47">
+    <div class="deco-circle" style="width:420px;height:420px;background:var(--support-green-fg-low);opacity:0.08;top:-120px;right:-100px;"></div>
+    <div class="deco-circle" style="width:300px;height:300px;background:var(--secondary-border-mid);bottom:-80px;left:-80px;"></div>
+    <div class="deco-circle" style="width:180px;height:180px;background:var(--primary-border-mid);top:40%;left:-40px;"></div>
+    <div class="deco-dots" style="top:15%;left:5%;"></div>
+    <div class="deco-dots" style="bottom:18%;right:6%;"></div>
+
+    <!-- Decorative floating assets -->
+    <img src="Images/DailyMu_Character_Welcome.png" alt="" style="position:absolute;top:5%;right:5%;height:clamp(80px,14cqh,160px);opacity:0.15;pointer-events:none;animation:floatUpSlow 7s ease-in-out infinite;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.06));">
+    <img src="Images/DailyMu_Character_One-Time.png" alt="" style="position:absolute;bottom:8%;left:3%;height:clamp(60px,10cqh,120px);opacity:0.12;pointer-events:none;animation:floatUpSlow 6s ease-in-out infinite 1s;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.06));">
+    <img src="Images/Week02/Asset/DailyMu_Character_FortuneSticks.png" alt="" style="position:absolute;bottom:12%;left:8%;height:clamp(50px,8cqh,100px);opacity:0.12;pointer-events:none;animation:floatUp 5s ease-in-out infinite 0.5s;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.06));">
+
+    <div class="cover-content">
+      <svg class="cover-logo" aria-hidden="true"><use href="#mu-logo"/></svg>
+
+      <div class="cover-date">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        22 April 2026
+      </div>
+
+      <h1 class="title-xl">
+        <span class="gradient-text">DailyMu Calendar</span>
+      </h1>
+      <p class="body-lg" style="max-width:500px;">Weekly Update &mdash; <strong>Week 4 &middot; ปาจื้อ</strong></p>
+
+      <div class="flex-center-gap-2 mt-2">
+        <span class="tag tag-primary">Muniverse Project</span>
+        <span class="tag tag-green">Week 4</span>
+      </div>
+
+      <img class="cover-character" src="Images/Week02/Asset/DailyMu_Character_07.png" alt="Balance Character" style="width:clamp(160px,34cqw,580px);">
+    </div>
+
+    <div class="present-hint">
+      กดปุ่ม <kbd>F</kbd> เพื่อเข้าโหมด Present
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SLIDE 48: AGENDA               -->
+  <!-- ============================== -->
+  <div class="slide bg-gradient-violet" data-slide="48">
+    <div class="slide-header">
+      <svg class="logo-icon" aria-hidden="true"><use href="#mu-logo"/></svg>
+      <span class="section-label">DailyMu Calendar &middot; Week 4</span>
+    </div>
+
+    <div class="slide-content two-col">
+      <div class="col-text">
+        <div class="section-tag">
+          <div class="dot" style="background:var(--secondary-fg-high);"></div>
+          <span class="text-secondary">Overview</span>
+        </div>
+        <h2 class="title-lg">Agenda</h2>
+        <p class="body-md">สิ่งที่จะพูดวันนี้</p>
+
+        <div class="agenda-list">
+          <div class="agenda-card">
+            <div class="agenda-num">1</div>
+            <div class="agenda-text">
+              <div class="agenda-title">Recap : Week 3</div>
+              <div class="agenda-desc">สรุปสิ่งที่ทำ &mdash; ไพ่ทาโร่, เซียมซี, ทำนายฝัน</div>
+            </div>
+          </div>
+          <div class="agenda-card">
+            <div class="agenda-num">2</div>
+            <div class="agenda-text">
+              <div class="agenda-title">วีคนี้ทำอะไร</div>
+              <div class="agenda-desc">เปลี่ยนศาสตร์, สรุปดวงชะตา, ปาจื่อของฉัน, Ten Gods, ปฎิทินปาจื่อ, เปลี่ยนวันเกิด</div>
+            </div>
+          </div>
+          <div class="agenda-card">
+            <div class="agenda-num">3</div>
+            <div class="agenda-text">
+              <div class="agenda-title">Outcome</div>
+              <div class="agenda-desc">ผลลัพธ์ที่ทำ</div>
+            </div>
+          </div>
+          <div class="agenda-card">
+            <div class="agenda-num">4</div>
+            <div class="agenda-text">
+              <div class="agenda-title">Planning: Subscription</div>
+              <div class="agenda-desc">Next Phase &mdash; Subscription User Flow &amp; Wireframe</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-visual">
+        <img src="Images/DailyMu_Character_Search.png" alt="Search Character" style="max-height:50cqh;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.08));">
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SLIDE 49: RECAP ปาจื้อ          -->
+  <!-- ============================== -->
+  <div class="slide bg-gradient-warm" data-slide="49">
+    <div class="deco-circle" style="width:280px;height:280px;background:var(--primary-border-mid);top:-80px;right:-60px;"></div>
+    <div class="deco-circle" style="width:200px;height:200px;background:var(--support-green-fg-low);opacity:0.06;bottom:-50px;left:-40px;"></div>
+
+    <div class="slide-header">
+      <svg class="logo-icon" aria-hidden="true"><use href="#mu-logo"/></svg>
+      <span class="section-label">Agenda 1 &middot; Recap Week 3</span>
+    </div>
+
+    <div class="slide-content two-col">
+      <div class="col-text">
+        <div class="section-tag">
+          <div class="dot" style="background:var(--primary-fg-high);"></div>
+          <span class="text-primary">Agenda 1</span>
+        </div>
+        <h2 class="title-lg">Recap : Week 3</h2>
+        <p class="body-md">สรุปสิ่งที่ทำใน Week 3 &mdash; Micro Service Dev</p>
+
+        <ul class="bullet-list">
+          <li><strong>ไพ่ทาโร่</strong> &mdash; Card UI, Result, Share &middot; 90% <span style="color:var(--gray-fg-low-on-white);">(PIM)</span></li>
+          <li><strong>เซียมซี</strong> &mdash; Shake mechanic, Result Card &middot; 70% <span style="color:var(--gray-fg-low-on-white);">(TAN)</span></li>
+          <li><strong>ทำนายฝัน</strong> &mdash; Dream Input, Analysis, Dream Card &middot; 85% <span style="color:var(--gray-fg-low-on-white);">(JED)</span></li>
+          <li><strong>Overall Progress</strong> &mdash; Done 9 &middot; WIP 3 &middot; รวม 82%</li>
+        </ul>
+      </div>
+
+      <div class="col-visual" style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:var(--spacing-2);">
+        <img src="Images/Week02/Asset/Container.png" alt="ปาจื้อ Screen 1" style="max-height:38cqh;border-radius:var(--radius-lg);filter:drop-shadow(0 6px 16px rgba(0,0,0,0.08));">
+        <img src="Images/Week02/Asset/Container-1.png" alt="ปาจื้อ Screen 2" style="max-height:38cqh;border-radius:var(--radius-lg);filter:drop-shadow(0 6px 16px rgba(0,0,0,0.08));">
+        <img src="Images/Week02/Asset/Container-2.png" alt="ปาจื้อ Screen 3" style="max-height:38cqh;border-radius:var(--radius-lg);filter:drop-shadow(0 6px 16px rgba(0,0,0,0.08));">
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SLIDE 50: วีคนี้ทำอะไร         -->
+  <!-- ============================== -->
+  <div class="slide" style="background:linear-gradient(160deg, #F8F8F9 0%, #F1F2FF 40%, #FDEFF5 70%, #E6F6FC 100%);" data-slide="50">
+    <div class="slide-header">
+      <svg class="logo-icon" aria-hidden="true"><use href="#mu-logo"/></svg>
+      <span class="section-label">Agenda 2 &middot; วีคนี้ทำอะไร</span>
+    </div>
+
+    <div class="slide-content column-gap-5" style="padding:0 5%;">
+      <!-- Title row -->
+      <div>
+        <div class="section-tag">
+          <div class="dot" style="background:var(--secondary-fg-high);"></div>
+          <span class="text-secondary">Agenda 2</span>
+        </div>
+        <h2 class="title-lg">วีคนี้ทำอะไร</h2>
+        <p class="body-md" style="color:var(--gray-fg-mid-on-white);">Week 4 &mdash; เพิ่มศาสตร์ปาจื้อเข้ามาในแอป</p>
+      </div>
+
+      <!-- 3 Column Cards -->
+      <div class="grid-3" style="flex:1;align-content:stretch;gap:var(--spacing-5);">
+
+        <!-- Column 1: Home -->
+        <div style="background:var(--gray-bg-white);border-radius:var(--radius-xl);padding:clamp(24px,2.5cqw,36px);box-shadow:0 2px 12px rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:clamp(14px,1.4cqw,22px);">
+          <span style="font-size:clamp(20px,2cqw,28px);font-weight:800;color:var(--gray-fg-high);">Home</span>
+
+          <!-- เปลี่ยนศาสตร์ -->
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--support-orange-bg-lowest);border-radius:var(--radius-lg);padding:clamp(12px,1.2cqw,18px) clamp(16px,1.4cqw,24px);">
+            <span style="font-size:clamp(14px,1.3cqw,19px);font-weight:600;color:var(--gray-fg-high);">เปลี่ยนศาสตร์</span>
+            <span style="font-size:clamp(11px,0.9cqw,15px);font-weight:700;color:var(--support-green-fg-low);background:var(--support-green-bg-lowest);padding:4px 14px;border-radius:var(--radius-full);">JED</span>
+          </div>
+
+          <!-- สรุปดวงชะตา -->
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--support-orange-bg-lowest);border-radius:var(--radius-lg);padding:clamp(12px,1.2cqw,18px) clamp(16px,1.4cqw,24px);">
+            <span style="font-size:clamp(14px,1.3cqw,19px);font-weight:600;color:var(--gray-fg-high);">สรุปดวงชะตา</span>
+            <span style="font-size:clamp(11px,0.9cqw,15px);font-weight:700;color:var(--support-orange-fg-low);background:var(--support-orange-bg-lowest);padding:4px 14px;border-radius:var(--radius-full);border:1px solid var(--support-orange-fg-low);">PIM</span>
+          </div>
+
+          <!-- สีมงคล · เลขมงคล · ทิศมงคล -->
+          <div style="padding:clamp(8px,0.6cqw,12px) clamp(16px,1.4cqw,24px);display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; สีมงคล (DN)</span>
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; เลขมงคล (DN)</span>
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; ทิศมงคล (DN)</span>
+          </div>
+        </div>
+
+        <!-- Column 2: ปาจื้อของฉัน -->
+        <div style="background:var(--gray-bg-white);border-radius:var(--radius-xl);padding:clamp(24px,2.5cqw,36px);box-shadow:0 2px 12px rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:clamp(14px,1.4cqw,22px);">
+          <span style="font-size:clamp(20px,2cqw,28px);font-weight:800;color:var(--gray-fg-high);">ปาจื้อของฉัน</span>
+
+          <!-- ปาจื้อของฉัน -->
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--support-orange-bg-lowest);border-radius:var(--radius-lg);padding:clamp(12px,1.2cqw,18px) clamp(16px,1.4cqw,24px);">
+            <span style="font-size:clamp(14px,1.3cqw,19px);font-weight:600;color:var(--gray-fg-high);">ปาจื้อของฉัน</span>
+            <span style="font-size:clamp(11px,0.9cqw,15px);font-weight:700;color:var(--support-orange-fg-low);background:var(--support-orange-bg-lowest);padding:4px 14px;border-radius:var(--radius-full);border:1px solid var(--support-orange-fg-low);">PIM</span>
+          </div>
+
+          <!-- Element Balance -->
+          <div style="background:linear-gradient(135deg,#F1F2FF 0%,#E6F6FC 100%);border-radius:var(--radius-lg);padding:clamp(12px,1.2cqw,18px) clamp(16px,1.4cqw,24px);">
+            <span style="font-size:clamp(14px,1.3cqw,19px);font-weight:600;color:var(--secondary-fg-high);">Element Balance (แมงมุม)</span>
+          </div>
+
+          <!-- ธาตุ sub-items -->
+          <div style="padding:clamp(6px,0.5cqw,10px) clamp(16px,1.4cqw,24px);display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; ธาตุหลัก (ST)</span>
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; ธาตุเสริม (ST)</span>
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; ธาตุมงคล (ST)</span>
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; ธาตุควรเลี่ยง (ST)</span>
+          </div>
+        </div>
+
+        <!-- Column 3: Features -->
+        <div style="background:var(--gray-bg-white);border-radius:var(--radius-xl);padding:clamp(24px,2.5cqw,36px);box-shadow:0 2px 12px rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:clamp(14px,1.4cqw,22px);">
+          <span style="font-size:clamp(20px,2cqw,28px);font-weight:800;color:var(--gray-fg-high);">Features</span>
+
+          <!-- Ten Gods -->
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--support-orange-bg-lowest);border-radius:var(--radius-lg);padding:clamp(12px,1.2cqw,18px) clamp(16px,1.4cqw,24px);">
+            <span style="font-size:clamp(14px,1.3cqw,19px);font-weight:600;color:var(--gray-fg-high);">Ten Gods</span>
+            <span style="font-size:clamp(11px,0.9cqw,15px);font-weight:700;color:var(--support-orange-fg-low);background:var(--support-orange-bg-lowest);padding:4px 14px;border-radius:var(--radius-full);border:1px solid var(--support-orange-fg-low);">PIM</span>
+          </div>
+          <div style="padding:clamp(6px,0.5cqw,10px) clamp(16px,1.4cqw,24px);display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; กดดูรายละเอียดได้</span>
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; Ten Gods Summary</span>
+          </div>
+
+          <!-- ปฏิทินปาจื้อ -->
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--support-orange-bg-lowest);border-radius:var(--radius-lg);padding:clamp(12px,1.2cqw,18px) clamp(16px,1.4cqw,24px);">
+            <span style="font-size:clamp(14px,1.3cqw,19px);font-weight:600;color:var(--gray-fg-high);">ปฏิทินปาจื้อ</span>
+            <span style="font-size:clamp(11px,0.9cqw,15px);font-weight:700;color:var(--support-green-fg-low);background:var(--support-green-bg-lowest);padding:4px 14px;border-radius:var(--radius-full);">JED</span>
+          </div>
+          <div style="padding:clamp(6px,0.5cqw,10px) clamp(16px,1.4cqw,24px);">
+            <span style="font-size:clamp(13px,1.2cqw,18px);color:var(--gray-fg-mid-on-white);">&bull; Daily Summary</span>
+          </div>
+
+          <!-- เปลี่ยนวันเกิด -->
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--support-orange-bg-lowest);border-radius:var(--radius-lg);padding:clamp(12px,1.2cqw,18px) clamp(16px,1.4cqw,24px);">
+            <span style="font-size:clamp(14px,1.3cqw,19px);font-weight:600;color:var(--gray-fg-high);">เปลี่ยนวันเกิด</span>
+            <span style="font-size:clamp(11px,0.9cqw,15px);font-weight:700;color:var(--support-green-fg-low);background:var(--support-green-bg-lowest);padding:4px 14px;border-radius:var(--radius-full);">JED</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SLIDE 51: SPRINT TIMELINE      -->
+  <!-- ============================== -->
+  <div class="slide" style="background:var(--gray-bg-white);" data-slide="50">
+    <div class="slide-header">
+      <svg class="logo-icon" aria-hidden="true"><use href="#mu-logo"/></svg>
+      <span class="section-label">Agenda 2 &middot; Sprint Timeline</span>
+    </div>
+
+    <div class="slide-content column">
+      <!-- Title + Legend -->
+      <div class="flex-between">
+        <div>
+          <div class="section-tag">
+            <div class="dot" style="background:var(--primary-fg-high);"></div>
+            <span class="text-primary">Agenda 2</span>
+          </div>
+          <h2 class="title-md">Sprint Timeline <span class="text-gray" style="font-weight:400;font-size:0.65em;">&mdash; April 2026</span></h2>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend-group">
+          <div class="legend-item">
+            <div class="legend-avatar" style="border-color:var(--support-orange-fg-low);background:var(--support-orange-bg-lowest);">
+              <span style="color:var(--support-orange-fg-low);">P</span>
+            </div>
+            <span class="legend-name">PIM</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-avatar" style="border-color:var(--support-green-fg-low);background:var(--support-green-bg-lowest);">
+              <span style="color:var(--support-green-fg-low);">J</span>
+            </div>
+            <span class="legend-name">JED</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div class="cal-container">
+        <!-- Day Headers -->
+        <div class="cal-header">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+
+        <!-- Week: Apr 14-20 (done) -->
+        <div class="cal-week done-week">
+          <div class="cal-dates">
+            <span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
+          </div>
+          <div class="cal-tasks">
+            <div class="cal-bar bar-holiday" style="grid-column:1/5;grid-row:1;">สงกรานต์</div>
+          </div>
+        </div>
+
+        <!-- Week: Apr 21-27 (current) -->
+        <div class="cal-week current-week">
+          <div class="cal-dates">
+            <span class="today">21</span><span class="today">22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span>
+          </div>
+          <div class="cal-tasks">
+            <div class="cal-bar bar-jed" style="grid-column:1/2;grid-row:1;">เปลี่ยนศาสตร์</div>
+            <div class="cal-bar bar-pim" style="grid-column:1/2;grid-row:2;">สรุปดวงชะตา</div>
+            <div class="cal-bar bar-pim" style="grid-column:1/2;grid-row:3;">ปาจื้อของฉัน</div>
+            <div class="cal-bar bar-jed" style="grid-column:1/2;grid-row:4;">ปฏิทินปาจื้อ</div>
+            <div class="cal-bar bar-pim" style="grid-column:2/3;grid-row:1;">Ten Gods</div>
+            <div class="cal-bar bar-jed" style="grid-column:2/3;grid-row:2;">เปลี่ยนวันเกิด</div>
+            <div class="cal-bar bar-pim" style="grid-column:2/3;grid-row:3;">Element Balance</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SLIDE 51: OUTCOME (PLACEHOLDER)-->
+  <!-- ============================== -->
+  <div class="slide bg-gradient-cool" data-slide="52">
+    <div class="deco-circle" style="width:300px;height:300px;background:var(--support-sky-fg-low);opacity:0.06;top:-80px;left:-60px;"></div>
+    <div class="deco-circle" style="width:220px;height:220px;background:var(--secondary-border-mid);bottom:-50px;right:-40px;"></div>
+    <div class="deco-dots" style="top:12%;right:6%;"></div>
+
+    <!-- Floating assets -->
+    <img src="Images/DailyMu_Character_Welcome.png" alt="" style="position:absolute;bottom:5%;left:3%;height:clamp(60px,9cqh,110px);opacity:0.1;pointer-events:none;animation:floatUpSlow 6s ease-in-out infinite;">
+    <img src="Images/Week02/Asset/DailyMu_Character_FortuneSticks.png" alt="" style="position:absolute;top:8%;right:3%;height:clamp(50px,7cqh,90px);opacity:0.1;pointer-events:none;animation:floatUp 5s ease-in-out infinite 1s;">
+
+    <div class="slide-header">
+      <svg class="logo-icon" aria-hidden="true"><use href="#mu-logo"/></svg>
+      <span class="section-label">Agenda 3 &middot; Outcome</span>
+    </div>
+
+    <div class="slide-content centered column-centered">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--spacing-6);">
+        <div class="section-tag">
+          <div class="dot" style="background:var(--support-sky-fg-low);"></div>
+          <span style="color:var(--support-sky-fg-low);font-size:clamp(10px,0.9cqw,14px);font-weight:600;text-transform:uppercase;letter-spacing:1px;">Agenda 3</span>
+        </div>
+        <h2 class="title-lg">Outcome &mdash; Week 4</h2>
+        <p class="body-md" style="max-width:500px;text-align:center;">ผลลัพธ์หน้าจอที่ทำ &mdash; รอเพิ่มรูปภาพ</p>
+
+        <!-- Placeholder grid -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-4);width:90%;max-width:800px;">
+          <div style="aspect-ratio:9/16;background:var(--gray-bg-lightgray);border-radius:var(--radius-xl);border:2px dashed var(--gray-bg-midgray);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-2);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gray-fg-low-on-white)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            <span style="font-size:clamp(9px,0.8cqw,12px);color:var(--gray-fg-low-on-white);">Screenshot 1</span>
+          </div>
+          <div style="aspect-ratio:9/16;background:var(--gray-bg-lightgray);border-radius:var(--radius-xl);border:2px dashed var(--gray-bg-midgray);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-2);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gray-fg-low-on-white)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            <span style="font-size:clamp(9px,0.8cqw,12px);color:var(--gray-fg-low-on-white);">Screenshot 2</span>
+          </div>
+          <div style="aspect-ratio:9/16;background:var(--gray-bg-lightgray);border-radius:var(--radius-xl);border:2px dashed var(--gray-bg-midgray);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-2);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gray-fg-low-on-white)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            <span style="font-size:clamp(9px,0.8cqw,12px);color:var(--gray-fg-low-on-white);">Screenshot 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SLIDE 53: PLANNING SUBSCRIPTION-->
+  <!-- ============================== -->
+  <div class="slide bg-gradient-pastel" data-slide="53">
+    <div class="deco-circle" style="width:350px;height:350px;background:var(--secondary-border-mid);top:-100px;left:-80px;"></div>
+    <div class="deco-circle" style="width:250px;height:250px;background:var(--primary-border-mid);bottom:-60px;right:-60px;"></div>
+    <div class="deco-dots" style="top:20%;right:10%;"></div>
+
+    <div class="slide-header">
+      <svg class="logo-icon" aria-hidden="true"><use href="#mu-logo"/></svg>
+      <span class="section-label">Agenda 4 &middot; Planning</span>
+    </div>
+
+    <div class="slide-content centered column-centered">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--spacing-4);">
+        <div class="section-tag">
+          <div class="dot" style="background:var(--support-green-fg-low);"></div>
+          <span style="color:var(--support-green-fg-low);font-size:clamp(10px,0.9cqw,14px);font-weight:600;text-transform:uppercase;letter-spacing:1px;">Agenda 4</span>
+        </div>
+        <h2 class="title-lg">Next Phase: Subscription</h2>
+        <p class="body-md">Subscription Plan Preview &mdash; กดเล่นได้จริง</p>
+      </div>
+
+      <!-- Website iframe embed -->
+      <div style="width:95%;max-width:1350px;border-radius:var(--radius-2xl);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.08);background:var(--gray-bg-white);position:relative;">
+        <iframe style="border:none;width:100%;aspect-ratio:16/8.2;display:block;" src="https://pimjirapat1234.github.io/DailiMuPlan/" loading="lazy" allow="fullscreen"></iframe>
+        <!-- Open in new tab button -->
+        <a href="https://pimjirapat1234.github.io/DailiMuPlan/" target="_blank" rel="noopener" style="position:absolute;top:12px;right:12px;width:36px;height:36px;background:rgba(255,255,255,0.9);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;z-index:2;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.15);transition:background 0.2s,transform 0.2s;" onmouseover="this.style.background='#fff';this.style.transform='scale(1.1)';" onmouseout="this.style.background='rgba(255,255,255,0.9)';this.style.transform='';">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-fg-high)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SLIDE 54: THANK YOU (PHASE 1.5)-->
+  <!-- ============================== -->
+  <div class="slide finale-bg dark-slide" data-slide="54">
+    <div class="deco-circle" style="width:400px;height:400px;background:var(--support-green-fg-low);top:-150px;right:-100px;opacity:0.12;animation:floatUpSlow 7s ease-in-out infinite;"></div>
+    <div class="deco-circle" style="width:300px;height:300px;background:var(--secondary-border-mid);bottom:-100px;left:-80px;opacity:0.1;animation:floatUpSlow 6s ease-in-out infinite 1s;"></div>
+    <div class="deco-circle" style="width:200px;height:200px;background:var(--primary-border-mid);top:30%;left:10%;opacity:0.08;animation:floatUp 5s ease-in-out infinite 0.5s;"></div>
+
+    <!-- Floating character silhouettes -->
+    <img src="Images/Week02/Asset/DailyMu_Character_07.png" alt="" style="position:absolute;bottom:-2%;left:3%;height:clamp(60px,10cqh,120px);opacity:0.12;pointer-events:none;animation:floatUpSlow 6s ease-in-out infinite 1s;">
+    <img src="Images/DailyMu_Character_Welcome.png" alt="" style="position:absolute;bottom:-1%;right:3%;height:clamp(60px,10cqh,120px);opacity:0.12;pointer-events:none;animation:floatUpSlow 5.5s ease-in-out infinite 0.8s;">
+
+    <div class="finale-sparkle" style="top:15%;left:12%;animation:sparkle 3s ease-in-out infinite;"></div>
+    <div class="finale-sparkle" style="top:25%;right:15%;animation:sparkle 3s ease-in-out infinite 0.8s;width:14px;height:14px;"></div>
+    <div class="finale-sparkle" style="bottom:20%;left:20%;animation:sparkle 3s ease-in-out infinite 1.5s;width:16px;height:16px;"></div>
+    <div class="finale-sparkle" style="bottom:30%;right:10%;animation:sparkle 3s ease-in-out infinite 2.2s;"></div>
+    <div class="finale-sparkle" style="top:40%;left:50%;animation:sparkle 3s ease-in-out infinite 0.3s;width:12px;height:12px;"></div>
+    <div class="finale-sparkle" style="top:10%;left:45%;animation:sparkle 3s ease-in-out infinite 1.8s;width:10px;height:10px;"></div>
+
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:var(--spacing-6);position:relative;">
+      <h1 class="finale-title" style="animation:floatUp 4s ease-in-out infinite, shimmer 3s linear infinite;">Thank you!</h1>
+
+      <p class="body-lg" style="color:var(--gray-fg-mid-on-white);max-width:400px;text-align:center;">
+        Questions &amp; Discussion
+      </p>
+      <p style="color:var(--gray-fg-low-on-white);font-size:clamp(10px,1cqw,15px);opacity:0.7;">
+        Muniverse Design Team &middot; Week 4 &middot; ปาจื้อ
+      </p>
+
+      <svg style="width:clamp(36px,4cqw,56px);margin-top:var(--spacing-4);animation:pulseGlow 3s ease-in-out infinite;" aria-hidden="true"><use href="#mu-logo"/></svg>
+    </div>
+  </div>
+
   <!-- ============================== -->
   <!-- TOP BAR (Dropdown + Present)   -->
   <!-- ============================== -->
@@ -4664,20 +5103,29 @@
     if (_w3Start === null) _w3Start = slideTitles.indexOf('Cover — Week 3');
     return _w3Start;
   }
+  let _p15Start = null;
+  function getP15Start() {
+    if (_p15Start === null) _p15Start = slideTitles.indexOf('Cover — Week 4');
+    return _p15Start;
+  }
 
   function nextSlide() {
-    // At end of W1 (Thank You W1) → go to Index instead of crossing to W2
+    // At end of W1 → go to Index
     if (currentSlide === getW2Start() - 1) { goToSlide(0); return; }
-    // At end of W2 (Thank You W2) → go to Index instead of crossing to W3
+    // At end of W2 → go to Index
     if (currentSlide === getW3Start() - 1) { goToSlide(0); return; }
+    // At end of W3 → go to Index
+    if (currentSlide === getP15Start() - 1) { goToSlide(0); return; }
     if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
   }
 
   function prevSlide() {
-    // At start of W2 (Cover W2) → go to Index instead of crossing back to W1
+    // At start of W2 → go to Index
     if (currentSlide === getW2Start()) { goToSlide(0); return; }
-    // At start of W3 (Cover W3) → go to Index instead of crossing back to W2
+    // At start of W3 → go to Index
     if (currentSlide === getW3Start()) { goToSlide(0); return; }
+    // At start of Week 4 → go to Index
+    if (currentSlide === getP15Start()) { goToSlide(0); return; }
     if (currentSlide > 0) goToSlide(currentSlide - 1);
   }
 
@@ -4702,8 +5150,10 @@
       case 'End':
         e.preventDefault();
         // Respect week boundary: go to end of current week
-        if (currentSlide >= getW3Start()) {
-          goToSlide(totalSlides - 1);  // W3 Thank You
+        if (currentSlide >= getP15Start()) {
+          goToSlide(totalSlides - 1);  // Week 4 Thank You
+        } else if (currentSlide >= getW3Start()) {
+          goToSlide(getP15Start() - 1); // W3 Thank You
         } else if (currentSlide >= getW2Start()) {
           goToSlide(getW3Start() - 1); // W2 Thank You
         } else if (currentSlide > 0) {
@@ -4882,6 +5332,15 @@
     'Planning เก็บงาน',
     'Prototype Show',
     'Thank you!',
+    // — Week 4 —
+    'Cover — Week 4',
+    'Agenda',
+    'Recap ปาจื้อ',
+    'วีคนี้ทำอะไร',
+    'Sprint Timeline',
+    'Outcome',
+    'Planning: Subscription',
+    'Thank you!',
   ];
 
   function buildDropdownMenu() {
@@ -4890,9 +5349,12 @@
     // Show only current week's slides
     const w2Start = slideTitles.indexOf('Cover — Week 2');
     const w3Start = slideTitles.indexOf('Cover — Week 3');
+    const p15Start = slideTitles.indexOf('Cover — Week 4');
     let start, end;
-    if (currentSlide >= w3Start) {
-      start = w3Start; end = slideTitles.length;
+    if (currentSlide >= p15Start) {
+      start = p15Start; end = slideTitles.length;
+    } else if (currentSlide >= w3Start) {
+      start = w3Start; end = p15Start;
     } else if (currentSlide >= w2Start) {
       start = w2Start; end = w3Start;
     } else {
