@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DailyMu Recruit — Web Dashboard</title>
+  <style>
+    /* ========== DailyMu Design Tokens ========== */
+    :root {
+      --primary: #EC599D;
+      --primary-light: #FDEFF5;
+      --secondary: #7279FB;
+      --secondary-light: #F1F2FF;
+      --text-primary: #1B1D22;
+      --text-secondary: #6A6E83;
+      --text-tertiary: #9A9DAD;
+      --bg-white: #FFFFFF;
+      --bg-light: #F8F8F9;
+      --bg-mid: #EBECEF;
+      --border: #EBECEF;
+      --success: #559652;
+      --warning: #C69A2A;
+      --error: #EA244F;
+      --gold: #F9C74F;
+      --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+      --sp-5: 20px; --sp-6: 24px; --sp-7: 32px; --sp-8: 40px;
+      --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-full: 9999px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'LINE Seed Sans TH', 'Noto Sans Thai', Inter, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ========== Layout ========== */
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ========== Sidebar Nav ========== */
+    .sidebar {
+      width: 240px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; bottom: 0; left: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 18px;
+    }
+    .sidebar-logo-text {
+      font-weight: 700; font-size: 16px; color: var(--text-primary);
+    }
+    .sidebar-logo-text span {
+      font-weight: 400; font-size: 12px; color: var(--text-tertiary); display: block;
+    }
+
+    .sidebar-menu { flex: 1; padding: 12px; overflow-y: auto; }
+    .menu-group-label {
+      font-size: 10px; font-weight: 700; color: var(--text-tertiary);
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 16px 12px 8px;
+    }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: var(--r-md);
+      font-size: 14px; color: var(--text-secondary);
+      cursor: pointer; transition: 0.15s;
+      margin-bottom: 2px;
+    }
+    .menu-item:hover { background: var(--bg-light); color: var(--text-primary); }
+    .menu-item.active {
+      background: var(--secondary-light);
+      color: var(--secondary); font-weight: 700;
+    }
+    .menu-item .icon { font-size: 16px; width: 20px; text-align: center; }
+    .menu-item .badge {
+      margin-left: auto;
+      background: var(--primary);
+      color: white; font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: var(--r-full);
+    }
+
+    .sidebar-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar-user-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .sidebar-user-name { font-size: 13px; font-weight: 600; }
+    .sidebar-user-role { font-size: 11px; color: var(--text-tertiary); }
+
+    /* ========== Main Content ========== */
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 24px 32px;
+    }
+
+    /* ========== Top Bar ========== */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .topbar-title { font-size: 22px; font-weight: 700; }
+    .topbar-title span { color: var(--text-tertiary); font-weight: 400; font-size: 14px; margin-left: 8px; }
+    .topbar-actions { display: flex; gap: 10px; }
+    .btn {
+      padding: 8px 16px; border-radius: var(--r-md);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      border: 1px solid var(--border); background: white;
+      color: var(--text-secondary); font-family: inherit;
+      display: flex; align-items: center; gap: 6px;
+      transition: 0.15s;
+    }
+    .btn:hover { border-color: var(--secondary); color: var(--secondary); }
+    .btn-primary {
+      background: var(--secondary); color: white; border-color: var(--secondary);
+    }
+    .btn-primary:hover { background: #5A61E0; }
+
+    /* ========== Stats Cards ========== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px; margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 20px;
+    }
+    .stat-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .stat-card-icon {
+      width: 40px; height: 40px; border-radius: var(--r-lg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .stat-card-icon.purple { background: var(--secondary-light); }
+    .stat-card-icon.pink { background: var(--primary-light); }
+    .stat-card-icon.green { background: #E8F5E9; }
+    .stat-card-icon.gold { background: #FFF8E1; }
+    .stat-change {
+      font-size: 11px; font-weight: 600; padding: 2px 8px;
+      border-radius: var(--r-full);
+    }
+    .stat-change.up { background: #E8F5E9; color: var(--success); }
+    .stat-change.down { background: #FFEBEE; color: var(--error); }
+    .stat-value { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+    .stat-label { font-size: 13px; color: var(--text-tertiary); }
+
+    /* ========== Candidate Pipeline (Kanban) ========== */
+    .pipeline-section { margin-bottom: 24px; }
+    .pipeline-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .pipeline-title { font-size: 16px; font-weight: 700; }
+    .pipeline-filters {
+      display: flex; gap: 8px;
+    }
+    .filter-chip {
+      padding: 6px 14px; border-radius: var(--r-full);
+      font-size: 12px; background: white;
+      border: 1px solid var(--border); color: var(--text-secondary);
+      cursor: pointer; font-family: inherit;
+    }
+    .filter-chip.active {
+      background: var(--secondary-light);
+      border-color: var(--secondary); color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .kanban-board {
+      display: flex; gap: 12px; overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .kanban-column {
+      min-width: 260px; flex: 1;
+      background: var(--bg-light);
+      border-radius: var(--r-xl);
+      padding: 12px;
+    }
+    .kanban-col-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 8px 12px;
+    }
+    .kanban-col-title {
+      font-size: 13px; font-weight: 700; color: var(--text-secondary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .kanban-col-count {
+      background: var(--bg-mid); padding: 1px 8px;
+      border-radius: var(--r-full); font-size: 11px;
+      font-weight: 600;
+    }
+    .kanban-col-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .dot-blue { background: var(--secondary); }
+    .dot-gold { background: var(--warning); }
+    .dot-green { background: var(--success); }
+    .dot-pink { background: var(--primary); }
+
+    .kanban-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .kanban-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      border-color: var(--secondary);
+    }
+    .kc-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .kc-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .kc-name { font-size: 13px; font-weight: 600; }
+    .kc-position { font-size: 11px; color: var(--text-tertiary); }
+    .kc-score-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 8px;
+    }
+    .kc-score {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .kc-score-badge {
+      font-size: 14px; font-weight: 800;
+      padding: 2px 10px; border-radius: var(--r-full);
+    }
+    .score-strong { background: var(--secondary-light); color: var(--secondary); }
+    .score-good { background: #E8F5E9; color: var(--success); }
+    .score-neutral { background: #FFF8E1; color: var(--warning); }
+    .score-caution { background: #FFEBEE; color: var(--error); }
+    .kc-score-label {
+      font-size: 10px; color: var(--text-tertiary);
+    }
+    .kc-tags { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+    .kc-tag {
+      font-size: 10px; padding: 2px 8px;
+      border-radius: var(--r-full);
+      background: var(--bg-light);
+      color: var(--text-tertiary);
+    }
+    .kc-tag.source { background: var(--primary-light); color: var(--primary); }
+    .kc-meta-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 8px;
+      font-size: 11px; color: var(--text-tertiary);
+    }
+
+    /* ========== Comparison Section ========== */
+    .comparison-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .comparison-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .comparison-title { font-size: 16px; font-weight: 700; }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .comparison-table th {
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border);
+    }
+    .comparison-table td {
+      padding: 12px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--bg-light);
+      vertical-align: middle;
+    }
+    .comparison-table tr:hover td {
+      background: var(--bg-light);
+    }
+    .ct-rank {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800;
+    }
+    .rank-1 { background: linear-gradient(135deg, #F9C74F, #F0A500); color: white; }
+    .rank-2 { background: var(--bg-mid); color: var(--text-secondary); }
+    .rank-3 { background: var(--bg-mid); color: var(--text-tertiary); }
+    .ct-candidate {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .ct-bar {
+      width: 60px; height: 6px; background: var(--bg-mid);
+      border-radius: var(--r-full); overflow: hidden;
+      display: inline-block; margin-right: 6px; vertical-align: middle;
+    }
+    .ct-bar-fill {
+      height: 100%; border-radius: var(--r-full);
+    }
+    .ct-action-tag {
+      font-size: 11px; padding: 3px 10px;
+      border-radius: var(--r-full);
+      font-weight: 600;
+    }
+    .action-interview { background: #E8F5E9; color: var(--success); }
+    .action-consider { background: var(--secondary-light); color: var(--secondary); }
+    .action-review { background: #FFF8E1; color: var(--warning); }
+
+    /* ========== Owner Review Section ========== */
+    .review-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .review-card {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      margin-bottom: 12px;
+      transition: 0.15s;
+    }
+    .review-card:hover {
+      border-color: var(--secondary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .review-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .review-info { flex: 1; }
+    .review-name { font-size: 15px; font-weight: 700; }
+    .review-detail { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .review-score-row {
+      display: flex; gap: 8px; margin-top: 8px; align-items: center;
+    }
+    .review-actions {
+      display: flex; flex-direction: column; gap: 6px;
+      align-items: flex-end;
+    }
+    .review-status {
+      font-size: 11px; padding: 4px 12px;
+      border-radius: var(--r-full); font-weight: 600;
+    }
+    .status-pending { background: #FFF8E1; color: var(--warning); }
+    .status-approved { background: #E8F5E9; color: var(--success); }
+    .review-date { font-size: 11px; color: var(--text-tertiary); }
+    .review-action-btns {
+      display: flex; gap: 6px; margin-top: 10px;
+    }
+    .review-btn {
+      padding: 6px 12px; border-radius: var(--r-md);
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      border: 1px solid var(--border); background: white;
+      color: var(--text-secondary); font-family: inherit;
+    }
+    .review-btn.approve { background: var(--success); color: white; border-color: var(--success); }
+    .review-btn.hold { background: var(--warning); color: white; border-color: var(--warning); }
+
+    /* ========== Analytics Row ========== */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .analytics-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 24px;
+    }
+    .analytics-card-title {
+      font-size: 14px; font-weight: 700; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .chart-placeholder {
+      height: 180px;
+      background: linear-gradient(180deg, var(--secondary-light) 0%, var(--bg-light) 100%);
+      border-radius: var(--r-lg);
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 12px; padding: 0 20px 16px;
+    }
+    .chart-bar {
+      width: 32px; border-radius: 6px 6px 0 0;
+      background: var(--secondary);
+      opacity: 0.7;
+    }
+    .chart-bar:nth-child(even) { background: var(--primary); opacity: 0.6; }
+    .score-dist-list { display: flex; flex-direction: column; gap: 10px; }
+    .dist-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .dist-label { font-size: 12px; color: var(--text-secondary); min-width: 90px; }
+    .dist-bar-track {
+      flex: 1; height: 8px; background: var(--bg-mid);
+      border-radius: var(--r-full); overflow: hidden;
+    }
+    .dist-bar-fill { height: 100%; border-radius: var(--r-full); }
+    .dist-val { font-size: 12px; font-weight: 700; min-width: 30px; text-align: right; }
+
+    /* ========== Credit Bar ========== */
+    .credit-bar {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .credit-info {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .credit-icon {
+      width: 40px; height: 40px; border-radius: var(--r-lg);
+      background: linear-gradient(135deg, var(--gold), #F0A500);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .credit-numbers { }
+    .credit-balance { font-size: 20px; font-weight: 800; }
+    .credit-plan { font-size: 12px; color: var(--text-tertiary); }
+    .credit-usage-bar {
+      width: 200px; height: 8px;
+      background: var(--bg-mid); border-radius: var(--r-full);
+      overflow: hidden;
+    }
+    .credit-usage-fill {
+      height: 100%; border-radius: var(--r-full);
+      background: linear-gradient(90deg, var(--gold), #F0A500);
+      width: 47%;
+    }
+
+    /* ========== Master Data Section ========== */
+    .master-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-bottom: 24px;
+    }
+    .master-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 20px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .master-card:hover {
+      border-color: var(--secondary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .master-card-icon {
+      width: 48px; height: 48px; border-radius: var(--r-lg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 12px;
+    }
+    .master-card-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .master-card-desc { font-size: 12px; color: var(--text-tertiary); }
+    .master-card-count {
+      margin-top: 12px; font-size: 20px; font-weight: 800;
+      color: var(--secondary);
+    }
+    .master-card-count span {
+      font-size: 12px; font-weight: 400; color: var(--text-tertiary);
+    }
+
+    /* ========== Tab Navigation ========== */
+    .page-tabs {
+      display: flex; gap: 4px; margin-bottom: 24px;
+      background: var(--bg-mid); padding: 4px;
+      border-radius: var(--r-md); width: fit-content;
+    }
+    .page-tab {
+      padding: 8px 20px; border-radius: 6px;
+      font-size: 13px; font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer; background: transparent;
+      border: none; font-family: inherit;
+    }
+    .page-tab.active {
+      background: white; color: var(--text-primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* Section divider */
+    .page-section {
+      margin-bottom: 32px;
+      padding-top: 16px;
+      border-top: 2px solid var(--bg-mid);
+    }
+    .page-section:first-of-type { border-top: none; padding-top: 0; }
+    .section-label {
+      font-size: 11px; font-weight: 700; color: var(--text-tertiary);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+  <!-- ========== Sidebar ========== -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">✦</div>
+      <div class="sidebar-logo-text">DailyMu <span>Recruit</span></div>
+    </div>
+    <div class="sidebar-menu">
+      <div class="menu-group-label">Main</div>
+      <div class="menu-item active"><span class="icon">📊</span> Overview</div>
+      <div class="menu-item"><span class="icon">👥</span> Candidates <span class="badge">24</span></div>
+      <div class="menu-item"><span class="icon">⚖️</span> Comparison</div>
+      <div class="menu-item"><span class="icon">👑</span> Owner Review <span class="badge">3</span></div>
+      <div class="menu-item"><span class="icon">📄</span> Reports</div>
+
+      <div class="menu-group-label">Setup</div>
+      <div class="menu-item"><span class="icon">🏢</span> Master Data</div>
+      <div class="menu-item"><span class="icon">👤</span> Users & Roles</div>
+      <div class="menu-item"><span class="icon">💳</span> Billing & Credits</div>
+      <div class="menu-item"><span class="icon">⚙️</span> Settings</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">🧑</div>
+        <div>
+          <div class="sidebar-user-name">สมศรี HR</div>
+          <div class="sidebar-user-role">HR Manager · ABC Corp</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== Main Content ========== -->
+  <main class="main-content">
+
+    <!-- ===== Section: Overview ===== -->
+    <div class="topbar">
+      <div class="topbar-title">Overview <span>บริษัท ABC จำกัด</span></div>
+      <div class="topbar-actions">
+        <button class="btn"><span>📅</span> เดือนนี้</button>
+        <button class="btn btn-primary"><span>✦</span> Install Extension</button>
+      </div>
+    </div>
+
+    <!-- Credit Bar -->
+    <div class="credit-bar">
+      <div class="credit-info">
+        <div class="credit-icon">✦</div>
+        <div class="credit-numbers">
+          <div class="credit-balance">47 <span style="font-size:14px; color:var(--text-tertiary); font-weight:400">Credits เหลือ</span></div>
+          <div class="credit-plan">Pro HR Plan · 100 credits/เดือน · ใช้ไป 53</div>
+        </div>
+      </div>
+      <div class="credit-usage-bar"><div class="credit-usage-fill"></div></div>
+      <button class="btn">เติม Credit</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-card-icon purple">🔍</div>
+          <div class="stat-change up">+12%</div>
+        </div>
+        <div class="stat-value">53</div>
+        <div class="stat-label">วิเคราะห์แล้ว</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-card-icon pink">💾</div>
+          <div class="stat-change up">+8%</div>
+        </div>
+        <div class="stat-value">24</div>
+        <div class="stat-label">บันทึกแล้ว</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-card-icon green">⭐</div>
+          <div class="stat-change up">+15%</div>
+        </div>
+        <div class="stat-value">8</div>
+        <div class="stat-label">Shortlisted</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-card-icon gold">📊</div>
+        </div>
+        <div class="stat-value">72.4</div>
+        <div class="stat-label">คะแนนเฉลี่ย</div>
+      </div>
+    </div>
+
+    <!-- Analytics -->
+    <div class="analytics-grid">
+      <div class="analytics-card">
+        <div class="analytics-card-title">📈 Candidate วิเคราะห์รายสัปดาห์</div>
+        <div class="chart-placeholder">
+          <div class="chart-bar" style="height:40%"></div>
+          <div class="chart-bar" style="height:55%"></div>
+          <div class="chart-bar" style="height:70%"></div>
+          <div class="chart-bar" style="height:50%"></div>
+          <div class="chart-bar" style="height:85%"></div>
+          <div class="chart-bar" style="height:60%"></div>
+          <div class="chart-bar" style="height:90%"></div>
+          <div class="chart-bar" style="height:75%"></div>
+        </div>
+      </div>
+      <div class="analytics-card">
+        <div class="analytics-card-title">🎯 Score Distribution</div>
+        <div class="score-dist-list">
+          <div class="dist-row">
+            <div class="dist-label">Strong 85-100</div>
+            <div class="dist-bar-track"><div class="dist-bar-fill" style="width:15%; background:var(--secondary)"></div></div>
+            <div class="dist-val">8</div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label">Good 70-84</div>
+            <div class="dist-bar-track"><div class="dist-bar-fill" style="width:35%; background:var(--success)"></div></div>
+            <div class="dist-val">19</div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label">Neutral 55-69</div>
+            <div class="dist-bar-track"><div class="dist-bar-fill" style="width:30%; background:var(--warning)"></div></div>
+            <div class="dist-val">16</div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label">Caution 40-54</div>
+            <div class="dist-bar-track"><div class="dist-bar-fill" style="width:12%; background:var(--error)"></div></div>
+            <div class="dist-val">7</div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label">Low 0-39</div>
+            <div class="dist-bar-track"><div class="dist-bar-fill" style="width:5%; background:var(--text-tertiary)"></div></div>
+            <div class="dist-val">3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section: Pipeline (Kanban) ===== -->
+    <div class="page-section">
+      <div class="section-label">Candidate Pipeline</div>
+      <div class="pipeline-header">
+        <div class="pipeline-title">Candidates</div>
+        <div class="pipeline-filters">
+          <button class="filter-chip active">ทั้งหมด</button>
+          <button class="filter-chip">Marketing</button>
+          <button class="filter-chip">Sales</button>
+          <button class="filter-chip">Dev</button>
+        </div>
+      </div>
+
+      <div class="page-tabs">
+        <button class="page-tab active">Kanban</button>
+        <button class="page-tab">Table</button>
+        <button class="page-tab">List</button>
+      </div>
+
+      <div class="kanban-board">
+        <!-- Column: Analyzed -->
+        <div class="kanban-column">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">
+              <div class="kanban-col-dot dot-blue"></div>
+              Analyzed
+              <span class="kanban-col-count">5</span>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kc-top">
+              <div class="kc-avatar">👩</div>
+              <div>
+                <div class="kc-name">สมหญิง รักงาน</div>
+                <div class="kc-position">Marketing Manager</div>
+              </div>
+            </div>
+            <div class="kc-score-row">
+              <div class="kc-score">
+                <span class="kc-score-badge score-good">78</span>
+                <span class="kc-score-label">Good Match</span>
+              </div>
+            </div>
+            <div class="kc-tags">
+              <span class="kc-tag source">JobThai</span>
+              <span class="kc-tag">ธาตุไฟ</span>
+            </div>
+            <div class="kc-meta-row">
+              <span>📅 10 พ.ค. 2569</span>
+              <span>by สมศรี</span>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kc-top">
+              <div class="kc-avatar">👨</div>
+              <div>
+                <div class="kc-name">วิชัย ก้าวหน้า</div>
+                <div class="kc-position">Marketing Executive</div>
+              </div>
+            </div>
+            <div class="kc-score-row">
+              <div class="kc-score">
+                <span class="kc-score-badge score-neutral">62</span>
+                <span class="kc-score-label">Neutral</span>
+              </div>
+            </div>
+            <div class="kc-tags">
+              <span class="kc-tag source">JobBKK</span>
+              <span class="kc-tag">ธาตุน้ำ</span>
+            </div>
+            <div class="kc-meta-row">
+              <span>📅 9 พ.ค. 2569</span>
+              <span>by สมศรี</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column: Shortlisted -->
+        <div class="kanban-column">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">
+              <div class="kanban-col-dot dot-gold"></div>
+              Shortlisted
+              <span class="kanban-col-count">3</span>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kc-top">
+              <div class="kc-avatar">👩</div>
+              <div>
+                <div class="kc-name">นภา สว่าง</div>
+                <div class="kc-position">Sales Manager</div>
+              </div>
+            </div>
+            <div class="kc-score-row">
+              <div class="kc-score">
+                <span class="kc-score-badge score-strong">88</span>
+                <span class="kc-score-label">Strong Match</span>
+              </div>
+            </div>
+            <div class="kc-tags">
+              <span class="kc-tag source">JobThai</span>
+              <span class="kc-tag">ธาตุทอง</span>
+              <span class="kc-tag">⭐ Top</span>
+            </div>
+            <div class="kc-meta-row">
+              <span>📅 8 พ.ค. 2569</span>
+              <span>by สมศรี</span>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kc-top">
+              <div class="kc-avatar">👨</div>
+              <div>
+                <div class="kc-name">ธนากร มั่นคง</div>
+                <div class="kc-position">Accounting Lead</div>
+              </div>
+            </div>
+            <div class="kc-score-row">
+              <div class="kc-score">
+                <span class="kc-score-badge score-good">76</span>
+                <span class="kc-score-label">Good Match</span>
+              </div>
+            </div>
+            <div class="kc-tags">
+              <span class="kc-tag source">JobBKK</span>
+              <span class="kc-tag">ธาตุดิน</span>
+            </div>
+            <div class="kc-meta-row">
+              <span>📅 7 พ.ค. 2569</span>
+              <span>by สมศรี</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column: Owner Review -->
+        <div class="kanban-column">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">
+              <div class="kanban-col-dot dot-pink"></div>
+              Owner Review
+              <span class="kanban-col-count">2</span>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kc-top">
+              <div class="kc-avatar">👩</div>
+              <div>
+                <div class="kc-name">พิมพ์ใจ ดี</div>
+                <div class="kc-position">HR Coordinator</div>
+              </div>
+            </div>
+            <div class="kc-score-row">
+              <div class="kc-score">
+                <span class="kc-score-badge score-strong">91</span>
+                <span class="kc-score-label">Strong Match</span>
+              </div>
+            </div>
+            <div class="kc-tags">
+              <span class="kc-tag source">JobThai</span>
+              <span class="kc-tag">ธาตุไม้</span>
+              <span class="kc-tag">👑 รอ Owner</span>
+            </div>
+            <div class="kc-meta-row">
+              <span>📅 6 พ.ค. 2569</span>
+              <span>sent to คุณวิชัย</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column: Interview -->
+        <div class="kanban-column">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">
+              <div class="kanban-col-dot dot-green"></div>
+              Interview
+              <span class="kanban-col-count">1</span>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kc-top">
+              <div class="kc-avatar">👨</div>
+              <div>
+                <div class="kc-name">สุรชัย ใจดี</div>
+                <div class="kc-position">Developer</div>
+              </div>
+            </div>
+            <div class="kc-score-row">
+              <div class="kc-score">
+                <span class="kc-score-badge score-strong">85</span>
+                <span class="kc-score-label">Strong Match</span>
+              </div>
+            </div>
+            <div class="kc-tags">
+              <span class="kc-tag source">JobThai</span>
+              <span class="kc-tag">ธาตุน้ำ</span>
+              <span class="kc-tag">✅ Owner OK</span>
+            </div>
+            <div class="kc-meta-row">
+              <span>📅 นัด 15 พ.ค.</span>
+              <span>approved</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section: Comparison ===== -->
+    <div class="page-section">
+      <div class="section-label">Candidate Comparison</div>
+      <div class="comparison-section">
+        <div class="comparison-header">
+          <div class="comparison-title">⚖️ เปรียบเทียบ — ตำแหน่ง Marketing Manager</div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn"><span>📄</span> Export</button>
+            <button class="btn btn-primary"><span>👑</span> ส่ง Owner</button>
+          </div>
+        </div>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>ผู้สมัคร</th>
+              <th>DailyMu</th>
+              <th>Company</th>
+              <th>Owner</th>
+              <th>Role Fit</th>
+              <th>แนะนำ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="ct-rank rank-1">1</div></td>
+              <td>
+                <div class="ct-candidate">
+                  <div class="kc-avatar" style="width:28px;height:28px;font-size:12px;">👩</div>
+                  <div>
+                    <div style="font-weight:600; font-size:13px;">นภา สว่าง</div>
+                    <div style="font-size:11px; color:var(--text-tertiary);">JobThai</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="kc-score-badge score-strong">88</span></td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:90%; background:var(--success)"></div></div>
+                90
+              </td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:85%; background:var(--secondary)"></div></div>
+                85
+              </td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:88%; background:var(--success)"></div></div>
+                88
+              </td>
+              <td><span class="ct-action-tag action-interview">นัดสัมภาษณ์</span></td>
+            </tr>
+            <tr>
+              <td><div class="ct-rank rank-2">2</div></td>
+              <td>
+                <div class="ct-candidate">
+                  <div class="kc-avatar" style="width:28px;height:28px;font-size:12px;">👩</div>
+                  <div>
+                    <div style="font-weight:600; font-size:13px;">สมหญิง รักงาน</div>
+                    <div style="font-size:11px; color:var(--text-tertiary);">JobThai</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="kc-score-badge score-good">78</span></td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:82%; background:var(--secondary)"></div></div>
+                82
+              </td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:75%; background:var(--secondary)"></div></div>
+                75
+              </td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:72%; background:var(--warning)"></div></div>
+                72
+              </td>
+              <td><span class="ct-action-tag action-consider">พิจารณาต่อ</span></td>
+            </tr>
+            <tr>
+              <td><div class="ct-rank rank-3">3</div></td>
+              <td>
+                <div class="ct-candidate">
+                  <div class="kc-avatar" style="width:28px;height:28px;font-size:12px;">👨</div>
+                  <div>
+                    <div style="font-weight:600; font-size:13px;">วิชัย ก้าวหน้า</div>
+                    <div style="font-size:11px; color:var(--text-tertiary);">JobBKK</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="kc-score-badge score-neutral">62</span></td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:65%; background:var(--warning)"></div></div>
+                65
+              </td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:58%; background:var(--warning)"></div></div>
+                58
+              </td>
+              <td>
+                <div class="ct-bar"><div class="ct-bar-fill" style="width:60%; background:var(--warning)"></div></div>
+                60
+              </td>
+              <td><span class="ct-action-tag action-review">ถามเพิ่ม</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== Section: Owner Review ===== -->
+    <div class="page-section">
+      <div class="section-label">Owner Review</div>
+      <div class="review-section">
+        <div class="comparison-header">
+          <div class="comparison-title">👑 รายการรอ Owner Review</div>
+          <div class="pipeline-filters">
+            <button class="filter-chip active">รอ Review (3)</button>
+            <button class="filter-chip">Approved (5)</button>
+            <button class="filter-chip">Hold (2)</button>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-avatar">👩</div>
+          <div class="review-info">
+            <div class="review-name">พิมพ์ใจ ดี</div>
+            <div class="review-detail">HR Coordinator · ฝ่ายบุคคล</div>
+            <div class="review-score-row">
+              <span class="kc-score-badge score-strong">91</span>
+              <span style="font-size:12px; color:var(--text-secondary);">Strong Match · ธาตุไม้ · Owner สมพงษ์สูง</span>
+            </div>
+            <div class="review-action-btns">
+              <button class="review-btn approve">✓ Approve Interview</button>
+              <button class="review-btn hold">Hold</button>
+              <button class="review-btn">ขอข้อมูลเพิ่ม</button>
+              <button class="review-btn">💬 Comment</button>
+            </div>
+          </div>
+          <div class="review-actions">
+            <div class="review-status status-pending">รอ Review</div>
+            <div class="review-date">ส่งเมื่อ 6 พ.ค.</div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-avatar">👩</div>
+          <div class="review-info">
+            <div class="review-name">นภา สว่าง</div>
+            <div class="review-detail">Sales Manager · ฝ่ายขาย</div>
+            <div class="review-score-row">
+              <span class="kc-score-badge score-strong">88</span>
+              <span style="font-size:12px; color:var(--text-secondary);">Strong Match · ธาตุทอง · Role Fit สูง</span>
+            </div>
+            <div class="review-action-btns">
+              <button class="review-btn approve">✓ Approve Interview</button>
+              <button class="review-btn hold">Hold</button>
+              <button class="review-btn">ขอข้อมูลเพิ่ม</button>
+              <button class="review-btn">💬 Comment</button>
+            </div>
+          </div>
+          <div class="review-actions">
+            <div class="review-status status-pending">รอ Review</div>
+            <div class="review-date">ส่งเมื่อ 8 พ.ค.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section: Master Data ===== -->
+    <div class="page-section">
+      <div class="section-label">Master Data Setup</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-icon" style="background: var(--primary-light);">🏢</div>
+          <div class="master-card-title">Company Profile</div>
+          <div class="master-card-desc">ข้อมูลบริษัท วันก่อตั้ง ธาตุ วัฒนธรรม</div>
+          <div class="master-card-count">1 <span>บริษัท</span></div>
+        </div>
+        <div class="master-card">
+          <div class="master-card-icon" style="background: #E8F5E9;">👑</div>
+          <div class="master-card-title">Owner / Executive</div>
+          <div class="master-card-desc">เจ้าของ ผู้บริหาร สำหรับเทียบ candidate</div>
+          <div class="master-card-count">2 <span>คน</span></div>
+        </div>
+        <div class="master-card">
+          <div class="master-card-icon" style="background: #E3F2FD;">👔</div>
+          <div class="master-card-title">Hiring Manager</div>
+          <div class="master-card-desc">หัวหน้าทีม สำหรับเทียบ compatibility</div>
+          <div class="master-card-count">5 <span>คน</span></div>
+        </div>
+        <div class="master-card">
+          <div class="master-card-icon" style="background: #F3E5F5;">🏛</div>
+          <div class="master-card-title">Department</div>
+          <div class="master-card-desc">แผนก ทีม พลังงานกลุ่ม</div>
+          <div class="master-card-count">4 <span>แผนก</span></div>
+        </div>
+        <div class="master-card">
+          <div class="master-card-icon" style="background: #FFF8E1;">💼</div>
+          <div class="master-card-title">Role Templates</div>
+          <div class="master-card-desc">Template ตำแหน่งงาน สำหรับ Role Fit</div>
+          <div class="master-card-count">8 <span>ตำแหน่ง</span></div>
+        </div>
+        <div class="master-card">
+          <div class="master-card-icon" style="background: var(--secondary-light);">👤</div>
+          <div class="master-card-title">Users & Roles</div>
+          <div class="master-card-desc">จัดการผู้ใช้ สิทธิ์ บทบาท</div>
+          <div class="master-card-count">6 <span>ผู้ใช้</span></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

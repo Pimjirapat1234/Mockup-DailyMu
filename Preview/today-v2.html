@@ -1,0 +1,2989 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DailyMu — Interactive Prototype</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/line-seed-sans-th" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      /* App colors */
+      --pink: #EC599D;
+      --pink-light: #FDEFF5;
+      --pink-soft: #FFF0F6;
+      --purple: #7279FB;
+      --purple-light: #F1F2FF;
+      --green: #559652;
+      --yellow: #F8C135;
+      --red: #EA244F;
+      --fg: #1B1D22;
+      --fg-mid: #6A6E83;
+      --fg-low: #9A9DAD;
+      --bg: #FAFAFA;
+      --white: #FFFFFF;
+      --border: #EBECEF;
+      --font: "LINE Seed Sans TH", "Noto Sans Thai", -apple-system, sans-serif;
+
+      /* Wireframe shell colors */
+      --shell-bg: #111116;
+      --shell-surface: #1B1D24;
+      --shell-border: #2A2D38;
+      --shell-fg: #E0E0E8;
+      --shell-fg-mid: #8A8D9A;
+      --shell-fg-low: #5A5D6A;
+      --shell-accent: #7C6FE0;
+      --shell-accent-bg: rgba(124,111,224,0.15);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--shell-bg);
+      color: var(--shell-fg);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* ═══════════════════════════════════
+       SHELL LAYOUT
+    ═══════════════════════════════════ */
+    .shell {
+      display: grid;
+      grid-template-columns: 260px 1fr 340px;
+      grid-template-rows: 56px 1fr;
+      height: 100vh;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      grid-column: 1 / -1;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 24px;
+      background: var(--shell-surface);
+      border-bottom: 1px solid var(--shell-border);
+    }
+    .top-bar-left h1 {
+      font-size: 15px; font-weight: 700; color: var(--shell-fg);
+    }
+    .top-bar-left p {
+      font-size: 12px; color: var(--shell-fg-mid); margin-top: 1px;
+    }
+    .top-bar-right {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13px; color: var(--shell-fg-mid);
+    }
+    .top-bar-right .epic { color: var(--shell-fg-low); }
+    .top-bar-right .breadcrumb {
+      color: var(--shell-accent); font-weight: 600; cursor: default;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      background: var(--shell-surface);
+      border-right: 1px solid var(--shell-border);
+      overflow-y: auto; padding: 16px 0;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--shell-border); border-radius: 2px; }
+
+    .flow-group { margin-bottom: 8px; }
+    .flow-label {
+      font-size: 11px; font-weight: 700; color: var(--shell-fg-low);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 8px 16px 6px; user-select: none;
+    }
+    .flow-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 16px; cursor: pointer;
+      transition: all 0.15s; border-left: 3px solid transparent;
+    }
+    .flow-item:hover { background: rgba(255,255,255,0.03); }
+    .flow-item.active {
+      background: var(--shell-accent-bg);
+      border-left-color: var(--shell-accent);
+    }
+    .flow-item-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .flow-item-text { min-width: 0; }
+    .flow-item-name {
+      font-size: 13px; font-weight: 600; color: var(--shell-fg);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .flow-item-sub {
+      font-size: 11px; color: var(--shell-fg-mid); margin-top: 1px;
+    }
+    .flow-item.active .flow-item-name { color: #fff; }
+
+    /* Center Preview */
+    .preview-area {
+      display: flex; align-items: center; justify-content: center;
+      background: var(--shell-bg); overflow: hidden; position: relative;
+    }
+
+    /* Right Annotation Panel */
+    .anno-panel {
+      background: var(--shell-surface);
+      border-left: 1px solid var(--shell-border);
+      overflow-y: auto; padding: 24px 20px;
+    }
+    .anno-panel::-webkit-scrollbar { width: 4px; }
+    .anno-panel::-webkit-scrollbar-thumb { background: var(--shell-border); border-radius: 2px; }
+
+    .anno-title {
+      font-size: 18px; font-weight: 700; color: var(--shell-fg);
+      margin-bottom: 4px;
+    }
+    .anno-subtitle {
+      font-size: 13px; color: var(--shell-fg-mid); margin-bottom: 20px;
+    }
+    .anno-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--shell-border);
+      border-radius: 12px; padding: 14px; margin-bottom: 12px;
+    }
+    .anno-card-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    }
+    .anno-badge {
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      color: #fff;
+    }
+    .anno-badge.info { background: #3B82F6; }
+    .anno-badge.tap { background: var(--shell-accent); }
+    .anno-badge.warn { background: #F59E0B; }
+    .anno-badge.success { background: #22C55E; }
+    .anno-badge.note { background: #8B5CF6; }
+    .anno-card-title {
+      font-size: 14px; font-weight: 700; color: var(--shell-fg);
+    }
+    .anno-card-body {
+      font-size: 13px; color: var(--shell-fg-mid); line-height: 1.6;
+    }
+
+    /* Document Hub Button */
+    .doc-hub-btn {
+      position: fixed; bottom: 24px; right: 24px; z-index: 500;
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 20px; border-radius: 12px;
+      background: var(--shell-surface); border: 1px solid var(--shell-border);
+      color: var(--shell-fg); font-family: var(--font);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .doc-hub-btn:hover {
+      background: var(--shell-accent-bg); border-color: var(--shell-accent);
+      color: var(--shell-accent);
+    }
+
+    /* ═══════════════════════════════════
+       PHONE FRAME
+    ═══════════════════════════════════ */
+    .phone-frame {
+      width: 375px; height: 812px;
+      background: var(--bg);
+      border-radius: 44px;
+      overflow: hidden; position: relative;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+      transform: scale(0.82);
+      transform-origin: center center;
+    }
+    .screen-scroll {
+      height: 812px; overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch; padding-bottom: 100px;
+    }
+    .screen-scroll::-webkit-scrollbar { display: none; }
+
+    /* Screen containers */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ═══════════════════════════════════
+       APP UI STYLES (inside phone)
+    ═══════════════════════════════════ */
+    .status-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 28px 0; height: 50px;
+    }
+    .status-bar .time { font-size: 15px; font-weight: 600; color: var(--fg); }
+
+    .header-bg {
+      background: linear-gradient(180deg, #FFF0F6 0%, #F5F0FF 40%, #FAFAFA 100%);
+      padding: 0 20px 20px;
+    }
+    .greeting { padding: 8px 0 6px; }
+    .greeting-sub { font-size: 14px; color: var(--fg-mid); }
+    .greeting-name { font-size: 22px; font-weight: 700; color: var(--fg); margin-top: 2px; }
+
+    .ai-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.85); border: 1px solid #E8E0F0;
+      border-radius: 20px; padding: 8px 16px; margin: 8px 0 12px;
+      font-size: 13px; color: #7C6FA0; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; backdrop-filter: blur(8px);
+    }
+    .ai-pill:hover { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .ai-pill .ai-icon {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: linear-gradient(135deg, #B8A9D4, #9B8DC7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: #fff;
+    }
+
+    .fortune-card {
+      background: linear-gradient(135deg, #FDDCE8 0%, #E8D5F5 50%, #D5DEF8 100%);
+      border-radius: 20px; padding: 20px; position: relative; overflow: hidden;
+    }
+    .fortune-card::after {
+      content: ''; position: absolute; right: -20px; top: -10px;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .fortune-title { font-size: 16px; font-weight: 700; color: var(--fg); margin-bottom: 6px; z-index: 1; position: relative; }
+    .fortune-desc { font-size: 13px; color: var(--fg-mid); line-height: 1.6; z-index: 1; position: relative; max-width: 240px; }
+    .fortune-character {
+      position: absolute; right: 10px; bottom: 50px; width: 90px; height: 90px;
+      background: linear-gradient(135deg, #D8BFE6, #BFA8D9);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 44px; opacity: 0.9; animation: float 3s ease-in-out infinite;
+    }
+
+    .lucky-colors-section { margin-top: 16px; z-index: 1; position: relative; }
+    .lucky-colors-title { font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 10px; }
+    .lucky-colors-row { display: flex; justify-content: space-between; }
+    .lucky-color-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+    .color-dots { display: flex; position: relative; }
+    .color-dot { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #fff; }
+    .color-dot:nth-child(2) { margin-left: -8px; }
+    .lucky-color-label { font-size: 12px; color: var(--fg-mid); font-weight: 500; }
+
+    .view-more-btn {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 16px; background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(236,89,157,0.15); border-radius: 12px;
+      padding: 10px; cursor: pointer; font-size: 14px; color: var(--pink);
+      font-weight: 600; transition: all 0.2s; position: relative; z-index: 1;
+    }
+    .view-more-btn:hover { background: #fff; }
+
+    .section { padding: 20px 20px 0; }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 14px; }
+    .section-title { font-size: 18px; font-weight: 700; color: var(--fg); }
+    .section-sub { font-size: 13px; color: var(--fg-mid); margin-top: 2px; }
+    .section-action { font-size: 13px; color: var(--purple); font-weight: 600; cursor: pointer; }
+
+    .predict-scroll {
+      display: flex; gap: 12px; overflow-x: auto;
+      margin: 0 -20px; padding: 0 20px 12px;
+      -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;
+    }
+    .predict-scroll::-webkit-scrollbar { display: none; }
+    .predict-card {
+      min-width: 200px; max-width: 200px; background: var(--white);
+      border-radius: 16px; padding: 16px; flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.04);
+      scroll-snap-align: start; cursor: pointer; transition: all 0.2s;
+    }
+    .predict-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+    .predict-card-title { font-size: 14px; font-weight: 700; color: var(--fg); margin-bottom: 6px; line-height: 1.5; }
+    .predict-card-desc { font-size: 12px; color: var(--fg-mid); line-height: 1.6; margin-bottom: 10px; }
+    .predict-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .predict-tag { font-size: 11px; color: var(--pink); font-weight: 500; background: var(--pink-light); border-radius: 6px; padding: 3px 8px; }
+    .predict-card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+    }
+    .predict-source { font-size: 11px; color: var(--fg-low); display: flex; align-items: center; gap: 4px; }
+    .predict-share { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--fg-low); cursor: pointer; }
+
+    .fortune-methods-scroll {
+      display: flex; gap: 12px; overflow-x: auto;
+      margin: 0 -20px; padding: 0 20px 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .fortune-methods-scroll::-webkit-scrollbar { display: none; }
+    .fortune-method-card {
+      min-width: 155px; max-width: 155px; background: var(--white);
+      border-radius: 16px; overflow: hidden; flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.04);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .fortune-method-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+    .fortune-method-img {
+      height: 110px; position: relative;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .fortune-method-badge {
+      position: absolute; top: 8px; right: 8px;
+      padding: 3px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 600; color: #fff;
+    }
+    .badge-new { background: linear-gradient(135deg, #F472B6, #EC599D); }
+    .badge-hot { background: linear-gradient(135deg, #FB923C, #EA580C); }
+    .fortune-method-info { padding: 10px 12px 14px; }
+    .fortune-method-name { font-size: 14px; font-weight: 700; color: var(--fg); }
+    .fortune-method-sub { font-size: 11px; color: var(--fg-mid); margin-top: 3px; }
+
+    .dots-indicator { display: flex; justify-content: center; gap: 6px; margin-top: 12px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+    .dot.active { width: 18px; border-radius: 3px; background: var(--pink); }
+
+    .calendar-card {
+      background: #fff; border-radius: 20px; padding: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.04);
+    }
+    .calendar-header { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+    .cal-nav {
+      width: 28px; height: 28px; border-radius: 50%; border: none;
+      background: none; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; font-size: 14px; color: var(--fg-mid); transition: all 0.2s;
+    }
+    .cal-nav:hover { background: var(--pink-light); color: var(--pink); }
+    .cal-month-label { font-size: 16px; font-weight: 700; color: var(--fg); min-width: 140px; text-align: center; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .cal-day-header { text-align: center; font-size: 13px; font-weight: 700; padding: 8px 0; color: var(--fg); }
+    .cal-day-header.sun { color: var(--red); }
+    .cal-day-cell {
+      text-align: center; padding: 6px 0; font-size: 14px; font-weight: 500; color: var(--fg);
+      border-radius: 10px; cursor: pointer; min-height: 40px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1px; transition: all 0.15s;
+    }
+    .cal-day-cell:hover { background: var(--pink-light); }
+    .cal-day-cell.today { background: var(--pink); color: #fff; font-weight: 700; }
+    .cal-day-cell.empty { cursor: default; }
+    .cal-day-cell.empty:hover { background: none; }
+    .cal-day-icon { font-size: 7px; line-height: 1; }
+    .cal-source { text-align: right; font-size: 11px; color: var(--fg-low); margin-top: 10px; }
+
+    /* Tab Bar */
+    .tab-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 88px; z-index: 100; }
+    .tab-bar-items {
+      position: relative; z-index: 2; display: flex;
+      height: 68px; padding-top: 8px; padding-bottom: 20px;
+      background: #fff;
+    }
+    .tab-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 3px; cursor: pointer; transition: all 0.2s;
+    }
+    .tab-item.center-space { flex: 1.2; }
+    .tab-icon { font-size: 20px; color: var(--fg-low); transition: all 0.2s; }
+    .tab-label { font-size: 10px; font-weight: 400; color: var(--fg-low); transition: all 0.2s; }
+    .tab-item.active .tab-icon { color: var(--pink); }
+    .tab-item.active .tab-label { color: var(--pink); font-weight: 700; }
+    .center-fab {
+      position: absolute; top: -20px; left: 50%; transform: translateX(-50%); z-index: 3;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #EC599D, #F472B6);
+      box-shadow: 0 4px 16px rgba(236,89,157,0.35);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .center-fab:hover { transform: translateX(-50%) scale(1.05); }
+    .center-fab-label {
+      position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
+      white-space: nowrap; font-size: 10px; font-weight: 700; color: var(--pink);
+    }
+
+    /* App Header Bar (sub-screens) */
+    .app-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 20px 12px; background: #fff;
+    }
+    .app-back {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: none; cursor: pointer; font-size: 18px; color: var(--purple);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .app-header-title { font-size: 18px; font-weight: 700; color: var(--fg); }
+
+    /* Wireframe placeholder */
+    .wire-placeholder {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 40px 24px; text-align: center;
+    }
+    .wire-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.5; }
+    .wire-label { font-size: 18px; font-weight: 700; color: var(--fg-mid); margin-bottom: 6px; }
+    .wire-sub { font-size: 13px; color: var(--fg-low); line-height: 1.5; }
+
+    /* Bottom sheet inside phone */
+    .phone-modal-overlay {
+      position: absolute; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.45);
+      display: flex; align-items: flex-end;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .phone-modal-overlay.show { opacity: 1; pointer-events: all; }
+    .phone-modal-sheet {
+      width: 100%; background: #fff; border-radius: 24px 24px 0 0;
+      padding: 20px 20px 36px; transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .phone-modal-overlay.show .phone-modal-sheet { transform: translateY(0); }
+    .phone-modal-handle { width: 36px; height: 4px; background: #D9D9D9; border-radius: 2px; margin: 0 auto 16px; }
+    .phone-modal-title { font-size: 17px; font-weight: 700; color: var(--fg); margin-bottom: 12px; }
+    .phone-btn-primary {
+      width: 100%; padding: 14px; border: none; border-radius: 14px;
+      background: linear-gradient(135deg, #EC599D, #F472B6);
+      color: #fff; font-family: var(--font); font-size: 15px; font-weight: 600;
+      cursor: pointer; margin-top: 16px;
+    }
+    .phone-btn-outline {
+      width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 14px;
+      background: #fff; color: var(--fg); font-family: var(--font); font-size: 15px;
+      font-weight: 600; cursor: pointer; margin-top: 8px;
+    }
+
+    /* Quota gate card */
+    .quota-gate-content {
+      text-align: center; padding: 20px 0;
+    }
+    .quota-gate-content .gate-icon { font-size: 56px; margin-bottom: 16px; }
+    .quota-gate-content h2 { font-size: 20px; font-weight: 700; color: var(--fg); margin-bottom: 8px; }
+    .quota-gate-content p { font-size: 14px; color: var(--fg-mid); line-height: 1.6; }
+    .quota-gate-content .highlight { font-weight: 700; color: var(--fg); }
+
+    /* Upgrade banner */
+    .upgrade-banner {
+      margin: 12px 20px; padding: 14px 16px; border-radius: 14px;
+      background: linear-gradient(135deg, #F0E6FF, #FFE6F0);
+      display: flex; align-items: center; gap: 12px; cursor: pointer;
+    }
+    .upgrade-banner-icon { font-size: 28px; }
+    .upgrade-banner-text h3 { font-size: 14px; font-weight: 700; color: var(--fg); }
+    .upgrade-banner-text p { font-size: 12px; color: var(--fg-mid); margin-top: 2px; }
+
+    /* Settings list */
+    .settings-list { padding: 8px 20px; }
+    .settings-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+    }
+    .settings-item-left { display: flex; align-items: center; gap: 12px; }
+    .settings-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+
+    /* Plan comparison */
+    .plan-table { padding: 20px; }
+    .plan-row {
+      display: flex; gap: 12px; margin-bottom: 12px;
+    }
+    .plan-col {
+      flex: 1; background: #fff; border-radius: 14px; padding: 16px;
+      border: 2px solid var(--border); text-align: center;
+    }
+    .plan-col.recommended { border-color: var(--pink); }
+    .plan-col h3 { font-size: 16px; font-weight: 700; color: var(--fg); }
+    .plan-col .price { font-size: 24px; font-weight: 800; color: var(--pink); margin: 8px 0; }
+    .plan-col .price span { font-size: 13px; font-weight: 400; color: var(--fg-mid); }
+    .plan-feature {
+      font-size: 12px; color: var(--fg-mid); padding: 4px 0;
+      display: flex; align-items: center; gap: 6px; justify-content: center;
+    }
+
+    /* Success screen */
+    .success-screen {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 60px 24px; text-align: center;
+    }
+    .success-icon { font-size: 72px; margin-bottom: 20px; }
+    .success-title { font-size: 22px; font-weight: 700; color: var(--fg); margin-bottom: 8px; }
+    .success-desc { font-size: 14px; color: var(--fg-mid); line-height: 1.6; }
+
+    /* Profile */
+    .profile-header {
+      text-align: center; padding: 20px 20px 16px;
+    }
+    .profile-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, #FDDCE8, #E8D5F5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; margin: 0 auto 10px;
+    }
+    .profile-name { font-size: 18px; font-weight: 700; color: var(--fg); }
+    .profile-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 12px; border-radius: 20px; margin-top: 6px;
+      font-size: 12px; font-weight: 600;
+    }
+    .badge-free { background: #F0F0F5; color: var(--fg-mid); }
+    .badge-plus { background: linear-gradient(135deg, #FFE6F0, #F0E6FF); color: var(--pink); }
+
+    /* Subscription info */
+    .sub-info-card {
+      margin: 12px 20px; padding: 16px; border-radius: 14px;
+      background: #fff; border: 1px solid var(--border);
+    }
+    .sub-info-row {
+      display: flex; justify-content: space-between; padding: 6px 0;
+      font-size: 13px;
+    }
+    .sub-info-label { color: var(--fg-mid); }
+    .sub-info-value { font-weight: 600; color: var(--fg); }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes chatPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(124,111,224,0.35); }
+      50% { box-shadow: 0 4px 28px rgba(124,111,224,0.55), 0 0 0 8px rgba(124,111,224,0.1); }
+    }
+    @keyframes typingDot {
+      0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-4px); }
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ═══════════════════════════════════
+       CHAT FAB (floating on phone)
+    ═══════════════════════════════════ */
+    .chat-fab {
+      position: absolute; z-index: 150;
+      right: 16px; bottom: 96px;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, #7C6FE0, #9B8AFF);
+      box-shadow: 0 4px 20px rgba(124,111,224,0.35);
+      display: flex; align-items: center; justify-content: center;
+      cursor: grab; touch-action: none; user-select: none;
+      animation: chatPulse 3s ease-in-out infinite;
+    }
+    .chat-fab.dragging {
+      cursor: grabbing; animation: none;
+      box-shadow: 0 8px 30px rgba(124,111,224,0.5);
+      transform: scale(1.08);
+    }
+    .chat-fab:hover { transform: scale(1.1); }
+    .chat-fab .chat-fab-icon { font-size: 22px; color: #fff; transition: all 0.3s; }
+    .chat-fab.open { display: none; }
+    .chat-fab-badge {
+      position: absolute; top: -2px; right: -2px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--pink); color: #fff;
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid #fff;
+    }
+
+    /* ═══════════════════════════════════
+       CHAT SCREEN (full overlay in phone)
+    ═══════════════════════════════════ */
+    .chat-overlay {
+      position: absolute; inset: 0; z-index: 140;
+      background: #fff;
+      display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .chat-overlay.open { transform: translateY(0); }
+
+    .chat-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 50px 16px 12px; background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .chat-header-back {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: none; cursor: pointer; font-size: 18px; color: var(--purple);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chat-header-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, #E8D5F5, #D5DEF8);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .chat-header-info { flex: 1; }
+    .chat-header-name { font-size: 15px; font-weight: 700; color: var(--fg); }
+    .chat-header-status { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 4px; }
+    .chat-header-status::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+    }
+
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .chat-messages::-webkit-scrollbar { display: none; }
+
+    .chat-msg {
+      max-width: 80%; padding: 12px 16px;
+      font-size: 14px; line-height: 1.6;
+      animation: msgIn 0.3s ease-out both;
+    }
+    .chat-msg.bot {
+      align-self: flex-start;
+      background: #F3F0FF; border-radius: 4px 18px 18px 18px;
+      color: var(--fg);
+    }
+    .chat-msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #7C6FE0, #9B8AFF);
+      border-radius: 18px 4px 18px 18px;
+      color: #fff;
+    }
+    .chat-msg-time {
+      font-size: 10px; margin-top: 4px; opacity: 0.5;
+    }
+    .chat-msg.bot .chat-msg-time { color: var(--fg-low); }
+    .chat-msg.user .chat-msg-time { color: rgba(255,255,255,0.6); text-align: right; }
+
+    .chat-typing {
+      align-self: flex-start; display: none; align-items: center; gap: 4px;
+      padding: 12px 20px; background: #F3F0FF; border-radius: 4px 18px 18px 18px;
+    }
+    .chat-typing.show { display: flex; }
+    .chat-typing-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #9B8AFF;
+    }
+    .chat-typing-dot:nth-child(1) { animation: typingDot 1.2s ease-in-out infinite 0s; }
+    .chat-typing-dot:nth-child(2) { animation: typingDot 1.2s ease-in-out infinite 0.2s; }
+    .chat-typing-dot:nth-child(3) { animation: typingDot 1.2s ease-in-out infinite 0.4s; }
+
+    .chat-suggestions {
+      display: flex; gap: 8px; padding: 8px 16px; overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .chat-suggestions::-webkit-scrollbar { display: none; }
+    .chat-suggest-chip {
+      flex-shrink: 0; padding: 8px 14px; border-radius: 20px;
+      background: #F3F0FF; border: 1px solid #E0DBFF;
+      font-size: 12px; color: #7C6FE0; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .chat-suggest-chip:hover { background: #E8E3FF; }
+
+    .chat-input-area {
+      display: flex; align-items: flex-end; gap: 8px;
+      padding: 12px 16px 28px; background: #fff;
+      border-top: 1px solid var(--border);
+    }
+    .chat-input {
+      flex: 1; padding: 10px 16px; border-radius: 24px;
+      border: 1px solid var(--border); background: var(--bg);
+      font-family: var(--font); font-size: 14px; color: var(--fg);
+      outline: none; resize: none; max-height: 80px; min-height: 40px;
+      line-height: 1.4;
+    }
+    .chat-input:focus { border-color: #9B8AFF; box-shadow: 0 0 0 3px rgba(124,111,224,0.1); }
+    .chat-input::placeholder { color: var(--fg-low); }
+    .chat-send-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, #7C6FE0, #9B8AFF);
+      color: #fff; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; flex-shrink: 0;
+    }
+    .chat-send-btn:hover { transform: scale(1.05); }
+    .chat-send-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+    /* Chat History Items */
+    .chat-history-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; cursor: pointer; transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+    .chat-history-item:hover { background: #F8F7FF; }
+    .chat-history-item.active { background: #F3F0FF; border-left-color: #7C6FE0; }
+    .chat-history-icon {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: var(--bg); display: flex; align-items: center;
+      justify-content: center; font-size: 15px; flex-shrink: 0;
+    }
+    .chat-history-text { flex: 1; min-width: 0; }
+    .chat-history-title {
+      font-size: 13px; font-weight: 600; color: var(--fg);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .chat-history-preview {
+      font-size: 11px; color: var(--fg-low); margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .chat-history-actions {
+      flex-shrink: 0; opacity: 0; transition: opacity 0.15s;
+      cursor: pointer; padding: 4px 6px; border-radius: 6px;
+      color: var(--fg-mid); font-size: 14px;
+    }
+    .chat-history-item:hover .chat-history-actions { opacity: 1; }
+    .chat-history-actions:hover { background: var(--border); }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- ═══ TOP BAR ═══ -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h1>DailyMu — App Wireframe</h1>
+      <p>Interactive Prototype | กดที่หน้าจอเพื่อ navigate</p>
+    </div>
+    <div class="top-bar-right">
+      <span class="epic" id="epicLabel">Epic DAIL-700</span>
+      <span>|</span>
+      <span class="breadcrumb" id="breadcrumb">Home — ดวงวันนี้</span>
+    </div>
+  </div>
+
+  <!-- ═══ LEFT SIDEBAR ═══ -->
+  <div class="sidebar">
+
+    <div class="flow-group">
+      <div class="flow-label">Flow 1: Main Tabs</div>
+      <div class="flow-item active" data-screen="today" data-epic="DAIL-700" data-title="Home — ดวงวันนี้">
+        <div class="flow-item-icon" style="background:#2D1F3D; color:#F472B6;">
+          <i class="fa-solid fa-sun"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Home (ดวงวันนี้)</div>
+          <div class="flow-item-sub">หน้าแรก + ดวงรายวัน</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="calendar" data-epic="DAIL-710" data-title="ปฏิทินดูดวง">
+        <div class="flow-item-icon" style="background:#1F2D3D; color:#60A5FA;">
+          <i class="fa-solid fa-calendar-days"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">ปฏิทิน</div>
+          <div class="flow-item-sub">ปฏิทินดูดวงรายเดือน</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="notify" data-epic="DAIL-715" data-title="แจ้งเตือน">
+        <div class="flow-item-icon" style="background:#3D2D1F; color:#FBBF24;">
+          <i class="fa-solid fa-bell"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">แจ้งเตือน</div>
+          <div class="flow-item-sub">Notification Center</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="profile" data-epic="DAIL-720" data-title="โปรไฟล์">
+        <div class="flow-item-icon" style="background:#1F3D2D; color:#4ADE80;">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">โปรไฟล์</div>
+          <div class="flow-item-sub">ข้อมูลผู้ใช้</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-group">
+      <div class="flow-label">Flow 2: Fortune Features</div>
+      <div class="flow-item" data-screen="fortune-hub" data-epic="DAIL-730" data-title="ทำนาย Hub">
+        <div class="flow-item-icon" style="background:#2D1F3D; color:#C084FC;">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">ทำนาย (Hub)</div>
+          <div class="flow-item-sub">เลือกวิธีทำนาย</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="siamsi" data-epic="DAIL-731" data-title="เซียมซี">
+        <div class="flow-item-icon" style="background:#3D3D1F; color:#FBBF24;">
+          <i class="fa-solid fa-torii-gate"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">เซียมซี</div>
+          <div class="flow-item-sub">สุ่มเซียมซีประจำวัน</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="tarot" data-epic="DAIL-732" data-title="เปิดไพ่ทาโร่">
+        <div class="flow-item-icon" style="background:#2D1F3D; color:#F472B6;">
+          <i class="fa-solid fa-cards-blank"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">เปิดไพ่ทาโร่</div>
+          <div class="flow-item-sub">เปิดไพ่ 3 ใบ</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="dream" data-epic="DAIL-733" data-title="ทำนายฝัน">
+        <div class="flow-item-icon" style="background:#1F2D3D; color:#93C5FD;">
+          <i class="fa-solid fa-cloud-moon"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">ทำนายฝัน</div>
+          <div class="flow-item-sub">เล่าฝัน แปลความหมาย</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="wallpaper" data-epic="DAIL-734" data-title="วอลเปเปอร์เสริมดวง">
+        <div class="flow-item-icon" style="background:#3D1F2D; color:#F9A8D4;">
+          <i class="fa-solid fa-image"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">วอลเปเปอร์</div>
+          <div class="flow-item-sub">วอลเปเปอร์เสริมดวง</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="qr-mu" data-epic="DAIL-735" data-title="QR Mu">
+        <div class="flow-item-icon" style="background:#1F3D3D; color:#5EEAD4;">
+          <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">QR Mu</div>
+          <div class="flow-item-sub">สร้าง QR ดวงส่วนตัว</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="astro-calendar" data-epic="DAIL-736" data-title="ปฏิทินโหราศาสตร์ 100 ปี">
+        <div class="flow-item-icon" style="background:#3D3D1F; color:#FDE68A;">
+          <i class="fa-solid fa-scroll"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">ปฏิทินโหราศาสตร์</div>
+          <div class="flow-item-sub">ปฏิทิน 100 ปี</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-group">
+      <div class="flow-label">Flow 3: Subscription</div>
+      <div class="flow-item" data-screen="plan-free" data-epic="DAIL-740" data-title="Plan Comparison — Free">
+        <div class="flow-item-icon" style="background:#1F2D3D; color:#94A3B8;">
+          <i class="fa-solid fa-table-columns"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Plan Comparison</div>
+          <div class="flow-item-sub">มุมมอง Free User</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="plan-plus" data-epic="DAIL-741" data-title="Plan Comparison — Plus">
+        <div class="flow-item-icon" style="background:#2D1F3D; color:#C084FC;">
+          <i class="fa-solid fa-table-columns"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Plan Comparison</div>
+          <div class="flow-item-sub">มุมมอง Plus User</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="subscribe-sheet" data-epic="DAIL-745" data-title="Bottom Sheet — ยืนยัน">
+        <div class="flow-item-icon" style="background:#1F3D2D; color:#4ADE80;">
+          <i class="fa-solid fa-credit-card"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Bottom Sheet</div>
+          <div class="flow-item-sub">ยืนยันก่อนออกแอป</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="success" data-epic="DAIL-748" data-title="Success Screen">
+        <div class="flow-item-icon" style="background:#1F3D2D; color:#4ADE80;">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Success Screen</div>
+          <div class="flow-item-sub">กลับเข้าแอป</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-group">
+      <div class="flow-label">Flow 4: Feature Gate</div>
+      <div class="flow-item" data-screen="gate-lock" data-epic="DAIL-749" data-title="Feature Gate — Lock">
+        <div class="flow-item-icon" style="background:#3D2D1F; color:#FBBF24;">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Gate: ฟีเจอร์ Lock</div>
+          <div class="flow-item-sub">Variant A</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="gate-quota" data-epic="DAIL-749" data-title="Feature Gate — Quota หมด">
+        <div class="flow-item-icon" style="background:#3D1F1F; color:#F87171;">
+          <i class="fa-solid fa-hourglass-end"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Gate: Quota หมด</div>
+          <div class="flow-item-sub">Variant B</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-group">
+      <div class="flow-label">Flow 5: Chat AI</div>
+      <div class="flow-item" data-screen="chat-ai" data-epic="DAIL-770" data-title="Chat with AI — Variant A (FAB)">
+        <div class="flow-item-icon" style="background:#1F1F3D; color:#9B8AFF;">
+          <i class="fa-solid fa-comments"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Variant A: ปุ่มลอย (FAB)</div>
+          <div class="flow-item-sub">มุมขวาล่าง</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="chat-ai-b" data-epic="DAIL-770" data-title="Chat with AI — Variant B (Top)">
+        <div class="flow-item-icon" style="background:#1F2D3D; color:#60A5FA;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">Variant B: แถบด้านบน</div>
+          <div class="flow-item-sub">Header search bar</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-group">
+      <div class="flow-label">Flow 6: Manage</div>
+      <div class="flow-item" data-screen="membership" data-epic="DAIL-760" data-title="สมาชิกของฉัน">
+        <div class="flow-item-icon" style="background:#2D1F3D; color:#C084FC;">
+          <i class="fa-solid fa-id-card"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">สมาชิกของฉัน</div>
+          <div class="flow-item-sub">Active</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ CENTER PREVIEW ═══ -->
+  <div class="preview-area">
+    <div class="phone-frame">
+      <div class="screen-scroll" id="mainScroll">
+
+        <!-- ═══════════ SCREEN: TODAY ═══════════ -->
+        <div class="screen active" id="screen-today">
+          <div class="status-bar">
+            <span class="time">9:41</span>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <svg width="16" height="12" viewBox="0 0 16 12"><path d="M1.5 4C4 0.5 7-0.3 8.5 0.5c1.5.8 3 2 4.5 4" stroke="#1B1D22" fill="none" stroke-width="1.5" stroke-linecap="round"/><path d="M3.5 7c1.2-1.5 3-2.2 5-1.2s2.5 2 3 3" stroke="#1B1D22" fill="none" stroke-width="1.5" stroke-linecap="round"/><circle cx="8.5" cy="10.5" r="1.2" fill="#1B1D22"/></svg>
+              <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="6" width="3" height="6" rx=".8" fill="#1B1D22"/><rect x="4.5" y="4" width="3" height="8" rx=".8" fill="#1B1D22"/><rect x="9" y="2" width="3" height="10" rx=".8" fill="#1B1D22"/><rect x="13" y="0" width="3" height="12" rx=".8" fill="#1B1D22"/></svg>
+              <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2.5" stroke="#1B1D22" stroke-width="1" fill="none"/><rect x="22.5" y="4" width="2" height="4" rx="1" fill="#1B1D22" opacity=".4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="#559652"/></svg>
+            </div>
+          </div>
+          <div class="header-bg">
+            <div class="greeting" style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div class="greeting-sub">สวัสดีตอนเช้า</div>
+                <div class="greeting-name">คุณ ซุปเปอร์ตีนไก่แซ่บ...</div>
+              </div>
+              <!-- Variant B: Top notification bell + no top chat icon (hidden by default) -->
+              <div id="chatTopIcon" style="display:none; margin-top:4px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <!-- Notification Bell -->
+                  <div onclick="navigateTo('notify')" style="position:relative; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.7); display:flex; align-items:center; justify-content:center; cursor:pointer; border:1px solid rgba(0,0,0,0.06);">
+                    <i class="fa-solid fa-bell" style="font-size:16px; color:var(--fg-mid);"></i>
+                    <div style="position:absolute; top:-2px; right:-2px; width:16px; height:16px; border-radius:50%; background:#EA244F; color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; border:2px solid #fff;">3</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Banner เปลี่ยนศาสตร์ -->
+            <div style="display:flex; align-items:center; gap:12px; padding:14px 16px; background:#fff; border-radius:16px; margin-bottom:14px; border:1px solid var(--border);">
+              <div style="width:44px; height:44px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                <span style="font-size:32px;">🪢</span>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg);">ปาจี่ของคุณ</div>
+                <div style="font-size:12px; color:var(--purple); margin-top:2px;">เปลี่ยนศาสตร์เพื่อเปรียบเทียบ</div>
+              </div>
+              <div onclick="showPhoneModal('change-method-modal')" style="padding:8px 16px; border-radius:10px; background:var(--purple); color:#fff; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap;">เปลี่ยนศาสตร์</div>
+            </div>
+            <div class="fortune-card">
+              <div class="fortune-title">วันนี้พลังงานชวนคุณดูแลตัวเอง</div>
+              <div class="fortune-desc">เป็นวันที่อาจมีบางเรื่องต้องใช้ความรอบคอบแต่ทุกอย่างคือจังหวะเรียนรู้✨</div>
+              <div class="lucky-colors-section">
+                <div class="lucky-colors-title">สีมงคลวันนี้</div>
+                <div class="lucky-colors-row">
+                  <div class="lucky-color-item"><div class="color-dots"><div class="color-dot" style="background:#E85D3A"></div><div class="color-dot" style="background:#F5A623"></div></div><div class="lucky-color-label">งาน</div></div>
+                  <div class="lucky-color-item"><div class="color-dots"><div class="color-dot" style="background:#FFD700"></div><div class="color-dot" style="background:#FFA500"></div></div><div class="lucky-color-label">เงิน</div></div>
+                  <div class="lucky-color-item"><div class="color-dots"><div class="color-dot" style="background:#C0C0C0"></div><div class="color-dot" style="background:#E8E8E8"></div></div><div class="lucky-color-label">โชค</div></div>
+                  <div class="lucky-color-item"><div class="color-dots"><div class="color-dot" style="background:#F8A4C8"></div><div class="color-dot" style="background:#FADCE8"></div></div><div class="lucky-color-label">รัก</div></div>
+                  <div class="lucky-color-item"><div class="color-dots"><div class="color-dot" style="background:#9B59B6"></div><div class="color-dot" style="background:#D2B4DE"></div></div><div class="lucky-color-label">โชคร้าย</div></div>
+                </div>
+              </div>
+              <div class="view-more-btn" onclick="showPhoneModal('detail-modal')">ดูเพิ่มเติม <i class="fa-solid fa-chevron-right" style="font-size:10px"></i></div>
+            </div>
+          </div>
+          <!-- Upgrade Banner -->
+          <div style="margin:12px 20px; padding:18px 20px; border-radius:16px; background:linear-gradient(135deg, #C084FC 0%, #E879A8 40%, #F9A855 100%); position:relative; cursor:pointer;" onclick="navigateTo('plan-free')">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <span style="font-size:16px; font-weight:700; color:#fff;">อัปเกรดวันนี้ เริ่มต้นสิ่งใหม่ไปกับเรา</span>
+              <span style="padding:3px 10px; border-radius:8px; background:rgba(255,255,255,0.25); font-size:12px; font-weight:700; color:#fff; flex-shrink:0;">Pro</span>
+            </div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.85); line-height:1.6;">ปลดล็อกทุกฟีเจอร์ เปิดทางสู่คำทำนายที่ลึกยิ่งขึ้น<br>พร้อมประสบการณ์ที่ลื่นไหลในทุกช่วงเวลา</div>
+            <div style="position:absolute; top:12px; right:14px; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:rgba(255,255,255,0.6); font-size:12px;" onclick="event.stopPropagation(); this.parentElement.style.display='none';">
+              <i class="fa-solid fa-xmark"></i>
+            </div>
+          </div>
+
+          <!-- คำทำนายวันนี้ -->
+          <div class="section">
+            <div class="section-header">
+              <div class="section-title">คำทำนายวันนี้</div>
+              <div class="section-action">ดูทั้งหมด</div>
+            </div>
+            <div class="predict-scroll">
+              <div class="predict-card">
+                <div class="predict-card-title">วันนี้ดวงเปิดสิ่งดีๆ กำลังมา</div>
+                <div class="predict-card-desc">พลังงานวันนี้ดีมากเลย เหมาะกับการเริ่มต้นอะไรใหม่ๆ ถ้ามีแผนอยากทำ ลุยได้เลยวันนี้!</div>
+                <div class="predict-card-tags"><span class="predict-tag">#ดวงวันนี้</span><span class="predict-tag">#พลังดีมีชัย</span></div>
+                <div class="predict-card-footer">
+                  <div class="predict-source"><i class="fa-solid fa-star" style="font-size:10px;color:#FFD700"></i> อ้างอิง จากตำราฮวงจุ้ย</div>
+                  <div class="predict-share"><i class="fa-solid fa-share-nodes" style="font-size:12px"></i> แชร์</div>
+                </div>
+              </div>
+              <div class="predict-card">
+                <div class="predict-card-title">วันนี้ลองทำแบบนี้ดูนะ</div>
+                <div class="predict-card-desc">หาเวลานั่งเงียบๆ สักหน่อย ทบทวนว่าช่วงนี้อะไรสำคัญจริงๆ จัดลำดับใหม่</div>
+                <div class="predict-card-tags"><span class="predict-tag">#ปังปุริเย่</span><span class="predict-tag">#พลังดีมีชัย</span></div>
+                <div class="predict-card-footer">
+                  <div class="predict-source"><i class="fa-solid fa-star" style="font-size:10px;color:#FFD700"></i> อ้างอิง จากคัมภีร์โบราณ</div>
+                  <div class="predict-share"><i class="fa-solid fa-share-nodes" style="font-size:12px"></i> แชร์</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- เปิดคำทำนาย -->
+          <div class="section">
+            <div class="section-header">
+              <div><div class="section-title">เปิดคำทำนาย</div><div class="section-sub">เลือกแนวทางที่คุณอยากค้นพบวันนี้</div></div>
+              <div class="section-action" onclick="navigateTo('fortune-hub')">ดูทั้งหมด</div>
+            </div>
+            <div class="fortune-methods-scroll">
+              <div class="fortune-method-card" onclick="navigateTo('tarot')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FDE8F0,#F0E0F8)"><div style="font-size:56px">🃏</div><div class="fortune-method-badge badge-new">ใหม่</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">เปิดไพ่ทาโร่</div><div class="fortune-method-sub">เปิดไพ่ 3 ใบ รู้ดวงวันนี้</div></div>
+              </div>
+              <div class="fortune-method-card" onclick="navigateTo('siamsi')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FFF3E0,#FFE0B2)"><div style="font-size:56px">🎋</div><div class="fortune-method-badge badge-hot">แนะนำ</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">เซียมซี</div><div class="fortune-method-sub">ทำนายประจำวัน</div></div>
+              </div>
+              <div class="fortune-method-card" onclick="navigateTo('dream')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#E8EAF6,#C5CAE9)"><div style="font-size:56px">💭</div><div class="fortune-method-badge badge-new">ใหม่</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">ทำนายฝัน</div><div class="fortune-method-sub">เล่าฝัน แปลความหมาย</div></div>
+              </div>
+            </div>
+            <div class="dots-indicator"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+          </div>
+          <!-- ปฏิทินดูดวง -->
+          <div class="section">
+            <div class="section-header">
+              <div><div class="section-title">ปฏิทินดูดวง</div><div class="section-sub">ดูแนวโน้มดวงล่วงหน้า</div></div>
+              <div class="section-action" onclick="navigateTo('calendar')">ดูทั้งหมด</div>
+            </div>
+            <div class="calendar-card">
+              <div class="calendar-header">
+                <button class="cal-nav" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="cal-month-label" id="calMonthLabel">มกราคม 2026</div>
+                <button class="cal-nav" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+              <div class="cal-grid">
+                <div class="cal-day-header sun">อา.</div><div class="cal-day-header">จ.</div><div class="cal-day-header">อ.</div><div class="cal-day-header">พ.</div><div class="cal-day-header">พฤ.</div><div class="cal-day-header">ศ.</div><div class="cal-day-header">ส.</div>
+              </div>
+              <div class="cal-grid" id="calDays"></div>
+              <div class="cal-source">อ้างอิงจากตำรามหาหมอดู</div>
+            </div>
+          </div>
+          <div style="height:30px"></div>
+
+          <!-- Detail Modal -->
+          <div class="phone-modal-overlay" id="detail-modal" onclick="closePhoneModal('detail-modal')">
+            <div class="phone-modal-sheet" onclick="event.stopPropagation()">
+              <div class="phone-modal-handle"></div>
+              <div class="phone-modal-title">รายละเอียดดวงวันนี้</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+                <div style="background:var(--pink-light); border-radius:12px; padding:12px; text-align:center;">
+                  <div style="font-size:22px; margin-bottom:4px;">💼</div>
+                  <div style="font-weight:700; font-size:13px; color:var(--fg);">การงาน</div>
+                  <div style="margin-top:4px;">⭐⭐⭐⭐</div>
+                </div>
+                <div style="background:#FEF9EB; border-radius:12px; padding:12px; text-align:center;">
+                  <div style="font-size:22px; margin-bottom:4px;">💰</div>
+                  <div style="font-weight:700; font-size:13px; color:var(--fg);">การเงิน</div>
+                  <div style="margin-top:4px;">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div style="background:#E1F2E0; border-radius:12px; padding:12px; text-align:center;">
+                  <div style="font-size:22px; margin-bottom:4px;">🍀</div>
+                  <div style="font-weight:700; font-size:13px; color:var(--fg);">โชคลาภ</div>
+                  <div style="margin-top:4px;">⭐⭐⭐</div>
+                </div>
+                <div style="background:#FDE9ED; border-radius:12px; padding:12px; text-align:center;">
+                  <div style="font-size:22px; margin-bottom:4px;">❤️</div>
+                  <div style="font-weight:700; font-size:13px; color:var(--fg);">ความรัก</div>
+                  <div style="margin-top:4px;">⭐⭐⭐⭐</div>
+                </div>
+              </div>
+              <button class="phone-btn-primary" onclick="closePhoneModal('detail-modal')">ปิด</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: CALENDAR ═══════════ -->
+        <div class="screen" id="screen-calendar">
+          <div class="status-bar"><span class="time">9:41</span><div style="display:flex;gap:6px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="6" width="3" height="6" rx=".8" fill="#1B1D22"/><rect x="4.5" y="4" width="3" height="8" rx=".8" fill="#1B1D22"/><rect x="9" y="2" width="3" height="10" rx=".8" fill="#1B1D22"/><rect x="13" y="0" width="3" height="12" rx=".8" fill="#1B1D22"/></svg></div></div>
+
+          <!-- Tab Switcher -->
+          <div style="padding:8px 20px 0;">
+            <div id="calTabBar" style="display:flex; background:#F3F0FF; border-radius:12px; padding:3px;">
+              <div class="cal-tab" data-tab="daily" onclick="switchCalTab('daily')" style="flex:1; text-align:center; padding:8px 0; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; transition:all 0.2s; background:var(--pink); color:#fff;">รายวัน</div>
+              <div class="cal-tab" data-tab="weekly" onclick="switchCalTab('weekly')" style="flex:1; text-align:center; padding:8px 0; border-radius:10px; font-size:14px; font-weight:500; cursor:pointer; transition:all 0.2s; background:none; color:var(--fg-mid);">รายสัปดาห์</div>
+              <div class="cal-tab" data-tab="monthly" onclick="switchCalTab('monthly')" style="flex:1; text-align:center; padding:8px 0; border-radius:10px; font-size:14px; font-weight:500; cursor:pointer; transition:all 0.2s; background:none; color:var(--fg-mid);">รายเดือน</div>
+            </div>
+          </div>
+
+          <!-- Month Nav -->
+          <div style="display:flex; align-items:center; justify-content:center; gap:16px; padding:14px 20px 10px;">
+            <button class="cal-nav" onclick="changeMonth2(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="cal-month-label" id="calMonthLabel2" style="min-width:140px; text-align:center;">มกราคม 2026</div>
+            <button class="cal-nav" onclick="changeMonth2(1)"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+
+          <!-- Week Strip -->
+          <div style="display:flex; gap:4px; padding:0 12px 16px; justify-content:space-between;" id="calWeekStrip"></div>
+
+          <!-- AI Summary Pill -->
+          <div style="padding:0 20px;">
+            <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.9); border:1px solid #E8E0F0; border-radius:20px; padding:7px 14px; margin:0 0 12px; font-size:12px; color:#7C6FA0; font-weight:500; cursor:pointer;">
+              <div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#B8A9D4,#9B8DC7);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;"><i class="fa-solid fa-hat-wizard"></i></div>
+              AI สรุปดวงประจำสัปดาห์
+            </div>
+          </div>
+
+          <!-- Fortune Card with Date -->
+          <div style="padding:0 20px 16px;">
+            <div style="background:linear-gradient(135deg, #FDDCE8 0%, #E8D5F5 50%, #D5DEF8 100%); border-radius:18px; padding:18px; display:flex; gap:14px; align-items:flex-start;">
+              <div style="background:#fff; border-radius:14px; padding:8px 12px; text-align:center; flex-shrink:0; min-width:52px;">
+                <div style="font-size:24px; font-weight:800; color:var(--pink);" id="calSelectedDay">15</div>
+                <div style="font-size:11px; color:var(--fg-mid); font-weight:600;" id="calSelectedMonthShort">ม.ค.</div>
+              </div>
+              <div>
+                <div style="font-size:15px; font-weight:700; color:var(--fg); display:flex; align-items:center; gap:6px;">
+                  วันนี้พลังงานชวนคุณดูแลตัวเอง
+                  <i class="fa-solid fa-circle-info" style="font-size:12px; color:var(--fg-low);"></i>
+                </div>
+                <div style="font-size:12px; color:var(--fg-mid); line-height:1.6; margin-top:4px;">เป็นวันที่อาจมีบางเรื่องต้องใช้ความรอบคอบแต่ทุกอย่างคือจังหวะเรียนรู้✨</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- สีมงคลวันนี้ -->
+          <div style="padding:0 20px 16px;">
+            <div style="background:#fff; border-radius:16px; padding:16px; border:1px solid var(--border);">
+              <div style="font-size:15px; font-weight:700; color:var(--fg); margin-bottom:12px;">สีมงคลวันนี้</div>
+              <div style="display:flex; justify-content:space-between;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;"><div style="display:flex;"><div style="width:22px;height:22px;border-radius:50%;background:#E85D3A;border:2px solid #fff;"></div><div style="width:22px;height:22px;border-radius:50%;background:#F5A623;border:2px solid #fff;margin-left:-6px;"></div></div><div style="font-size:11px;color:var(--fg-mid);">งาน</div></div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;"><div style="display:flex;"><div style="width:22px;height:22px;border-radius:50%;background:#FFD700;border:2px solid #fff;"></div><div style="width:22px;height:22px;border-radius:50%;background:#FFA500;border:2px solid #fff;margin-left:-6px;"></div></div><div style="font-size:11px;color:var(--fg-mid);">เงิน</div></div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;"><div style="display:flex;"><div style="width:22px;height:22px;border-radius:50%;background:#C0C0C0;border:2px solid #fff;"></div><div style="width:22px;height:22px;border-radius:50%;background:#E8E8E8;border:2px solid #fff;margin-left:-6px;"></div></div><div style="font-size:11px;color:var(--fg-mid);">โชค</div></div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;"><div style="display:flex;"><div style="width:22px;height:22px;border-radius:50%;background:#F8A4C8;border:2px solid #fff;"></div><div style="width:22px;height:22px;border-radius:50%;background:#FADCE8;border:2px solid #fff;margin-left:-6px;"></div></div><div style="font-size:11px;color:var(--fg-mid);">รัก</div></div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;"><div style="display:flex;"><div style="width:22px;height:22px;border-radius:50%;background:#9B59B6;border:2px solid #fff;"></div><div style="width:22px;height:22px;border-radius:50%;background:#D2B4DE;border:2px solid #fff;margin-left:-6px;"></div></div><div style="font-size:11px;color:var(--fg-mid);">โชคร้าย</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ควรทำ / ควรเลี่ยง -->
+          <div style="padding:0 20px 16px;">
+            <div style="display:flex; gap:12px;">
+              <div style="flex:1; background:#fff; border-radius:16px; padding:14px; border:1px solid var(--border);">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                  <div style="width:28px;height:28px;border-radius:8px;background:#E8F5E9;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-thumbs-up" style="font-size:13px;color:#2E7D32;"></i></div>
+                  <span style="font-size:14px; font-weight:700; color:var(--fg);">ควรทำ</span>
+                </div>
+                <div style="font-size:12px; color:var(--fg-mid); line-height:1.8;">
+                  <div style="display:flex; align-items:flex-start; gap:6px;"><span style="color:#2E7D32;">•</span> นำเสนองานวันอังคาร-พฤหัส</div>
+                  <div style="display:flex; align-items:flex-start; gap:6px;"><span style="color:#2E7D32;">•</span> คุยเรื่องขึ้นเงินเดือนได้เลย</div>
+                </div>
+              </div>
+              <div style="flex:1; background:#fff; border-radius:16px; padding:14px; border:1px solid var(--border);">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                  <div style="width:28px;height:28px;border-radius:8px;background:#FDE9ED;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-flag" style="font-size:13px;color:#EA244F;"></i></div>
+                  <span style="font-size:14px; font-weight:700; color:var(--fg);">ควรเลี่ยง</span>
+                </div>
+                <div style="font-size:12px; color:var(--fg-mid); line-height:1.8;">
+                  <div style="display:flex; align-items:flex-start; gap:6px;"><span style="color:#EA244F;">•</span> อย่าให้สัญญาเกินตัว</div>
+                  <div style="display:flex; align-items:flex-start; gap:6px;"><span style="color:#EA244F;">•</span> หลีกเลี่ยงบินกลับหลัง</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ดาวเกิด & ดาวจร -->
+          <div style="padding:0 20px 20px;">
+            <div style="background:#fff; border-radius:16px; padding:16px; border:1px solid var(--border);">
+              <div style="font-size:16px; font-weight:700; color:var(--fg); margin-bottom:14px;">ดาวเกิด & ดาวจร</div>
+
+              <div style="margin-bottom:14px;">
+                <div style="font-size:13px; font-weight:700; color:var(--fg); margin-bottom:4px;">ดาวเกิด:</div>
+                <div style="font-size:12px; color:var(--fg-mid); line-height:1.7;">
+                  ดาวอาทิตย์อยู่ราศีกุมภ์ ดาวจันทร์อยู่ราศีพฤษภ ดาวอังคารอยู่ราศีสิงห์ ดาวพุธอยู่ราศีเมษ ดาวพฤหัสอยู่ราศีกุมภ์ ดาวศุกร์อยู่ราศีพฤษภ ดาวเสาร์อยู่ราศีมีน...
+                  <span style="color:var(--purple); font-weight:600; cursor:pointer;"> เพิ่มเติม</span>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-size:13px; font-weight:700; color:var(--fg); margin-bottom:4px;">ดาวจร:</div>
+                <div style="font-size:12px; color:var(--fg-mid); line-height:1.7;">
+                  ช่วงนี้พลังของความมั่นคงและความเป็นรูปธรรมเด่นชัด สิ่งที่เคยวางแผนไว้มีแนวโน้มค่อยๆ เห็นผล แต่ต้องอาศัยความอดทนและการลงมือทำอย่างสม่ำเสมอ...
+                  <span style="color:var(--purple); font-weight:600; cursor:pointer;"> เพิ่มเติม</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height:30px;"></div>
+        </div>
+
+        <!-- ═══════════ SCREEN: NOTIFY ═══════════ -->
+        <div class="screen" id="screen-notify">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><div class="app-header-title">แจ้งเตือน</div></div>
+          <div class="wire-placeholder" style="padding-top:80px;">
+            <div class="wire-icon">🔔</div>
+            <div class="wire-label">แจ้งเตือน</div>
+            <div class="wire-sub">แจ้งเตือนดวงรายวัน<br>วันพิเศษ และโปรโมชัน</div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: PROFILE ═══════════ -->
+        <div class="screen" id="screen-profile">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><div class="app-header-title">โปรไฟล์</div></div>
+          <div class="profile-header">
+            <div class="profile-avatar">🧑</div>
+            <div class="profile-name">ซุปเปอร์ตีนไก่แซ่บ</div>
+            <div class="profile-badge badge-free">Free</div>
+          </div>
+          <div class="settings-list">
+            <div class="settings-item" onclick="navigateTo('membership')"><div class="settings-item-left"><div class="settings-icon" style="background:#F0E6FF;"><i class="fa-solid fa-id-card" style="color:#8B5CF6"></i></div><span style="font-size:14px;color:var(--fg)">สมาชิกของฉัน</span></div><i class="fa-solid fa-chevron-right" style="color:var(--fg-low);font-size:12px"></i></div>
+            <div class="settings-item" onclick="navigateTo('plan-free')"><div class="settings-item-left"><div class="settings-icon" style="background:#FFE6F0;"><i class="fa-solid fa-crown" style="color:var(--pink)"></i></div><span style="font-size:14px;color:var(--fg)">อัปเกรดแพลน</span></div><i class="fa-solid fa-chevron-right" style="color:var(--fg-low);font-size:12px"></i></div>
+            <div class="settings-item"><div class="settings-item-left"><div class="settings-icon" style="background:#E1F2E0;"><i class="fa-solid fa-gear" style="color:var(--green)"></i></div><span style="font-size:14px;color:var(--fg)">ตั้งค่า</span></div><i class="fa-solid fa-chevron-right" style="color:var(--fg-low);font-size:12px"></i></div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: FORTUNE HUB ═══════════ -->
+        <div class="screen" id="screen-fortune-hub">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><div class="app-header-title">ทำนาย</div></div>
+          <div class="section" style="padding-top:8px">
+            <div class="section-header"><div class="section-title">เลือกวิธีทำนาย</div></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('siamsi')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FFF3E0,#FFE0B2)"><div style="font-size:48px">🎋</div><div class="fortune-method-badge badge-hot">แนะนำ</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">เซียมซี</div><div class="fortune-method-sub">ทำนายประจำวัน</div></div>
+              </div>
+              <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('tarot')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FDE8F0,#F0E0F8)"><div style="font-size:48px">🃏</div><div class="fortune-method-badge badge-new">ใหม่</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">เปิดไพ่ทาโร่</div><div class="fortune-method-sub">เปิดไพ่ 3 ใบ</div></div>
+              </div>
+              <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('dream')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#E8EAF6,#C5CAE9)"><div style="font-size:48px">💭</div><div class="fortune-method-badge badge-new">ใหม่</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">ทำนายฝัน</div><div class="fortune-method-sub">เล่าฝัน แปลความหมาย</div></div>
+              </div>
+              <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('wallpaper')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FFF0F6,#FDDCE8)"><div style="font-size:48px">🖼️</div><div class="fortune-method-badge badge-new">ใหม่</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">วอลเปเปอร์</div><div class="fortune-method-sub">วอลเปเปอร์เสริมดวง</div></div>
+              </div>
+              <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('qr-mu')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2)"><div style="font-size:48px">📱</div><div class="fortune-method-badge badge-hot">แนะนำ</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">QR Mu</div><div class="fortune-method-sub">สร้าง QR ดวงส่วนตัว</div></div>
+              </div>
+              <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('astro-calendar')">
+                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FFF8E1,#FFECB3)"><div style="font-size:48px">📜</div></div>
+                <div class="fortune-method-info"><div class="fortune-method-name">ปฏิทินโหราศาสตร์</div><div class="fortune-method-sub">ปฏิทิน 100 ปี</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: SIAMSI ═══════════ -->
+        <div class="screen" id="screen-siamsi">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">เซียมซี</div></div>
+          <div class="wire-placeholder" style="padding-top:40px;">
+            <div class="wire-icon">🎋</div>
+            <div class="wire-label">เซียมซี</div>
+            <div class="wire-sub">สุ่มเซียมซี ได้คำทำนายประจำวัน<br>เขย่ากระบอก เลือกไม้</div>
+            <button class="phone-btn-primary" style="width:auto; margin-top:24px; padding:14px 40px;" onclick="showPhoneModal('quota-modal')">เสี่ยงเซียมซี</button>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: TAROT ═══════════ -->
+        <div class="screen" id="screen-tarot">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">เปิดไพ่ทาโร่</div></div>
+          <div class="wire-placeholder" style="padding-top:40px;">
+            <div class="wire-icon">🃏</div>
+            <div class="wire-label">เปิดไพ่ทาโร่</div>
+            <div class="wire-sub">เลือกไพ่ 3 ใบ<br>อดีต ปัจจุบัน อนาคต</div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: DREAM ═══════════ -->
+        <div class="screen" id="screen-dream">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">ทำนายฝัน</div></div>
+          <div class="wire-placeholder" style="padding-top:40px;">
+            <div class="wire-icon">💭</div>
+            <div class="wire-label">ทำนายฝัน</div>
+            <div class="wire-sub">พิมพ์เล่าความฝัน<br>AI ช่วยแปลความหมาย</div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: WALLPAPER ═══════════ -->
+        <div class="screen" id="screen-wallpaper">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">วอลเปเปอร์เสริมดวง</div></div>
+
+          <!-- Personalized banner -->
+          <div style="margin:0 20px 12px; padding:14px 16px; border-radius:14px; background:linear-gradient(135deg,#F0E6FF,#FFE6F0); display:flex; align-items:center; gap:12px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#EC599D,#9B8AFF);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">✨</div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:700; color:var(--fg);">แนะนำสำหรับคุณ</div>
+              <div style="font-size:11px; color:var(--fg-mid);">ราศีกุมภ์ • ธาตุน้ำ — สีมงคลวันนี้: สีทอง</div>
+            </div>
+          </div>
+
+          <!-- Category Tabs -->
+          <div style="display:flex; gap:8px; padding:0 20px 14px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <div style="padding:7px 16px; border-radius:20px; background:var(--pink); color:#fff; font-size:13px; font-weight:600; white-space:nowrap; cursor:pointer; flex-shrink:0;">ทั้งหมด</div>
+            <div style="padding:7px 16px; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--fg-mid); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0;">💰 เสริมเงิน</div>
+            <div style="padding:7px 16px; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--fg-mid); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0;">❤️ เสริมรัก</div>
+            <div style="padding:7px 16px; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--fg-mid); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0;">💼 เสริมงาน</div>
+            <div style="padding:7px 16px; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--fg-mid); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0;">🍀 เสริมโชค</div>
+          </div>
+
+          <!-- Wallpaper Grid -->
+          <div style="padding:0 20px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+
+              <!-- Card 1: มังกรทอง -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
+                <div style="height:200px; background:linear-gradient(160deg,#FFD54F,#FF8F00,#E65100); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
+                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🐉</div>
+                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;">ฟรี</div>
+                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 2.4K</div>
+                </div>
+                <div style="padding:10px 12px; background:#fff;">
+                  <div style="font-size:13px; font-weight:700; color:var(--fg);">มังกรทอง</div>
+                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">💰 เสริมเงิน • ดึงดูดโชคลาภ</div>
+                </div>
+              </div>
+
+              <!-- Card 2: ดอกบัวศักดิ์สิทธิ์ -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
+                <div style="height:200px; background:linear-gradient(160deg,#F8BBD0,#E91E63,#880E4F); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
+                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🪷</div>
+                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;">ฟรี</div>
+                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 3.1K</div>
+                </div>
+                <div style="padding:10px 12px; background:#fff;">
+                  <div style="font-size:13px; font-weight:700; color:var(--fg);">ดอกบัวศักดิ์สิทธิ์</div>
+                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">❤️ เสริมรัก • เมตตามหานิยม</div>
+                </div>
+              </div>
+
+              <!-- Card 3: จักรวาลนำโชค -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
+                <div style="height:200px; background:linear-gradient(160deg,#CE93D8,#7B1FA2,#4A148C); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
+                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🌌</div>
+                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:linear-gradient(135deg,#EC599D,#9B8AFF);color:#fff;font-size:10px;font-weight:600;">Pro</div>
+                  <div style="position:absolute;top:8px;right:8px;"><i class="fa-solid fa-lock" style="color:rgba(255,255,255,0.6);font-size:12px;"></i></div>
+                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 5.8K</div>
+                </div>
+                <div style="padding:10px 12px; background:#fff;">
+                  <div style="font-size:13px; font-weight:700; color:var(--fg);">จักรวาลนำโชค</div>
+                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">🍀 เสริมโชค • เปิดทางสว่าง</div>
+                </div>
+              </div>
+
+              <!-- Card 4: คลื่นทะเลแห่งปัญญา -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
+                <div style="height:200px; background:linear-gradient(160deg,#80DEEA,#0097A7,#00695C); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
+                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🌊</div>
+                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;">ฟรี</div>
+                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 1.7K</div>
+                </div>
+                <div style="padding:10px 12px; background:#fff;">
+                  <div style="font-size:13px; font-weight:700; color:var(--fg);">คลื่นทะเลแห่งปัญญา</div>
+                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">💼 เสริมงาน • สติปัญญา</div>
+                </div>
+              </div>
+
+              <!-- Card 5: พระจันทร์ทอง -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
+                <div style="height:200px; background:linear-gradient(160deg,#1A237E,#283593,#5C6BC0); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
+                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🌙</div>
+                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:linear-gradient(135deg,#EC599D,#9B8AFF);color:#fff;font-size:10px;font-weight:600;">Pro</div>
+                  <div style="position:absolute;top:8px;right:8px;"><i class="fa-solid fa-lock" style="color:rgba(255,255,255,0.6);font-size:12px;"></i></div>
+                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 4.2K</div>
+                </div>
+                <div style="padding:10px 12px; background:#fff;">
+                  <div style="font-size:13px; font-weight:700; color:var(--fg);">พระจันทร์ทอง</div>
+                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">✨ เสริมรวม • พลังจันทรา</div>
+                </div>
+              </div>
+
+              <!-- Card 6: ดอกไม้มงคล -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
+                <div style="height:200px; background:linear-gradient(160deg,#FDDCE8,#D5A6E0,#B39DDB); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
+                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🌸</div>
+                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;">ฟรี</div>
+                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 2.9K</div>
+                </div>
+                <div style="padding:10px 12px; background:#fff;">
+                  <div style="font-size:13px; font-weight:700; color:var(--fg);">ดอกไม้มงคล</div>
+                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">❤️ เสริมรัก • เสน่ห์แรง</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div style="height:30px;"></div>
+
+          <!-- Wallpaper Preview Modal -->
+          <div class="phone-modal-overlay" id="wp-preview" onclick="closePhoneModal('wp-preview')">
+            <div class="phone-modal-sheet" onclick="event.stopPropagation()" style="padding:0; border-radius:24px 24px 0 0; overflow:hidden;">
+              <!-- Preview image -->
+              <div style="height:320px; background:linear-gradient(160deg,#FFD54F,#FF8F00,#E65100); display:flex; align-items:center; justify-content:center; position:relative;">
+                <div style="font-size:80px; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2));">🐉</div>
+                <!-- Phone frame overlay hint -->
+                <div style="position:absolute; inset:20px 60px; border:2px solid rgba(255,255,255,0.2); border-radius:24px;"></div>
+                <!-- Close btn -->
+                <div onclick="closePhoneModal('wp-preview')" style="position:absolute; top:12px; right:12px; width:32px; height:32px; border-radius:50%; background:rgba(0,0,0,0.3); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; font-size:14px;"><i class="fa-solid fa-xmark"></i></div>
+              </div>
+              <!-- Info -->
+              <div style="padding:20px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+                  <div style="font-size:18px; font-weight:700; color:var(--fg);">มังกรทอง</div>
+                  <div style="display:flex; align-items:center; gap:4px; font-size:12px; color:var(--fg-low);"><i class="fa-solid fa-download" style="font-size:10px;"></i> 2.4K ดาวน์โหลด</div>
+                </div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.6; margin-bottom:16px;">
+                  💰 เสริมดวงการเงิน • ดึงดูดโชคลาภ<br>
+                  เหมาะสำหรับราศีที่ธาตุไฟ-ทอง ช่วยเปิดทางโชคด้านการเงิน เสริมพลังความมั่งคั่ง
+                </div>
+                <!-- Tags -->
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px;">
+                  <span style="padding:4px 10px; border-radius:8px; background:#FFF3E0; font-size:11px; color:#E65100; font-weight:500;">#เสริมเงิน</span>
+                  <span style="padding:4px 10px; border-radius:8px; background:#FFF3E0; font-size:11px; color:#E65100; font-weight:500;">#โชคลาภ</span>
+                  <span style="padding:4px 10px; border-radius:8px; background:#FFF3E0; font-size:11px; color:#E65100; font-weight:500;">#มังกร</span>
+                </div>
+                <!-- Actions -->
+                <div style="display:flex; gap:10px;">
+                  <button class="phone-btn-primary" style="flex:1; margin:0; display:flex; align-items:center; justify-content:center; gap:6px;"><i class="fa-solid fa-download"></i> ดาวน์โหลด</button>
+                  <button class="phone-btn-outline" style="width:50px; margin:0; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: QR MU ═══════════ -->
+        <div class="screen" id="screen-qr-mu">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">QR Mu</div></div>
+          <div style="padding:20px; text-align:center;">
+            <div style="font-size:14px; color:var(--fg-mid); margin-bottom:20px;">QR Code ดวงส่วนตัวของคุณ</div>
+            <div style="width:200px; height:200px; margin:0 auto 20px; background:#fff; border-radius:20px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center;">
+              <div style="width:160px; height:160px; background:linear-gradient(135deg,#F3F0FF,#FFF0F6); border-radius:12px; display:grid; grid-template-columns:repeat(8,1fr); grid-template-rows:repeat(8,1fr); gap:2px; padding:8px;">
+                <div style="grid-column:1/4;grid-row:1/4;background:var(--purple);border-radius:4px;"></div>
+                <div style="grid-column:6/9;grid-row:1/4;background:var(--purple);border-radius:4px;"></div>
+                <div style="grid-column:1/4;grid-row:6/9;background:var(--purple);border-radius:4px;"></div>
+                <div style="grid-column:4/6;grid-row:4/6;background:var(--pink);border-radius:4px;"></div>
+                <div style="grid-column:6/8;grid-row:5/7;background:var(--fg);border-radius:2px;"></div>
+                <div style="grid-column:4/5;grid-row:7/8;background:var(--fg);border-radius:2px;"></div>
+              </div>
+            </div>
+            <div style="font-size:18px; font-weight:700; color:var(--fg); margin-bottom:4px;">ซุปเปอร์ตีนไก่แซ่บ</div>
+            <div style="font-size:13px; color:var(--fg-mid); margin-bottom:20px;">ราศีกุมภ์ • ธาตุน้ำ • ปีมะโรง</div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+              <button class="phone-btn-primary" style="width:auto; padding:12px 28px; margin:0; font-size:14px;"><i class="fa-solid fa-download" style="margin-right:6px;"></i> บันทึก</button>
+              <button class="phone-btn-outline" style="width:auto; padding:12px 28px; margin:0; font-size:14px;"><i class="fa-solid fa-share-nodes" style="margin-right:6px;"></i> แชร์</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: ASTRO CALENDAR ═══════════ -->
+        <div class="screen" id="screen-astro-calendar">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+
+          <!-- Purple header -->
+          <div style="background:linear-gradient(135deg,#5B4A9E,#7C6FE0,#9B8AFF); padding:16px 20px 20px; color:#fff;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <button class="app-back" onclick="navigateTo('fortune-hub')" style="color:#fff;"><i class="fa-solid fa-chevron-left"></i></button>
+              <div style="flex:1;"></div>
+              <div style="display:flex; align-items:center; gap:4px; font-size:11px; opacity:0.8;"><i class="fa-solid fa-coins" style="font-size:10px;"></i> 500,000</div>
+              <div style="display:flex; align-items:center; gap:4px; font-size:11px; opacity:0.8; margin-left:8px;"><i class="fa-solid fa-gem" style="font-size:10px;"></i> 1,500,000</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; padding:8px 12px; background:rgba(255,255,255,0.15); border-radius:10px; font-size:12px; margin-bottom:10px;">
+              <i class="fa-solid fa-bookmark" style="font-size:11px;"></i>
+              จัดวิจัยดูดวงการเรียกทรัพย์จากการทำโพสข้ออิ่มเกี่ยวกับหนี้ ความยั่งยืนและการลงทุนกองทรัสต์ของเดิม
+            </div>
+            <div style="padding:6px 12px; background:rgba(255,255,255,0.15); border-radius:8px; font-size:12px; display:inline-block;">
+              <i class="fa-solid fa-calendar" style="font-size:10px; margin-right:4px;"></i> วันพฤหัสบดี ที่ 8 ธันวาคม พ.ศ. 2534
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div style="padding:16px 20px;">
+            <!-- Title section -->
+            <div style="text-align:center; margin-bottom:20px;">
+              <div style="font-size:20px; font-weight:800; color:var(--fg);">โหราศาสตร์</div>
+              <div style="font-size:14px; color:var(--fg-mid); margin-top:2px;">ปฏิทินโหราศาสตร์ของคุณ</div>
+            </div>
+
+            <!-- Zodiac Chart -->
+            <div style="background:#EEEAF6; border-radius:16px; padding:16px 8px; margin-bottom:16px; text-align:center; overflow:hidden;">
+              <div style="position:relative; width:280px; height:280px; margin:0 auto;">
+                <!-- Outer ring: life aspects -->
+                <svg viewBox="0 0 280 280" width="280" height="280" style="position:absolute;top:0;left:0;">
+                  <circle cx="140" cy="140" r="136" fill="none" stroke="#D1C4E9" stroke-width="1"/>
+                  <circle cx="140" cy="140" r="118" fill="none" stroke="#B39DDB" stroke-width="1.5"/>
+                  <circle cx="140" cy="140" r="96" fill="none" stroke="#9575CD" stroke-width="1.5"/>
+                  <circle cx="140" cy="140" r="70" fill="none" stroke="#7E57C2" stroke-width="2"/>
+                  <circle cx="140" cy="140" r="42" fill="#7E57C2"/>
+                  <!-- Divider lines (12 sectors) -->
+                  <g stroke="#C5B8DB" stroke-width="0.5" opacity="0.5">
+                    <line x1="140" y1="4" x2="140" y2="276"/>
+                    <line x1="4" y1="140" x2="276" y2="140"/>
+                    <line x1="41" y1="41" x2="239" y2="239"/>
+                    <line x1="239" y1="41" x2="41" y2="239"/>
+                    <line x1="72" y1="12" x2="208" y2="268"/>
+                    <line x1="208" y1="12" x2="72" y2="268"/>
+                  </g>
+                </svg>
+                <!-- Center: zodiac animal -->
+                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,#9575CD,#7E57C2); display:flex; align-items:center; justify-content:center; font-size:36px; box-shadow:0 2px 12px rgba(0,0,0,0.2);">♋</div>
+                <!-- Outer labels: life aspects -->
+                <div style="position:absolute; top:2px; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#5E35B1;">การงาน</div>
+                <div style="position:absolute; bottom:2px; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#5E35B1;">ครอบครัว</div>
+                <div style="position:absolute; left:2px; top:50%; transform:translateY(-50%); font-size:9px; font-weight:700; color:#5E35B1;">ตัวตน</div>
+                <div style="position:absolute; right:2px; top:50%; transform:translateY(-50%); font-size:9px; font-weight:700; color:#5E35B1;">คู่ครอง</div>
+                <div style="position:absolute; top:16px; right:20px; font-size:8px; font-weight:600; color:#7E57C2;">ความเจริญ</div>
+                <div style="position:absolute; top:16px; left:16px; font-size:8px; font-weight:600; color:#7E57C2;">โชคลาภ</div>
+                <div style="position:absolute; bottom:16px; right:16px; font-size:8px; font-weight:600; color:#7E57C2;">บริวาร</div>
+                <div style="position:absolute; bottom:16px; left:16px; font-size:8px; font-weight:600; color:#7E57C2;">สังคม</div>
+                <div style="position:absolute; top:48px; right:4px; font-size:8px; font-weight:600; color:#7E57C2;">โรคภัย</div>
+                <div style="position:absolute; bottom:48px; right:4px; font-size:8px; font-weight:600; color:#7E57C2;">อุปสรรค</div>
+                <div style="position:absolute; top:48px; left:4px; font-size:8px; font-weight:600; color:#7E57C2;">ความเสียหาย</div>
+                <div style="position:absolute; bottom:48px; left:4px; font-size:8px; font-weight:600; color:#7E57C2;">การเงิน</div>
+                <!-- Zodiac names on inner ring -->
+                <div style="position:absolute; top:30px; left:50%; transform:translateX(-50%); font-size:8px; color:#9575CD;">เมษ</div>
+                <div style="position:absolute; top:38px; right:52px; font-size:8px; color:#9575CD;">มีน</div>
+                <div style="position:absolute; top:68px; right:34px; font-size:8px; color:#9575CD;">กุมภ์</div>
+                <div style="position:absolute; right:28px; top:50%; transform:translateY(-50%); font-size:8px; color:#9575CD;">มังกร</div>
+                <div style="position:absolute; bottom:68px; right:38px; font-size:8px; color:#9575CD;">ธนู</div>
+                <div style="position:absolute; bottom:38px; right:56px; font-size:8px; color:#9575CD;">พิจิก</div>
+                <div style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); font-size:8px; color:#9575CD;">ตุลย์</div>
+                <div style="position:absolute; bottom:38px; left:52px; font-size:8px; color:#9575CD;">กันย์</div>
+                <div style="position:absolute; bottom:68px; left:34px; font-size:8px; color:#9575CD;">สิงห์</div>
+                <div style="position:absolute; left:28px; top:50%; transform:translateY(-50%); font-size:8px; color:#9575CD;">เมถุน</div>
+                <div style="position:absolute; top:68px; left:38px; font-size:8px; color:#9575CD;">พฤษภ</div>
+                <!-- Planet bubbles scattered -->
+                <div style="position:absolute; top:18px; left:48%; font-size:14px;">🔴</div>
+                <div style="position:absolute; top:56px; left:35%; font-size:10px; background:#E53935; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">๑</div>
+                <div style="position:absolute; top:56px; left:45%; font-size:10px; background:#5C6BC0; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">๔</div>
+                <div style="position:absolute; top:24px; right:38px; font-size:10px; background:#212121; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">8</div>
+                <div style="position:absolute; top:24px; right:22px; font-size:10px; background:#F57C00; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">บ</div>
+                <div style="position:absolute; top:80px; right:18px; font-size:10px; background:#9C27B0; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">7</div>
+                <div style="position:absolute; right:14px; top:50%; font-size:10px; background:#4CAF50; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">9</div>
+                <div style="position:absolute; right:32px; top:53%; font-size:10px; background:#7B1FA2; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">พ</div>
+                <div style="position:absolute; bottom:56px; right:40px; font-size:10px; background:#FF9800; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">๒</div>
+                <div style="position:absolute; bottom:38px; right:56px; font-size:10px; background:#42A5F5; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">O</div>
+                <div style="position:absolute; bottom:38px; right:38px; font-size:10px; background:#E91E63; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">๓</div>
+                <div style="position:absolute; bottom:60px; left:36px; font-size:10px; background:#26A69A; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">2</div>
+                <div style="position:absolute; bottom:60px; left:54px; font-size:10px; background:#F48FB1; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">ลั</div>
+                <div style="position:absolute; left:16px; top:48%; font-size:10px; background:#FF5722; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">4</div>
+                <div style="position:absolute; left:34px; top:48%; font-size:10px; background:#66BB6A; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">6</div>
+                <div style="position:absolute; top:36px; left:20px; font-size:10px; background:#1565C0; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">0</div>
+                <div style="position:absolute; top:36px; left:38px; font-size:10px; background:#7CB342; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">5</div>
+                <div style="position:absolute; top:52px; left:22px; font-size:10px; background:#D32F2F; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">1</div>
+                <!-- Inner ring planets -->
+                <div style="position:absolute; top:42%; left:32%; font-size:10px; background:#E91E63; color:#fff; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800;">๘</div>
+                <div style="position:absolute; top:42%; left:43%; font-size:10px; background:#F48FB1; color:#fff; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800;">ลั</div>
+                <div style="position:absolute; top:34%; left:34%; font-size:9px; color:#9575CD; font-weight:700;">พ</div>
+                <div style="position:absolute; top:34%; left:42%; font-size:9px; color:#9575CD; font-weight:700;">บ</div>
+                <div style="position:absolute; top:34%; left:50%; font-size:9px; color:#9575CD; font-weight:700;">๕</div>
+                <div style="position:absolute; top:50%; right:36%; font-size:10px; background:#7E57C2; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">๗</div>
+                <div style="position:absolute; top:50%; right:28%; font-size:10px; background:#FF8A65; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">๙</div>
+              </div>
+            </div>
+
+            <!-- คำทำนายสรุปปฏิทินวันนี้ -->
+            <div style="margin-bottom:20px;">
+              <div style="font-size:18px; font-weight:800; color:var(--fg); margin-bottom:10px;">คำทำนายสรุปปฏิทินวันนี้</div>
+              <div style="font-size:13px; color:var(--fg-mid); line-height:1.8;">
+                คำทำนายว่าคุณเป็นคนขยันหมั่นเพียร<br>
+                มีความเข้มแข็งและไม่ยอมแพ้ มีความจงรักภักดีสูง<br>
+                และมีความต้องการทางเพศร้อนแรง<br>
+                ดาวที่ร่วมราศีกับคุณมีผลต่อชีวิตและลักษณะบุคลิกของคุณต่างๆ อย่างต่างกัน<br>
+                ควรระวังเรื่องการคิดทำผิดทำนองคลองธรรม<br>
+                เพื่อป้องกันการเกิดโทษทัณฑ์ได้ในอนาคต
+              </div>
+            </div>
+
+            <!-- ดาวที่ยังส่งผล -->
+            <div style="font-size:18px; font-weight:800; color:var(--fg); margin-bottom:14px;">ดาวที่ยังส่งผล</div>
+
+            <!-- Planet accordion: ดวงอาทิตย์ (collapsed) -->
+            <div style="background:#fff; border-radius:14px; border:1px solid var(--border); margin-bottom:10px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:10px; padding:12px 14px; cursor:pointer;">
+                <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#FFF3E0,#FFE0B2); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; color:#E65100;">บ</div>
+                <div style="flex:1;">
+                  <div style="font-size:14px; font-weight:700; color:var(--fg);">ดวงอาทิตย์</div>
+                  <div style="font-size:11px; color:var(--fg-low);">ดาวเกิด</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:4px;">
+                  <span style="background:var(--purple); color:#fff; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px;">พ 9</span>
+                  <i class="fa-solid fa-chevron-down" style="font-size:11px; color:var(--fg-low);"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Planet accordion: ดวงอาทิตย์ (expanded/active) -->
+            <div style="background:linear-gradient(135deg,#F3F0FF,#EDE7FF); border-radius:14px; border:2px solid var(--purple); margin-bottom:10px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:10px; padding:12px 14px; cursor:pointer;">
+                <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#E53935,#FF7043); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; color:#fff;">๑</div>
+                <div style="flex:1;">
+                  <div style="font-size:14px; font-weight:700; color:var(--purple);">ดวงอาทิตย์</div>
+                  <div style="font-size:11px; color:var(--purple); opacity:0.7;">ดาวเกิด</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:4px;">
+                  <span style="background:var(--purple); color:#fff; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px;">9</span>
+                  <i class="fa-solid fa-chevron-up" style="font-size:11px; color:var(--purple);"></i>
+                </div>
+              </div>
+
+              <!-- Expanded content -->
+              <div style="padding:0 14px 16px;">
+                <!-- Planet detail card -->
+                <div style="background:#fff; border-radius:12px; padding:14px; margin-bottom:12px;">
+                  <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                    <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#5C6BC0,#7986CB); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; color:#fff;">๒</div>
+                    <div>
+                      <div style="font-size:15px; font-weight:700; color:var(--fg);">ดวงจันทร์</div>
+                      <div style="font-size:12px; color:var(--fg-low);">จรถึง พระอาทิตย์ (2-๑)</div>
+                    </div>
+                  </div>
+                  <!-- Date & chance -->
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:var(--bg); border-radius:10px;">
+                    <div>
+                      <div style="font-size:10px; color:var(--fg-low); margin-bottom:3px;">ส่งผลถึงวันที่และเวลา</div>
+                      <div style="display:flex; align-items:center; gap:10px; font-size:12px; color:var(--fg-mid);">
+                        <span><i class="fa-regular fa-calendar" style="font-size:10px; margin-right:3px;"></i> 2 ธ.ค. 2567</span>
+                        <span><i class="fa-regular fa-clock" style="font-size:10px; margin-right:3px;"></i> 01:03 น.</span>
+                      </div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:10px; color:var(--purple); font-weight:600;">โอกาสเกิด</div>
+                      <div style="font-size:22px; font-weight:800; color:var(--purple);">79.1<span style="font-size:12px;">%</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ทำนายว่า -->
+                <div style="margin-bottom:12px;">
+                  <div style="font-size:15px; font-weight:800; color:var(--fg); margin-bottom:6px;">ทำนายว่า</div>
+                  <div style="font-size:13px; color:var(--fg-mid); line-height:1.7;">
+                    จะโชคดีมีลาภดังปรารถนาหรือไม่ก็จะมีความสุขกายสบายใจ ศัตรูจะแพ้ภัย
+                  </div>
+                </div>
+
+                <!-- คำแนะนำ -->
+                <div style="border-left:3px solid var(--purple); padding-left:12px;">
+                  <div style="font-size:15px; font-weight:800; color:var(--fg); margin-bottom:6px;">คำแนะนำ</div>
+                  <div style="font-size:13px; color:var(--fg-mid); line-height:1.7;">
+                    ใช้ช่วงเวลานี้ในการฝึกจิตใจให้มั่นคงและมีทัศนคติที่ดี การคิดบวกจะช่วยดึงดูดสิ่งดี ๆ เข้ามาและทำให้ชีวิตราบรื่น
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prediction Card 3 (highlighted) -->
+            <div style="background:linear-gradient(135deg,#FFF3E0,#FFE0B2); border-radius:16px; padding:16px; border:1px solid #FFE0B2; margin-bottom:16px;">
+              <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+                <div style="width:24px;height:24px;border-radius:50%;background:#FF9800;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;">5</div>
+                <div style="font-size:14px; font-weight:700; color:var(--fg);">เทคนิค(แปรนัยดาวจร)</div>
+              </div>
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:8px;">
+                <div style="font-size:11px; color:var(--fg-low);">ตกอยู่ พระอาทิตย์ (5-จ)</div>
+                <div style="display:flex; align-items:center; gap:4px;">
+                  <div style="font-size:11px; color:var(--fg-low);"><i class="fa-solid fa-clock" style="font-size:9px;"></i> 01:03 น.</div>
+                  <div style="padding:2px 8px; border-radius:6px; background:#fff; font-size:12px; font-weight:700; color:#E65100;">79.1%</div>
+                </div>
+              </div>
+              <div style="font-size:13px; font-weight:700; color:var(--fg); margin-bottom:4px;">คำทำนาย</div>
+              <div style="font-size:12px; color:var(--fg-mid); line-height:1.7; margin-bottom:10px;">คนจะมีผลดวงที่เข้าสอดคล้องกันเป็นตามมาสารพัด ดาวคู่นี้สะท้อน ความสนิทมั่งคั่ง แต่แก้ด้วยการพัฒนาสรรค์สร้าง</div>
+              <div style="font-size:13px; font-weight:700; color:var(--fg); margin-bottom:4px;">คำแนะนำ</div>
+              <div style="font-size:12px; color:var(--fg-mid); line-height:1.7;">โดยมุ่งระบุหนทางแก้ความขัดแย้งของชะตากรรม ครองชีพ เลย พระจันทร์เด่นที่เรื่องบรรยากาศที่ล่อแหลมจากนั้น สำเร็จ</div>
+            </div>
+
+            <!-- ศาสตร์แนะนำ -->
+            <div style="margin-bottom:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:16px; font-weight:700; color:var(--fg);">ศาสตร์แนะนำ</div>
+                <div style="font-size:13px; color:var(--purple); font-weight:600; cursor:pointer;">ดูเพิ่ม</div>
+              </div>
+              <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:4px;">
+                <div style="min-width:130px; border-radius:14px; overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer;">
+                  <div style="height:80px; background:linear-gradient(135deg,#F8BBD0,#E91E63); display:flex; align-items:center; justify-content:center; font-size:28px;">🔮</div>
+                  <div style="padding:8px 10px; background:#fff;"><div style="font-size:12px; font-weight:600; color:var(--fg);">เสี่ยงให้ทำนายรัก</div><div style="font-size:10px; color:var(--fg-low);">ดวงรักของคุณเร็วๆนี้</div></div>
+                </div>
+                <div style="min-width:130px; border-radius:14px; overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer;">
+                  <div style="height:80px; background:linear-gradient(135deg,#E8EAF6,#5C6BC0); display:flex; align-items:center; justify-content:center; font-size:28px;">📊</div>
+                  <div style="padding:8px 10px; background:#fff;"><div style="font-size:12px; font-weight:600; color:var(--fg);">กราฟชีวิต</div><div style="font-size:10px; color:var(--fg-low);">วิเคราะห์เส้นทางชีวิต</div></div>
+                </div>
+                <div style="min-width:130px; border-radius:14px; overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer;">
+                  <div style="height:80px; background:linear-gradient(135deg,#C8E6C9,#388E3C); display:flex; align-items:center; justify-content:center; font-size:28px;">🎋</div>
+                  <div style="padding:8px 10px; background:#fff;"><div style="font-size:12px; font-weight:600; color:var(--fg);">เซียมซี</div><div style="font-size:10px; color:var(--fg-low);">สุ่มเซียมซีประจำวัน</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ศาสตร์ที่ถูกใจ -->
+            <div style="margin-bottom:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:16px; font-weight:700; color:var(--fg);">ศาสตร์ที่ถูกใจ</div>
+                <div style="font-size:13px; color:var(--purple); font-weight:600; cursor:pointer;">ดูเพิ่ม</div>
+              </div>
+              <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:4px;">
+                <div style="min-width:130px; border-radius:14px; overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer;">
+                  <div style="height:80px; background:linear-gradient(135deg,#FDDCE8,#E8D5F5); display:flex; align-items:center; justify-content:center; font-size:28px;">❤️</div>
+                  <div style="padding:8px 10px; background:#fff;"><div style="font-size:12px; font-weight:600; color:var(--fg);">เสี่ยงให้ทำนายรัก</div><div style="font-size:10px; color:var(--fg-low);">ดูดวงความรัก</div></div>
+                </div>
+                <div style="min-width:130px; border-radius:14px; overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer;">
+                  <div style="height:80px; background:linear-gradient(135deg,#FFF3E0,#FFE0B2); display:flex; align-items:center; justify-content:center; font-size:28px;">⚡</div>
+                  <div style="padding:8px 10px; background:#fff;"><div style="font-size:12px; font-weight:600; color:var(--fg);">เสี่ยงให้รู้เหตุการณ์</div><div style="font-size:10px; color:var(--fg-low);">เหตุการณ์ที่จะเกิด</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ข่าวสาร / Event -->
+            <div style="margin-bottom:16px;">
+              <div style="font-size:16px; font-weight:700; color:var(--fg); margin-bottom:12px;">ข่าวสาร / event</div>
+              <div style="background:#fff; border-radius:14px; padding:14px; border:1px solid var(--border);">
+                <div style="font-size:14px; font-weight:700; color:var(--fg); margin-bottom:4px;">ชี้เป้าที่รวมเหล่านักพยากรณ์</div>
+                <div style="font-size:12px; color:var(--fg-mid);">ที่ไม่ใครเคยจัดมาก่อนดีแค่ไหน</div>
+              </div>
+            </div>
+
+            <!-- โปรโมชัน -->
+            <div style="margin-bottom:16px;">
+              <div style="font-size:16px; font-weight:700; color:var(--fg); margin-bottom:12px;">โปรโมชัน</div>
+              <div style="height:100px; border-radius:14px; background:linear-gradient(135deg,#7C6FE0,#EC599D); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+                <div style="text-align:center; color:#fff; z-index:1;">
+                  <div style="font-size:10px; opacity:0.8;">DAILY</div>
+                  <div style="font-size:18px; font-weight:800; letter-spacing:2px;">MU</div>
+                </div>
+                <div style="position:absolute; right:20px; display:flex; gap:4px;">
+                  <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.15);"></div>
+                  <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.1);"></div>
+                  <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.08);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height:30px;"></div>
+        </div>
+
+        <!-- ═══════════ SCREEN: PLAN FREE ═══════════ -->
+        <div class="screen" id="screen-plan-free">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('profile')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">เปรียบเทียบแพลน</div></div>
+          <div class="plan-table">
+            <div class="plan-row">
+              <div class="plan-col">
+                <h3>Free</h3>
+                <div class="price">฿0<span>/เดือน</span></div>
+                <div class="plan-feature"><i class="fa-solid fa-check" style="color:var(--green);font-size:11px"></i> เซียมซี 1 ครั้ง/วัน</div>
+                <div class="plan-feature"><i class="fa-solid fa-check" style="color:var(--green);font-size:11px"></i> ดวงรายวัน</div>
+                <div class="plan-feature"><i class="fa-solid fa-xmark" style="color:var(--fg-low);font-size:11px"></i> ไพ่ทาโร่</div>
+                <div class="plan-feature"><i class="fa-solid fa-xmark" style="color:var(--fg-low);font-size:11px"></i> ทำนายฝัน</div>
+              </div>
+              <div class="plan-col recommended">
+                <h3 style="color:var(--pink)">Plus ✨</h3>
+                <div class="price">฿59<span>/เดือน</span></div>
+                <div class="plan-feature"><i class="fa-solid fa-check" style="color:var(--green);font-size:11px"></i> เซียมซี 3 ครั้ง/วัน</div>
+                <div class="plan-feature"><i class="fa-solid fa-check" style="color:var(--green);font-size:11px"></i> ดวงรายวัน</div>
+                <div class="plan-feature"><i class="fa-solid fa-check" style="color:var(--green);font-size:11px"></i> ไพ่ 2 ครั้ง/วัน</div>
+                <div class="plan-feature"><i class="fa-solid fa-check" style="color:var(--green);font-size:11px"></i> ฝัน 5 ครั้ง/วัน</div>
+              </div>
+            </div>
+            <button class="phone-btn-primary" onclick="showPhoneModal('subscribe-confirm')">อัปเกรดเป็น Plus</button>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: PLAN PLUS ═══════════ -->
+        <div class="screen" id="screen-plan-plus">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('profile')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">เปรียบเทียบแพลน</div></div>
+          <div class="plan-table">
+            <div style="text-align:center; padding:12px 0 20px;">
+              <div class="profile-badge badge-plus" style="font-size:14px; padding:6px 16px;">✨ คุณเป็นสมาชิก Plus</div>
+            </div>
+            <div class="plan-row">
+              <div class="plan-col">
+                <h3>Free</h3>
+                <div class="price" style="color:var(--fg-mid)">฿0<span>/เดือน</span></div>
+              </div>
+              <div class="plan-col recommended">
+                <h3 style="color:var(--pink)">Plus ✨</h3>
+                <div class="price">฿59<span>/เดือน</span></div>
+                <div style="font-size:12px; color:var(--green); font-weight:600;">Active</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: SUBSCRIBE SHEET ═══════════ -->
+        <div class="screen" id="screen-subscribe-sheet">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('plan-free')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">เปรียบเทียบแพลน</div></div>
+          <div class="plan-table" style="opacity:0.4;pointer-events:none">
+            <div class="plan-row"><div class="plan-col"><h3>Free</h3></div><div class="plan-col recommended"><h3 style="color:var(--pink)">Plus ✨</h3></div></div>
+          </div>
+          <!-- Bottom sheet shown -->
+          <div class="phone-modal-overlay show" id="subscribe-confirm-static">
+            <div class="phone-modal-sheet">
+              <div class="phone-modal-handle"></div>
+              <div class="phone-modal-title">ยืนยันการสมัคร</div>
+              <div style="font-size:14px; color:var(--fg-mid); line-height:1.7;">
+                <p>คุณจะถูกนำไปยังหน้าชำระเงินภายนอก</p>
+                <p style="margin-top:8px;"><strong>แพลน:</strong> Plus — ฿59/เดือน</p>
+                <p><strong>ต่ออายุ:</strong> อัตโนมัติ</p>
+              </div>
+              <button class="phone-btn-primary" onclick="navigateTo('success')">ไปหน้าชำระเงิน</button>
+              <button class="phone-btn-outline" onclick="navigateTo('plan-free')">ยกเลิก</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: SUCCESS ═══════════ -->
+        <div class="screen" id="screen-success">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="success-screen">
+            <div class="success-icon">✅</div>
+            <div class="success-title">สมัครสำเร็จ!</div>
+            <div class="success-desc">ยินดีต้อนรับสู่ DailyMu Plus<br>คุณสามารถใช้งานฟีเจอร์ทั้งหมดได้แล้ว</div>
+            <button class="phone-btn-primary" style="margin-top:32px;" onclick="navigateTo('today')">กลับหน้าหลัก</button>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: GATE LOCK ═══════════ -->
+        <div class="screen" id="screen-gate-lock">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">เปิดไพ่ทาโร่</div></div>
+          <div class="wire-placeholder" style="padding-top:60px;">
+            <div class="wire-icon">🔒</div>
+            <div class="wire-label">ฟีเจอร์สำหรับ Plus</div>
+            <div class="wire-sub">อัปเกรดเป็น Plus เพื่อปลดล็อก<br>ฟีเจอร์เปิดไพ่ทาโร่</div>
+            <button class="phone-btn-primary" style="width:auto; margin-top:24px; padding:14px 40px;" onclick="navigateTo('plan-free')">ดูแพลนทั้งหมด</button>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: GATE QUOTA ═══════════ -->
+        <div class="screen" id="screen-gate-quota">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('siamsi')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">เซียมซี</div></div>
+          <div class="wire-placeholder" style="padding-top:20px; opacity:0.3;">
+            <div class="wire-icon">🎋</div>
+            <div class="wire-label">เซียมซี</div>
+          </div>
+          <!-- Quota bottom sheet -->
+          <div class="phone-modal-overlay show" id="quota-modal-static">
+            <div class="phone-modal-sheet">
+              <div class="phone-modal-handle"></div>
+              <div class="quota-gate-content">
+                <div class="gate-icon">⏳</div>
+                <h2>ใช้ครบแล้ววันนี้</h2>
+                <p>คุณใช้เซียมซีครบ <span class="highlight">1 ครั้ง</span> แล้ววันนี้</p>
+                <p style="margin-top:4px;">อัปเกรดเพื่อใช้งานเพิ่ม<br>หรือกลับมาใหม่พรุ่งนี้</p>
+              </div>
+              <button class="phone-btn-primary" onclick="navigateTo('plan-free')">ดูแพลนทั้งหมด</button>
+              <button class="phone-btn-outline" onclick="navigateTo('today')">กลับหน้าหลัก</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: MEMBERSHIP ═══════════ -->
+        <div class="screen" id="screen-membership">
+          <div class="status-bar"><span class="time">9:41</span><div></div></div>
+          <div class="app-header"><button class="app-back" onclick="navigateTo('profile')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">สมาชิกของฉัน</div></div>
+          <div class="profile-header" style="padding-top:12px;">
+            <div class="profile-avatar">🧑</div>
+            <div class="profile-name">ซุปเปอร์ตีนไก่แซ่บ</div>
+            <div class="profile-badge badge-plus">✨ Plus</div>
+          </div>
+          <div class="sub-info-card">
+            <div class="sub-info-row"><span class="sub-info-label">แพลน</span><span class="sub-info-value">Plus — ฿59/เดือน</span></div>
+            <div class="sub-info-row"><span class="sub-info-label">เริ่มใช้งาน</span><span class="sub-info-value">8 พ.ค. 2026</span></div>
+            <div class="sub-info-row"><span class="sub-info-label">ต่ออายุถัดไป</span><span class="sub-info-value">8 มิ.ย. 2026</span></div>
+            <div class="sub-info-row"><span class="sub-info-label">สถานะ</span><span class="sub-info-value" style="color:var(--green)">Active</span></div>
+          </div>
+          <div style="padding:16px 20px;">
+            <button class="phone-btn-outline" style="color:var(--red); border-color:#FDE9ED;">ยกเลิกสมาชิก</button>
+          </div>
+        </div>
+
+        <!-- Quota Modal (for siamsi screen) -->
+        <div class="phone-modal-overlay" id="quota-modal" onclick="closePhoneModal('quota-modal')">
+          <div class="phone-modal-sheet" onclick="event.stopPropagation()">
+            <div class="phone-modal-handle"></div>
+            <div class="quota-gate-content">
+              <div class="gate-icon">⏳</div>
+              <h2>ใช้ครบแล้ววันนี้</h2>
+              <p>คุณใช้เซียมซีครบ <span class="highlight">1 ครั้ง</span> แล้ววันนี้</p>
+              <p style="margin-top:4px;">อัปเกรดเพื่อใช้งานเพิ่ม<br>หรือกลับมาใหม่พรุ่งนี้</p>
+            </div>
+            <button class="phone-btn-primary" onclick="closePhoneModal('quota-modal'); navigateTo('plan-free')">ดูแพลนทั้งหมด</button>
+            <button class="phone-btn-outline" onclick="closePhoneModal('quota-modal')">กลับ</button>
+          </div>
+        </div>
+
+        <!-- Subscribe confirm modal -->
+        <div class="phone-modal-overlay" id="subscribe-confirm" onclick="closePhoneModal('subscribe-confirm')">
+          <div class="phone-modal-sheet" onclick="event.stopPropagation()">
+            <div class="phone-modal-handle"></div>
+            <div class="phone-modal-title">ยืนยันการสมัคร</div>
+            <div style="font-size:14px; color:var(--fg-mid); line-height:1.7;">
+              <p>คุณจะถูกนำไปยังหน้าชำระเงินภายนอก</p>
+              <p style="margin-top:8px;"><strong>แพลน:</strong> Plus — ฿59/เดือน</p>
+              <p><strong>ต่ออายุ:</strong> อัตโนมัติ</p>
+            </div>
+            <button class="phone-btn-primary" onclick="closePhoneModal('subscribe-confirm'); navigateTo('success')">ไปหน้าชำระเงิน</button>
+            <button class="phone-btn-outline" onclick="closePhoneModal('subscribe-confirm')">ยกเลิก</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══════════ CHAT FAB (floating) ═══════════ -->
+      <div class="chat-fab" id="chatFab" onclick="toggleChat()">
+        <i class="fa-solid fa-comments" style="font-size:22px; color:#fff;"></i>
+        <div class="chat-fab-badge" id="chatBadge" style="display:none;">1</div>
+      </div>
+
+      <!-- ═══════════ CHAT OVERLAY ═══════════ -->
+      <div class="chat-overlay" id="chatOverlay">
+
+        <!-- Chat Sidebar (history) -->
+        <div id="chatSidebar" style="position:absolute; inset:0; z-index:10; display:none;">
+          <!-- Backdrop -->
+          <div onclick="toggleChatSidebar()" style="position:absolute; inset:0; background:rgba(0,0,0,0.35);"></div>
+          <!-- Drawer -->
+          <div id="chatDrawer" style="position:absolute; left:0; top:0; bottom:0; width:280px; background:#fff; z-index:11; display:flex; flex-direction:column; transform:translateX(-100%); transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);">
+            <!-- Drawer Header -->
+            <div style="padding:50px 16px 12px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between;">
+              <div style="font-size:16px; font-weight:700; color:var(--fg);">ประวัติแชท</div>
+              <div style="display:flex; gap:8px;">
+                <div onclick="toggleChatSidebar()" style="width:32px;height:32px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--fg-mid);"><i class="fa-solid fa-xmark"></i></div>
+              </div>
+            </div>
+            <!-- Search -->
+            <div style="padding:12px 16px;">
+              <div style="display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:12px; background:var(--bg); border:1px solid var(--border);">
+                <i class="fa-solid fa-magnifying-glass" style="font-size:13px; color:var(--fg-low);"></i>
+                <input type="text" placeholder="ค้นหาประวัติ..." oninput="filterHistory(this.value)" style="border:none; background:none; outline:none; font-family:var(--font); font-size:13px; color:var(--fg); width:100%;">
+              </div>
+            </div>
+            <!-- New Chat Button -->
+            <div style="padding:0 16px 8px;">
+              <div onclick="newChat()" style="display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:12px; background:linear-gradient(135deg,#7C6FE0,#9B8AFF); cursor:pointer;">
+                <i class="fa-solid fa-plus" style="font-size:14px; color:#fff;"></i>
+                <span style="font-size:14px; font-weight:600; color:#fff;">แชทใหม่</span>
+              </div>
+            </div>
+            <!-- History Sections -->
+            <div style="flex:1; overflow-y:auto; padding:4px 0;" id="chatHistoryList">
+              <div style="padding:6px 16px 4px; font-size:11px; font-weight:700; color:var(--fg-low); text-transform:uppercase;">วันนี้</div>
+              <div class="chat-history-item active" data-chat-id="0" onclick="loadChat(0)">
+                <div class="chat-history-icon">🔮</div>
+                <div class="chat-history-text">
+                  <div class="chat-history-title">ดวงวันนี้เป็นยังไง?</div>
+                  <div class="chat-history-preview">วันนี้ดวงของคุณเปิดรับสิ่งดีๆ...</div>
+                </div>
+                <div class="chat-history-actions">
+                  <i class="fa-solid fa-ellipsis" onclick="event.stopPropagation(); showHistoryMenu(0)"></i>
+                </div>
+              </div>
+              <div class="chat-history-item" data-chat-id="1" onclick="loadChat(1)">
+                <div class="chat-history-icon">❤️</div>
+                <div class="chat-history-text">
+                  <div class="chat-history-title">ดวงความรักเดือนนี้</div>
+                  <div class="chat-history-preview">ดาวศุกร์ส่งพลังดี...</div>
+                </div>
+                <div class="chat-history-actions">
+                  <i class="fa-solid fa-ellipsis" onclick="event.stopPropagation(); showHistoryMenu(1)"></i>
+                </div>
+              </div>
+              <div style="padding:12px 16px 4px; font-size:11px; font-weight:700; color:var(--fg-low); text-transform:uppercase;">เมื่อวาน</div>
+              <div class="chat-history-item" data-chat-id="2" onclick="loadChat(2)">
+                <div class="chat-history-icon">💰</div>
+                <div class="chat-history-text">
+                  <div class="chat-history-title">การเงินเดือนพฤษภาคม</div>
+                  <div class="chat-history-preview">ดวงการเงินเดือนนี้ดีเลย...</div>
+                </div>
+                <div class="chat-history-actions">
+                  <i class="fa-solid fa-ellipsis" onclick="event.stopPropagation(); showHistoryMenu(2)"></i>
+                </div>
+              </div>
+              <div class="chat-history-item" data-chat-id="3" onclick="loadChat(3)">
+                <div class="chat-history-icon">🎯</div>
+                <div class="chat-history-text">
+                  <div class="chat-history-title">เลขนำโชค งวด 1/5/69</div>
+                  <div class="chat-history-preview">เลขเด่น 9, 23, 47...</div>
+                </div>
+                <div class="chat-history-actions">
+                  <i class="fa-solid fa-ellipsis" onclick="event.stopPropagation(); showHistoryMenu(3)"></i>
+                </div>
+              </div>
+              <div style="padding:12px 16px 4px; font-size:11px; font-weight:700; color:var(--fg-low); text-transform:uppercase;">สัปดาห์ก่อน</div>
+              <div class="chat-history-item" data-chat-id="4" onclick="loadChat(4)">
+                <div class="chat-history-icon">🎨</div>
+                <div class="chat-history-text">
+                  <div class="chat-history-title">สีมงคลประจำสัปดาห์</div>
+                  <div class="chat-history-preview">สีส้มเสริมการงาน...</div>
+                </div>
+                <div class="chat-history-actions">
+                  <i class="fa-solid fa-ellipsis" onclick="event.stopPropagation(); showHistoryMenu(4)"></i>
+                </div>
+              </div>
+              <div class="chat-history-item" data-chat-id="5" onclick="loadChat(5)">
+                <div class="chat-history-icon">💼</div>
+                <div class="chat-history-text">
+                  <div class="chat-history-title">ดวงการงาน ควรเปลี่ยนงาน?</div>
+                  <div class="chat-history-preview">ช่วงนี้ดาวพฤหัสส่งพลัง...</div>
+                </div>
+                <div class="chat-history-actions">
+                  <i class="fa-solid fa-ellipsis" onclick="event.stopPropagation(); showHistoryMenu(5)"></i>
+                </div>
+              </div>
+              <div class="chat-history-item" data-chat-id="6" onclick="loadChat(6)">
+                <div class="chat-history-icon">✈️</div>
+                <div class="chat-history-text">
+                  <div class="chat-history-title">ดวงเดินทาง ไปญี่ปุ่น</div>
+                  <div class="chat-history-preview">ช่วงนี้เหมาะกับการเดินทาง...</div>
+                </div>
+                <div class="chat-history-actions">
+                  <i class="fa-solid fa-ellipsis" onclick="event.stopPropagation(); showHistoryMenu(6)"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- History item context menu -->
+        <div id="historyMenu" style="position:absolute; z-index:20; display:none; background:#fff; border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.15); padding:6px 0; min-width:160px;">
+          <div onclick="renameChat()" style="display:flex; align-items:center; gap:10px; padding:10px 16px; cursor:pointer; font-size:13px; color:var(--fg); transition:background 0.1s;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-pen" style="font-size:12px; color:var(--fg-mid);"></i> เปลี่ยนชื่อ
+          </div>
+          <div onclick="shareChat()" style="display:flex; align-items:center; gap:10px; padding:10px 16px; cursor:pointer; font-size:13px; color:var(--fg); transition:background 0.1s;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-share-nodes" style="font-size:12px; color:var(--fg-mid);"></i> แชร์
+          </div>
+          <div style="height:1px; background:var(--border); margin:4px 0;"></div>
+          <div onclick="deleteChat()" style="display:flex; align-items:center; gap:10px; padding:10px 16px; cursor:pointer; font-size:13px; color:var(--red); transition:background 0.1s;" onmouseover="this.style.background='#FDE9ED'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-trash" style="font-size:12px;"></i> ลบแชท
+          </div>
+        </div>
+
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <button class="chat-header-back" onclick="toggleChatSidebar()" style="font-size:16px;"><i class="fa-solid fa-bars"></i></button>
+          <div class="chat-header-avatar">🔮</div>
+          <div class="chat-header-info">
+            <div class="chat-header-name" id="chatHeaderTitle">DailyMu AI</div>
+            <div class="chat-header-status">ออนไลน์</div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <div onclick="newChat()" style="width:32px;height:32px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--fg-mid);" title="แชทใหม่"><i class="fa-solid fa-pen-to-square"></i></div>
+            <div onclick="toggleChat()" style="width:32px;height:32px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--fg-mid);"><i class="fa-solid fa-xmark"></i></div>
+          </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg bot">
+            สวัสดีค่ะ ✨ ฉันคือ <strong>DailyMu AI</strong> ผู้ช่วยดูดวงส่วนตัวของคุณ
+            <br><br>ถามเรื่องดวงชะตา ความรัก การงาน การเงิน หรืออะไรก็ได้เลยค่ะ 🔮
+            <div class="chat-msg-time">9:41</div>
+          </div>
+        </div>
+
+        <!-- Typing indicator -->
+        <div class="chat-typing" id="chatTyping">
+          <div class="chat-typing-dot"></div>
+          <div class="chat-typing-dot"></div>
+          <div class="chat-typing-dot"></div>
+        </div>
+
+        <!-- Suggestion chips -->
+        <div class="chat-suggestions" id="chatSuggestions">
+          <div class="chat-suggest-chip" onclick="sendSuggestion('ดวงวันนี้เป็นยังไง?')">🌟 ดวงวันนี้เป็นยังไง?</div>
+          <div class="chat-suggest-chip" onclick="sendSuggestion('ดวงความรักช่วงนี้')">❤️ ดวงความรักช่วงนี้</div>
+          <div class="chat-suggest-chip" onclick="sendSuggestion('การเงินเดือนนี้ดีไหม?')">💰 การเงินเดือนนี้ดีไหม?</div>
+          <div class="chat-suggest-chip" onclick="sendSuggestion('เลขนำโชควันนี้')">🎯 เลขนำโชควันนี้</div>
+          <div class="chat-suggest-chip" onclick="sendSuggestion('สีมงคลวันนี้ใส่สีอะไรดี?')">🎨 สีมงคลวันนี้</div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-area">
+          <textarea class="chat-input" id="chatInput" placeholder="ถามเรื่องดวงได้เลย..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+      </div>
+
+      <!-- Tab Bar -->
+      <div class="tab-bar" id="tabBar">
+        <!-- Tab bar white background -->
+        <div style="position:absolute; bottom:0; left:0; right:0; height:88px; background:#fff; z-index:0;"></div>
+        <svg width="375" height="88" viewBox="0 0 375 88" preserveAspectRatio="none" style="position:absolute;bottom:0;left:0;right:0;width:100%;z-index:1;pointer-events:none;">
+          <defs>
+            <filter id="ts" x="-5%" y="-20%" width="110%" height="140%">
+              <feDropShadow dx="0" dy="-2" stdDeviation="4" flood-color="#000" flood-opacity=".06"/>
+            </filter>
+          </defs>
+          <path d="M0 16 H152 C160 16 165 16 169 20 Q177 32 186 36 Q191 38 195 38 Q199 38 204 36 Q213 32 221 20 C225 16 230 16 238 16 H375 V88 H0 Z" fill="white" filter="url(#ts)"/>
+        </svg>
+        <div class="center-fab" onclick="navigateTo('today')">
+          <i class="fa-solid fa-sun" style="font-size:22px;color:#fff"></i>
+          <span class="center-fab-label">ดวงวันนี้</span>
+        </div>
+        <div class="tab-bar-items" id="tabBarItems">
+          <div class="tab-item" data-tab-id="calendar" onclick="navigateTo('calendar')"><i class="fa-solid fa-calendar-days tab-icon"></i><span class="tab-label">ปฏิทิน</span></div>
+          <div class="tab-item" data-tab-id="notify" id="tabNotify" onclick="navigateTo('notify')"><i class="fa-solid fa-bell tab-icon"></i><span class="tab-label">แจ้งเตือน</span></div>
+          <div class="tab-item center-space active" data-tab-id="today"></div>
+          <div class="tab-item" data-tab-id="fortune-hub" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-wand-magic-sparkles tab-icon"></i><span class="tab-label">ทำนาย</span></div>
+          <div class="tab-item" data-tab-id="profile" onclick="navigateTo('profile')"><i class="fa-solid fa-user tab-icon"></i><span class="tab-label">โปรไฟล์</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT ANNOTATION PANEL ═══ -->
+  <div class="anno-panel" id="annoPanel">
+    <div class="anno-title" id="annoTitle">Home — ดวงวันนี้</div>
+    <div class="anno-subtitle" id="annoSubtitle">Main Tab | DAIL-700</div>
+
+    <div id="annoCards">
+      <!-- Annotations get swapped per screen -->
+    </div>
+  </div>
+</div>
+
+<!-- Document Hub button -->
+<button class="doc-hub-btn" onclick="navigateTo('today')">
+  <i class="fa-solid fa-arrow-left"></i> Document Hub
+</button>
+
+<script>
+  // ═══════════════════════════════════
+  //   SCREEN & ANNOTATION DATA
+  // ═══════════════════════════════════
+  const annotations = {
+    'today': {
+      title: 'Home — ดวงวันนี้',
+      subtitle: 'Main Tab | DAIL-700',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'หน้าแรก', body: 'แสดงดวงรายวัน สีมงคล คำทำนาย\nและทางลัดไปฟีเจอร์ทำนายต่างๆ' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'AI สรุปดวง', body: 'กดปุ่ม pill ด้านบน → เปิด bottom sheet\nแสดง AI สรุปดวงประจำสัปดาห์' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'Upgrade Banner', body: 'กดแบนเนอร์ → ไปหน้า Plan Comparison\nแสดงเฉพาะ Free User' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'เปิดคำทำนาย', body: 'กดการ์ด เซียมซี/ไพ่/ฝัน → ไปหน้าฟีเจอร์นั้น\nถ้า quota หมด → แสดง Gate' },
+      ]
+    },
+    'calendar': {
+      title: 'ปฏิทินดูดวง',
+      subtitle: 'Main Tab | DAIL-710',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'Calendar View', body: 'แสดงปฏิทินรายเดือน พร้อมไอคอน\nวันพระ วันธงไชย วันกาลกิณี' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'กดวันที่', body: 'แสดงดวงรายวันของวันที่เลือก' },
+      ]
+    },
+    'notify': {
+      title: 'แจ้งเตือน',
+      subtitle: 'Main Tab | DAIL-715',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'Notification Center', body: 'แสดงรายการแจ้งเตือน\nดวงรายวัน วันพิเศษ โปรโมชัน' },
+      ]
+    },
+    'profile': {
+      title: 'โปรไฟล์',
+      subtitle: 'Main Tab | DAIL-720',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'ข้อมูลผู้ใช้', body: 'แสดงชื่อ avatar และ badge แพลน\nFree / Plus' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'สมาชิกของฉัน', body: 'ไปหน้าจัดการสมาชิก\nดูสถานะ ยกเลิกได้' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'อัปเกรดแพลน', body: 'ไปหน้า Plan Comparison' },
+      ]
+    },
+    'fortune-hub': {
+      title: 'ทำนาย Hub',
+      subtitle: 'Feature | DAIL-730',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'Hub Screen', body: 'รวมทุกวิธีทำนายไว้ที่เดียว\nGrid layout 2 คอลัมน์' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'เลือกวิธีทำนาย', body: 'กดการ์ด → ไปหน้าฟีเจอร์นั้น\nเซียมซี / ไพ่ / ฝัน / เลขนำโชค' },
+      ]
+    },
+    'siamsi': {
+      title: 'เซียมซี',
+      subtitle: 'Feature | DAIL-731',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'เซียมซีวันนี้', body: 'สุ่มเซียมซี ได้คำทำนายประจำวัน\nมีอนิเมชันเขย่ากระบอก' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'เสี่ยงเซียมซี', body: 'กดปุ่ม → ถ้า quota หมด\n→ แสดง Gate: Quota หมด (bottom sheet)' },
+        { badge: 'warn', badgeLabel: 'warn', title: 'Quota', body: 'Free: เซียมซี 1 ครั้ง/วัน\nPlus: เซียมซี 3 ครั้ง/วัน' },
+      ]
+    },
+    'tarot': {
+      title: 'เปิดไพ่ทาโร่',
+      subtitle: 'Feature | DAIL-732',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'ไพ่ทาโร่', body: 'เลือกไพ่ 3 ใบ\nอดีต ปัจจุบัน อนาคต' },
+        { badge: 'warn', badgeLabel: 'warn', title: 'Feature Gate', body: 'Plus Only — Free User จะเห็น\nGate: ฟีเจอร์ Lock แทน' },
+      ]
+    },
+    'dream': {
+      title: 'ทำนายฝัน',
+      subtitle: 'Feature | DAIL-733',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'ทำนายฝัน', body: 'พิมพ์เล่าความฝัน\nAI ช่วยแปลความหมาย' },
+        { badge: 'note', badgeLabel: 'note', title: 'AI Powered', body: 'ใช้ AI วิเคราะห์ความฝัน\nตามตำราโบราณ + จิตวิทยา' },
+      ]
+    },
+    'wallpaper': {
+      title: 'วอลเปเปอร์เสริมดวง',
+      subtitle: 'Feature | DAIL-734',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'วอลเปเปอร์', body: 'วอลเปเปอร์เสริมดวงประจำวัน\nเปลี่ยนตามราศี ธาตุ และสีมงคล' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'เลือก + ดาวน์โหลด', body: 'กดเลือกวอลเปเปอร์ → Preview เต็มจอ\n→ กดบันทึกลงเครื่อง' },
+      ]
+    },
+    'qr-mu': {
+      title: 'QR Mu',
+      subtitle: 'Feature | DAIL-735',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'QR ดวงส่วนตัว', body: 'สร้าง QR Code ที่มีข้อมูลดวงของ user\nราศี ธาตุ ปีนักษัตร' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'บันทึก / แชร์', body: 'กดบันทึก → Save ลงเครื่อง\nกดแชร์ → ส่งให้เพื่อน' },
+      ]
+    },
+    'astro-calendar': {
+      title: 'ปฏิทินโหราศาสตร์ 100 ปี',
+      subtitle: 'Feature | DAIL-736',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'ปฏิทิน 100 ปี', body: 'ค้นหาดวงตามวันเดือนปี\nย้อนหลังได้ 100 ปี\nดูราศี ดาวเด่น วันมงคล' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'เลือกปี + เดือน', body: 'เลื่อนเลือกปี พ.ศ.\nกดเลือกเดือน → แสดงข้อมูลโหราศาสตร์' },
+      ]
+    },
+    'plan-free': {
+      title: 'Plan Comparison',
+      subtitle: 'มุมมอง Free User | DAIL-740',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'เปรียบเทียบแพลน', body: 'แสดง Free vs Plus เทียบกัน\nHighlight ข้อดีของ Plus' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'อัปเกรดเป็น Plus', body: 'กดปุ่ม → แสดง Bottom Sheet ยืนยัน\nก่อนออกไปหน้าชำระเงิน' },
+      ]
+    },
+    'plan-plus': {
+      title: 'Plan Comparison',
+      subtitle: 'มุมมอง Plus User | DAIL-741',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'แสดงสถานะ Active', body: 'Plus User เห็นว่าตัวเองอยู่แพลนไหน\nไม่มีปุ่มอัปเกรด' },
+      ]
+    },
+    'subscribe-sheet': {
+      title: 'Bottom Sheet — ยืนยัน',
+      subtitle: 'Subscribe Flow | DAIL-745',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'ยืนยันก่อนออกแอป', body: 'แสดงรายละเอียดแพลนและราคา\nก่อนนำผู้ใช้ไปหน้าชำระเงิน' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ไปหน้าชำระเงิน', body: 'กดปุ่ม → เปิด External Browser\n(Web Payment Page)' },
+        { badge: 'warn', badgeLabel: 'warn', title: 'UX Decision', body: 'ใช้ bottom sheet แทน full page\nเพื่อให้ user รู้ว่ากำลังจะออกแอป' },
+      ]
+    },
+    'success': {
+      title: 'Success Screen',
+      subtitle: 'Subscribe Flow | DAIL-748',
+      cards: [
+        { badge: 'success', badgeLabel: 'done', title: 'สมัครสำเร็จ', body: 'แสดงหลังกลับมาจากหน้าชำระเงิน\nUser กด "กลับหน้าหลัก" → Today' },
+      ]
+    },
+    'gate-lock': {
+      title: 'Feature Gate — Lock',
+      subtitle: 'Variant A | DAIL-749',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'ฟีเจอร์ Lock', body: 'แสดงเมื่อ Free User เข้าฟีเจอร์ Plus Only\nเช่น ไพ่ทาโร่' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ดูแพลนทั้งหมด', body: 'ไปหน้า Plan Comparison' },
+      ]
+    },
+    'gate-quota': {
+      title: 'Feature Gate — Quota หมด',
+      subtitle: 'Variant B | DAIL-749',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'Quota หมด', body: 'แสดงเมื่อใช้ฟีเจอร์ครบจำนวนครั้ง/วัน\n\nFree: เซียมซี 1 ครั้ง\nPlus: เซียมซี 3, ไพ่ 2, ฝัน 5' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ดูแพลนทั้งหมด', body: 'ไปหน้า Plan Comparison' },
+        { badge: 'warn', badgeLabel: 'warn', title: 'UX Decision', body: 'แสดง quota ที่เหลือตลอดเวลา (เช่น 0/1) หรือ gate\nตอนหมดเท่านั้น?' },
+      ]
+    },
+    'chat-ai': {
+      title: 'Chat AI — Variant A (FAB)',
+      subtitle: 'Feature | DAIL-770',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'Variant A: ปุ่มลอย (FAB)', body: 'ปุ่มวงกลมสีม่วงลอยมุมขวาล่าง\nแสดงทุกหน้าจอตลอดเวลา\nมี pulse animation ดึงดูดสายตา' },
+        { badge: 'success', badgeLabel: 'pro', title: 'ข้อดี', body: '✅ เห็นได้ชัดเจนตลอดเวลา\n✅ Pattern สากล ผู้ใช้คุ้นเคย\n✅ ไม่รบกวน header / content\n✅ อยู่ thumb zone เข้าถึงง่าย' },
+        { badge: 'warn', badgeLabel: 'con', title: 'ข้อเสีย', body: '⚠️ บังเนื้อหามุมขวาล่าง\n⚠️ อาจซ้อนกับ bottom tab bar\n⚠️ ดูเหมือน "แปะเพิ่ม" ไม่ integrated\n⚠️ บนจอเล็กอาจบังปฏิทิน/ปุ่ม' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'Interaction', body: 'กด FAB → เปิดแชทเต็มจอ slide up\nกด X → ปิดกลับหน้าเดิม' },
+      ]
+    },
+    'chat-ai-b': {
+      title: 'Chat AI — Variant B (Tab + Bell)',
+      subtitle: 'Feature | DAIL-770',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'Variant B: แชทแทน Tab แจ้งเตือน', body: '• แชท AI แทนที่ tab "แจ้งเตือน" ใน bottom bar\n• แจ้งเตือนย้ายไป bell icon มุมขวาบน\n  พร้อม badge แสดงจำนวน (เช่น 3)' },
+        { badge: 'success', badgeLabel: 'pro', title: 'ข้อดี', body: '✅ แชทเข้าถึงง่าย — อยู่ใน tab bar หลัก\n✅ ไม่บัง content (ไม่มี FAB ลอย)\n✅ ดู integrated เป็นฟีเจอร์หลักของแอป\n✅ Bell icon มุมขวาบนเป็น pattern สากล\n  (LINE, IG, Shopee, Banking apps)\n✅ Badge notification เห็นชัดตั้งแต่เปิดแอป' },
+        { badge: 'warn', badgeLabel: 'con', title: 'ข้อเสีย', body: '⚠️ แจ้งเตือนหาได้ยากขึ้น (ไม่อยู่ใน tab)\n⚠️ User เดิมอาจงงที่ tab เปลี่ยน\n⚠️ Bell icon เล็ก — อาจมองข้าม\n⚠️ ต้องมี onboarding แนะนำตำแหน่งใหม่' },
+        { badge: 'note', badgeLabel: 'note', title: 'Research: ตำแหน่ง Bell Icon', body: '📱 LINE: Bell มุมขวาบน + badge\n📱 Instagram: Bell มุมขวาบน + red dot\n📱 Shopee: Bell ข้าง search bar\n📱 Grab: Bell มุมขวา navigation\n📱 Banking apps: Bell มุมขวาบน\n\n→ มุมขวาบนเป็น standard ที่สุด\n→ User scan มุมขวาบนเป็นธรรมชาติ' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'Interaction', body: '• กด tab "แชท" → เปิดหน้าแชท AI\n• กด bell icon มุมขวาบน → ไปหน้าแจ้งเตือน\n• Badge จำนวนหายเมื่อเปิดดูแล้ว' },
+      ]
+    },
+    'membership': {
+      title: 'สมาชิกของฉัน',
+      subtitle: 'Manage | DAIL-760',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'ข้อมูลสมาชิก', body: 'แสดงแพลนปัจจุบัน วันเริ่ม\nวันต่ออายุ สถานะ' },
+        { badge: 'warn', badgeLabel: 'warn', title: 'ยกเลิกสมาชิก', body: 'ต้องมี confirmation dialog\nก่อนยกเลิกจริง' },
+      ]
+    },
+  };
+
+  // ═══════════════════════════════════
+  //   NAVIGATION
+  // ═══════════════════════════════════
+  let currentScreen = 'today';
+
+  function navigateTo(screenId) {
+    // Hide all screens
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+    // Show target
+    const target = document.getElementById(`screen-${screenId}`);
+    if (target) {
+      target.classList.add('active');
+      currentScreen = screenId;
+    }
+
+    // Scroll to top
+    document.getElementById('mainScroll').scrollTop = 0;
+
+    // Update sidebar active
+    document.querySelectorAll('.flow-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.screen === screenId);
+    });
+
+    // Update top bar
+    const anno = annotations[screenId];
+    if (anno) {
+      document.getElementById('breadcrumb').textContent = anno.title;
+      document.getElementById('epicLabel').textContent = `Epic ${anno.subtitle.split('|')[1]?.trim() || ''}`;
+    }
+
+    // Update annotation panel
+    updateAnnoPanel(screenId);
+
+    // Update tab bar active
+    const tabMap = { calendar: 0, notify: 1, today: 2, 'fortune-hub': 3, fortune: 3, profile: 4 };
+    const tabItems = document.querySelectorAll('.tab-bar-items .tab-item');
+    tabItems.forEach(t => t.classList.remove('active'));
+    const idx = tabMap[screenId];
+    if (idx !== undefined) {
+      tabItems[idx].classList.add('active');
+    } else {
+      // sub-screen: keep center active for feature screens
+      tabItems[2].classList.add('active');
+    }
+
+    // Show/hide tab bar for certain screens
+    const hideTabScreens = ['gate-lock', 'gate-quota', 'subscribe-sheet', 'success'];
+    const tabBar = document.getElementById('tabBar');
+    tabBar.style.display = hideTabScreens.includes(screenId) ? 'none' : '';
+
+    // Reset chat FAB to default bottom-right on every screen
+    const chatFab = document.getElementById('chatFab');
+    if (chatFab) {
+      const phone = chatFab.closest('.phone-frame');
+      const w = phone ? phone.offsetWidth || 375 : 375;
+      const h = phone ? phone.offsetHeight || 812 : 812;
+      const bottomOffset = hideTabScreens.includes(screenId) ? 24 : 96;
+      chatFab.style.left = (w - 52 - 16) + 'px';
+      chatFab.style.top = (h - 52 - bottomOffset) + 'px';
+      chatFab.style.right = 'auto';
+      chatFab.style.bottom = 'auto';
+    }
+  }
+
+  function updateAnnoPanel(screenId) {
+    const data = annotations[screenId];
+    if (!data) return;
+
+    document.getElementById('annoTitle').textContent = data.title;
+    document.getElementById('annoSubtitle').textContent = data.subtitle;
+
+    const container = document.getElementById('annoCards');
+    container.innerHTML = data.cards.map(c => `
+      <div class="anno-card">
+        <div class="anno-card-header">
+          <span class="anno-badge ${c.badge}">${c.badgeLabel}</span>
+          <span class="anno-card-title">${c.title}</span>
+        </div>
+        <div class="anno-card-body">${c.body.replace(/\n/g, '<br>')}</div>
+      </div>
+    `).join('');
+  }
+
+  // ═══════════════════════════════════
+  //   SIDEBAR CLICKS
+  // ═══════════════════════════════════
+  document.querySelectorAll('.flow-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const screen = item.dataset.screen;
+      if (screen) navigateTo(screen);
+    });
+  });
+
+  // ═══════════════════════════════════
+  //   PHONE MODALS
+  // ═══════════════════════════════════
+  function showPhoneModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('show');
+  }
+  function closePhoneModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  }
+
+  // ═══════════════════════════════════
+  //   CALENDAR
+  // ═══════════════════════════════════
+  const MONTHS = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  let calMonth = 0, calYear = 2026;
+
+  function renderCalendar() {
+    document.getElementById('calMonthLabel').textContent = `${MONTHS[calMonth]} ${calYear}`;
+    const grid = document.getElementById('calDays');
+    grid.innerHTML = '';
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const dim = new Date(calYear, calMonth + 1, 0).getDate();
+    const today = new Date();
+    const isCur = today.getFullYear() === calYear && today.getMonth() === calMonth;
+
+    for (let i = 0; i < firstDay; i++) {
+      const c = document.createElement('div');
+      c.className = 'cal-day-cell empty';
+      grid.appendChild(c);
+    }
+    for (let d = 1; d <= dim; d++) {
+      const c = document.createElement('div');
+      c.className = `cal-day-cell${isCur && today.getDate() === d ? ' today' : ''}`;
+      const r = Math.abs(Math.sin(calYear * 73 + calMonth * 37 + d * 13));
+      let icons = '';
+      if (d % 8 === 1 || d % 8 === 0) icons += '🙏';
+      if (r < 0.15) icons += '🌟';
+      if (r > 0.85) icons += '💕';
+      if (d === 9 || d === 18) icons += '💰';
+      c.innerHTML = `<span>${d}</span>${icons ? `<div class="cal-day-icon">${icons}</div>` : ''}`;
+      grid.appendChild(c);
+    }
+  }
+
+  function changeMonth(dir) {
+    calMonth += dir;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCalendar();
+  }
+
+  // ═══════════════════════════════════
+  //   CALENDAR PAGE (screen-calendar)
+  // ═══════════════════════════════════
+  let calMonth2 = 0, calYear2 = 2026;
+
+  // Calendar page state
+  let calSelectedDay2 = 15;
+  const DH_SHORT = ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
+  const MONTH_SHORT = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+  function renderCalendar2() {
+    const label = document.getElementById('calMonthLabel2');
+    if (!label) return;
+    label.textContent = `${MONTHS[calMonth2]} ${calYear2}`;
+    renderWeekStrip();
+    updateCalDayInfo(calSelectedDay2);
+  }
+
+  function renderWeekStrip() {
+    const strip = document.getElementById('calWeekStrip');
+    if (!strip) return;
+    // Build a week around the selected day
+    const sel = new Date(calYear2, calMonth2, calSelectedDay2);
+    const dow = sel.getDay(); // 0=Sun
+    const weekStart = new Date(sel);
+    weekStart.setDate(sel.getDate() - dow);
+
+    strip.innerHTML = '';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart);
+      d.setDate(weekStart.getDate() + i);
+      const day = d.getDate();
+      const isSelected = d.getFullYear() === calYear2 && d.getMonth() === calMonth2 && day === calSelectedDay2;
+      const isToday = d.toDateString() === new Date().toDateString();
+      const dayColor = isSelected ? '#fff' : (d.getDay() === 0 ? 'var(--pink)' : 'var(--fg)');
+      const bgStyle = isSelected ? 'background:var(--pink); color:#fff;' : '';
+
+      strip.innerHTML += `
+        <div onclick="selectCalDay(${day}, ${d.getMonth()}, ${d.getFullYear()})" style="display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px 0; flex:1;">
+          <div style="font-size:13px; font-weight:700; color:${isSelected ? 'var(--pink)' : 'var(--fg-mid)'};">${DH_SHORT[d.getDay()]}</div>
+          <div style="width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; ${bgStyle} color:${dayColor}; ${isToday && !isSelected ? 'border:2px solid var(--pink);' : ''}">${day}</div>
+        </div>
+      `;
+    }
+  }
+
+  function selectCalDay(day, month, year) {
+    calSelectedDay2 = day;
+    calMonth2 = month;
+    calYear2 = year;
+    renderCalendar2();
+  }
+
+  function changeMonth2(dir) {
+    calMonth2 += dir;
+    if (calMonth2 > 11) { calMonth2 = 0; calYear2++; }
+    if (calMonth2 < 0) { calMonth2 = 11; calYear2--; }
+    calSelectedDay2 = 1;
+    renderCalendar2();
+  }
+
+  function updateCalDayInfo(day) {
+    const dayEl = document.getElementById('calSelectedDay');
+    const monthEl = document.getElementById('calSelectedMonthShort');
+    if (dayEl) dayEl.textContent = day;
+    if (monthEl) monthEl.textContent = MONTH_SHORT[calMonth2];
+  }
+
+  function switchCalTab(tab) {
+    document.querySelectorAll('#calTabBar > div').forEach(el => {
+      const isActive = el.dataset.tab === tab;
+      el.style.background = isActive ? 'var(--pink)' : 'none';
+      el.style.color = isActive ? '#fff' : 'var(--fg-mid)';
+      el.style.fontWeight = isActive ? '700' : '500';
+    });
+  }
+
+  // ═══════════════════════════════════
+  //   CHAT AI (ChatGPT-style)
+  // ═══════════════════════════════════
+  let chatOpen = false;
+  let chatSidebarOpen = false;
+  let activeChatId = 0;
+  let menuTargetId = null;
+
+  // Mock chat history data
+  const chatHistory = [
+    { id: 0, icon: '🔮', title: 'ดวงวันนี้เป็นยังไง?', preview: 'วันนี้ดวงของคุณเปิดรับสิ่งดีๆ...', group: 'วันนี้',
+      messages: [
+        { sender: 'user', text: 'ดวงวันนี้เป็นยังไง?', time: '9:42' },
+        { sender: 'bot', text: '🌟 วันนี้ดวงของคุณเปิดรับสิ่งดีๆ ค่ะ!\n\nพลังงานโดยรวมดีมาก เหมาะกับการเริ่มต้นอะไรใหม่ๆ ช่วงเช้าเป็นเวลาที่ดีที่สุดในการตัดสินใจสำคัญ\n\n💼 การงาน: ⭐⭐⭐⭐ มีโอกาสดีเข้ามา\n💰 การเงิน: ⭐⭐⭐⭐⭐ โชคลาภมาแรง\n❤️ ความรัก: ⭐⭐⭐ ระวังความเข้าใจผิด', time: '9:42' },
+      ]},
+    { id: 1, icon: '❤️', title: 'ดวงความรักเดือนนี้', preview: 'ดาวศุกร์ส่งพลังดี...', group: 'วันนี้',
+      messages: [
+        { sender: 'user', text: 'ดวงความรักช่วงนี้เป็นยังไง?', time: '8:15' },
+        { sender: 'bot', text: '❤️ ดวงความรักช่วงนี้ของคุณน่าสนใจมากค่ะ\n\nดาวศุกร์ส่งพลังดี ถ้าคุณมีคู่อยู่แล้ว ช่วงนี้ความสัมพันธ์จะแน่นแฟ้นขึ้น\n\nถ้าโสดอยู่ มีโอกาสเจอคนพิเศษ\n\n🌹 สีเสริมดวงรัก: ชมพูพาสเทล\n💕 วันดี: วันศุกร์นี้', time: '8:15' },
+      ]},
+    { id: 2, icon: '💰', title: 'การเงินเดือนพฤษภาคม', preview: 'ดวงการเงินเดือนนี้ดีเลย...', group: 'เมื่อวาน',
+      messages: [
+        { sender: 'user', text: 'การเงินเดือนนี้ดีไหม?', time: '20:30' },
+        { sender: 'bot', text: '💰 ดวงการเงินเดือนนี้ดีเลยค่ะ!\n\nดาวพฤหัสส่งพลังด้านโชคลาภ มีรายได้พิเศษเข้ามา\n\n✅ ควรทำ: เก็บออม ลงทุนระยะสั้น\n⚠️ ระวัง: อย่าให้ใครยืมเงินช่วงนี้', time: '20:30' },
+      ]},
+    { id: 3, icon: '🎯', title: 'เลขนำโชค งวด 1/5/69', preview: 'เลขเด่น 9, 23, 47...', group: 'เมื่อวาน',
+      messages: [
+        { sender: 'user', text: 'เลขนำโชควันนี้', time: '18:00' },
+        { sender: 'bot', text: '🎯 เลขนำโชคของคุณวันนี้ค่ะ!\n\n🔮 เลขเด่น: 9, 23, 47\n⭐ เลขรอง: 14, 36\n🌟 เลขคู่: 09, 23, 47, 91\n💫 เลข 3 ตัว: 923, 147\n\nช่วงเวลาโชคดี: 10:00 - 14:00 น.', time: '18:00' },
+      ]},
+    { id: 4, icon: '🎨', title: 'สีมงคลประจำสัปดาห์', preview: 'สีส้มเสริมการงาน...', group: 'สัปดาห์ก่อน',
+      messages: [
+        { sender: 'user', text: 'สีมงคลวันนี้ใส่สีอะไรดี?', time: '9:00' },
+        { sender: 'bot', text: '🎨 สีมงคลประจำวันนี้ค่ะ!\n\n💼 สีเสริมการงาน: 🟠 สีส้ม\n💰 สีเสริมการเงิน: 🟡 สีทอง\n❤️ สีเสริมความรัก: 🩷 สีชมพู\n🍀 สีเสริมโชค: ⚪ สีเงิน\n\n❌ ควรหลีกเลี่ยง: 🟣 สีม่วง', time: '9:00' },
+      ]},
+    { id: 5, icon: '💼', title: 'ดวงการงาน ควรเปลี่ยนงาน?', preview: 'ช่วงนี้ดาวพฤหัสส่งพลัง...', group: 'สัปดาห์ก่อน',
+      messages: [
+        { sender: 'user', text: 'ช่วงนี้ควรเปลี่ยนงานไหม?', time: '14:20' },
+        { sender: 'bot', text: '💼 เรื่องการเปลี่ยนงานค่ะ\n\nช่วงนี้ดาวพฤหัสส่งพลังด้านการงาน แต่ยังไม่ใช่จังหวะที่ดีที่สุดในการเปลี่ยน\n\nแนะนำให้รอช่วงกลางปี ดาวจะเรียงตัวเหมาะกับการเริ่มต้นใหม่\n\n⏰ ช่วงเวลาที่ดี: มิ.ย. - ก.ค.', time: '14:20' },
+      ]},
+    { id: 6, icon: '✈️', title: 'ดวงเดินทาง ไปญี่ปุ่น', preview: 'ช่วงนี้เหมาะกับการเดินทาง...', group: 'สัปดาห์ก่อน',
+      messages: [
+        { sender: 'user', text: 'อยากไปเที่ยวญี่ปุ่น ช่วงนี้ดวงเดินทางดีไหม?', time: '11:45' },
+        { sender: 'bot', text: '✈️ ดวงเดินทางของคุณค่ะ\n\nช่วงนี้เหมาะกับการเดินทางมากค่ะ! ดาวจันทร์อยู่ในตำแหน่งที่ดี\n\n🗾 ทิศตะวันออก (ญี่ปุ่น) เป็นทิศมงคลของคุณพอดีเลย\n\n📅 วันที่ดี: 15-20 ของเดือน\n🎨 สีเสริมดวงเดินทาง: สีฟ้า', time: '11:45' },
+      ]},
+  ];
+
+  const aiResponses = {
+    'ดวงวันนี้': '🌟 วันนี้ดวงของคุณเปิดรับสิ่งดีๆ ค่ะ!\n\nพลังงานโดยรวมดีมาก เหมาะกับการเริ่มต้นอะไรใหม่ๆ\n\n💼 การงาน: ⭐⭐⭐⭐\n💰 การเงิน: ⭐⭐⭐⭐⭐\n❤️ ความรัก: ⭐⭐⭐\n\nอยากถามเรื่องไหนเพิ่มเติมไหมคะ? ✨',
+    'ความรัก': '❤️ ดวงความรักช่วงนี้ดีค่ะ\n\nดาวศุกร์ส่งพลังดี ความสัมพันธ์แน่นแฟ้นขึ้น\nคนโสดมีโอกาสเจอคนพิเศษ\n\n🌹 สีเสริมดวงรัก: ชมพูพาสเทล\n💕 วันดี: วันศุกร์นี้',
+    'การเงิน': '💰 ดวงการเงินเดือนนี้ดีค่ะ!\n\nดาวพฤหัสส่งพลังด้านโชคลาภ\n\n✅ ควรทำ: เก็บออม ลงทุนระยะสั้น\n⚠️ ระวัง: อย่าให้ใครยืมเงิน\n\n🔢 เลขมงคล: 3, 9, 14',
+    'เลขนำโชค': '🎯 เลขนำโชคค่ะ!\n\n🔮 เลขเด่น: 9, 23, 47\n⭐ เลขรอง: 14, 36\n🌟 เลขคู่: 09, 23, 47\n💫 เลข 3 ตัว: 923, 147\n\nช่วงเวลาโชคดี: 10:00 - 14:00 น.',
+    'สีมงคล': '🎨 สีมงคลวันนี้ค่ะ!\n\n💼 การงาน: 🟠 สีส้ม\n💰 การเงิน: 🟡 สีทอง\n❤️ ความรัก: 🩷 สีชมพู\n🍀 โชค: ⚪ สีเงิน\n\n❌ หลีกเลี่ยง: 🟣 สีม่วง',
+    'สุขภาพ': '🏥 ดวงสุขภาพช่วงนี้ค่ะ\n\nโดยรวมดี แต่ควรระวังเรื่องการพักผ่อน\n\n✅ แนะนำ: ออกกำลังกายเบาๆ โยคะ\n⚠️ ระวัง: ความเครียด นอนไม่พอ\n🍀 วันที่ดี: วันจันทร์ เริ่มต้นดูแลตัวเอง',
+    'เดินทาง': '✈️ ดวงเดินทางค่ะ\n\nช่วงนี้เหมาะมาก! ดาวจันทร์อยู่ตำแหน่งดี\n\n📅 วันดี: 15-20 ของเดือน\n🧭 ทิศมงคล: ตะวันออก\n🎨 สีเสริม: สีฟ้า\n\nไปเถอะค่ะ ดวงเปิด! 🌈',
+    'default': '🔮 ขอบคุณสำหรับคำถามค่ะ!\n\nจากการดูดวง ช่วงนี้พลังงานดีมาก ทุกอย่างเข้าที่เข้าทาง\n\n💡 คำแนะนำ: อดทนอีกนิด ความสำเร็จใกล้มือแล้ว\n\nอยากถามเรื่องอะไรเพิ่มเติมไหมคะ? ✨',
+  };
+
+  // Toggle main chat
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    document.getElementById('chatOverlay').classList.toggle('open', chatOpen);
+    document.getElementById('chatFab').classList.toggle('open', chatOpen);
+    document.getElementById('chatBadge').style.display = 'none';
+    // Close sidebar when closing chat
+    if (!chatOpen && chatSidebarOpen) { chatSidebarOpen = false; closeChatSidebarUI(); }
+    // Update wireframe annotation
+    if (chatOpen) {
+      updateAnnoPanel('chat-ai');
+      document.querySelectorAll('.flow-item').forEach(i => i.classList.toggle('active', i.dataset.screen === 'chat-ai'));
+      document.getElementById('breadcrumb').textContent = 'Chat with AI';
+      document.getElementById('epicLabel').textContent = 'Epic DAIL-770';
+    } else {
+      updateAnnoPanel(currentScreen);
+      document.querySelectorAll('.flow-item').forEach(i => i.classList.toggle('active', i.dataset.screen === currentScreen));
+      const a = annotations[currentScreen];
+      if (a) { document.getElementById('breadcrumb').textContent = a.title; document.getElementById('epicLabel').textContent = `Epic ${a.subtitle.split('|')[1]?.trim() || ''}`; }
+    }
+  }
+
+  // Sidebar toggle
+  function toggleChatSidebar() {
+    chatSidebarOpen = !chatSidebarOpen;
+    const sidebar = document.getElementById('chatSidebar');
+    const drawer = document.getElementById('chatDrawer');
+    if (chatSidebarOpen) {
+      sidebar.style.display = 'block';
+      requestAnimationFrame(() => { drawer.style.transform = 'translateX(0)'; });
+    } else { closeChatSidebarUI(); }
+    hideHistoryMenu();
+  }
+  function closeChatSidebarUI() {
+    const drawer = document.getElementById('chatDrawer');
+    drawer.style.transform = 'translateX(-100%)';
+    setTimeout(() => { document.getElementById('chatSidebar').style.display = 'none'; }, 300);
+  }
+
+  // Load a chat from history
+  function loadChat(id) {
+    activeChatId = id;
+    const chat = chatHistory.find(c => c.id === id);
+    if (!chat) return;
+    // Update header
+    document.getElementById('chatHeaderTitle').textContent = chat.title;
+    // Render messages
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = `<div class="chat-msg bot">สวัสดีค่ะ ✨ ฉันคือ <strong>DailyMu AI</strong> ผู้ช่วยดูดวงส่วนตัวของคุณ<div class="chat-msg-time">9:41</div></div>`;
+    chat.messages.forEach(m => {
+      const el = document.createElement('div');
+      el.className = `chat-msg ${m.sender}`;
+      el.innerHTML = `${m.text.replace(/\n/g, '<br>')}<div class="chat-msg-time">${m.time}</div>`;
+      container.appendChild(el);
+    });
+    container.scrollTop = container.scrollHeight;
+    // Hide suggestions for loaded chats
+    document.getElementById('chatSuggestions').style.display = 'none';
+    // Update active in sidebar
+    document.querySelectorAll('.chat-history-item').forEach(el => {
+      el.classList.toggle('active', parseInt(el.dataset.chatId) === id);
+    });
+    // Close sidebar
+    if (chatSidebarOpen) toggleChatSidebar();
+  }
+
+  // New chat
+  function newChat() {
+    activeChatId = -1;
+    document.getElementById('chatHeaderTitle').textContent = 'DailyMu AI';
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = `<div class="chat-msg bot">สวัสดีค่ะ ✨ ฉันคือ <strong>DailyMu AI</strong> ผู้ช่วยดูดวงส่วนตัวของคุณ<br><br>ถามเรื่องดวงชะตา ความรัก การงาน การเงิน หรืออะไรก็ได้เลยค่ะ 🔮<div class="chat-msg-time">9:41</div></div>`;
+    const suggestions = document.getElementById('chatSuggestions');
+    suggestions.style.display = 'flex';
+    suggestions.innerHTML = defaultSuggestions();
+    document.querySelectorAll('.chat-history-item').forEach(el => el.classList.remove('active'));
+    if (chatSidebarOpen) toggleChatSidebar();
+  }
+
+  // Filter history
+  function filterHistory(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('.chat-history-item').forEach(el => {
+      const title = el.querySelector('.chat-history-title').textContent.toLowerCase();
+      const preview = el.querySelector('.chat-history-preview').textContent.toLowerCase();
+      el.style.display = (title.includes(q) || preview.includes(q)) ? 'flex' : 'none';
+    });
+  }
+
+  // History context menu
+  function showHistoryMenu(id) {
+    menuTargetId = id;
+    const menu = document.getElementById('historyMenu');
+    const item = document.querySelector(`.chat-history-item[data-chat-id="${id}"]`);
+    if (!item) return;
+    const rect = item.getBoundingClientRect();
+    const overlay = document.getElementById('chatOverlay').getBoundingClientRect();
+    menu.style.top = (rect.bottom - overlay.top + 4) + 'px';
+    menu.style.left = '60px';
+    menu.style.display = 'block';
+    // Close on outside click
+    setTimeout(() => document.addEventListener('click', hideHistoryMenuOnce), 10);
+  }
+  function hideHistoryMenu() { document.getElementById('historyMenu').style.display = 'none'; }
+  function hideHistoryMenuOnce() { hideHistoryMenu(); document.removeEventListener('click', hideHistoryMenuOnce); }
+
+  function renameChat() {
+    hideHistoryMenu();
+    const item = document.querySelector(`.chat-history-item[data-chat-id="${menuTargetId}"] .chat-history-title`);
+    if (!item) return;
+    const current = item.textContent;
+    const newName = prompt('เปลี่ยนชื่อแชท:', current);
+    if (newName && newName.trim()) {
+      item.textContent = newName.trim();
+      const chat = chatHistory.find(c => c.id === menuTargetId);
+      if (chat) chat.title = newName.trim();
+      if (activeChatId === menuTargetId) document.getElementById('chatHeaderTitle').textContent = newName.trim();
+    }
+  }
+  function shareChat() { hideHistoryMenu(); alert('แชร์ลิงก์แชทเรียบร้อย! (mock)'); }
+  function deleteChat() {
+    hideHistoryMenu();
+    if (!confirm('ต้องการลบแชทนี้?')) return;
+    const item = document.querySelector(`.chat-history-item[data-chat-id="${menuTargetId}"]`);
+    if (item) item.remove();
+    if (activeChatId === menuTargetId) newChat();
+  }
+
+  // Messaging
+  function sendSuggestion(text) {
+    document.getElementById('chatSuggestions').style.display = 'none';
+    addMessage(text, 'user');
+    // Auto-set header title from first user message
+    if (activeChatId === -1) document.getElementById('chatHeaderTitle').textContent = text.substring(0, 30) + (text.length > 30 ? '...' : '');
+    showTypingThenReply(text);
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    input.style.height = '40px';
+    document.getElementById('chatSuggestions').style.display = 'none';
+    addMessage(text, 'user');
+    if (activeChatId === -1) document.getElementById('chatHeaderTitle').textContent = text.substring(0, 30) + (text.length > 30 ? '...' : '');
+    showTypingThenReply(text);
+  }
+
+  function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+  function autoResize(el) { el.style.height = '40px'; el.style.height = Math.min(el.scrollHeight, 80) + 'px'; }
+
+  function addMessage(text, sender) {
+    const container = document.getElementById('chatMessages');
+    const now = new Date();
+    const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const msg = document.createElement('div');
+    msg.className = `chat-msg ${sender}`;
+    msg.innerHTML = `${text.replace(/\n/g, '<br>')}<div class="chat-msg-time">${time}</div>`;
+    container.appendChild(msg);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function showTypingThenReply(userText) {
+    const typing = document.getElementById('chatTyping');
+    typing.classList.add('show');
+    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+    let reply = aiResponses['default'];
+    for (const [key, val] of Object.entries(aiResponses)) {
+      if (key !== 'default' && userText.includes(key)) { reply = val; break; }
+    }
+    const delay = 1000 + Math.random() * 1500;
+    setTimeout(() => {
+      typing.classList.remove('show');
+      addMessage(reply, 'bot');
+      setTimeout(() => {
+        const s = document.getElementById('chatSuggestions');
+        s.style.display = 'flex';
+        s.innerHTML = getRandomSuggestions();
+      }, 300);
+    }, delay);
+  }
+
+  function defaultSuggestions() {
+    return `<div class="chat-suggest-chip" onclick="sendSuggestion('ดวงวันนี้เป็นยังไง?')">🌟 ดวงวันนี้เป็นยังไง?</div>
+      <div class="chat-suggest-chip" onclick="sendSuggestion('ดวงความรักช่วงนี้')">❤️ ดวงความรักช่วงนี้</div>
+      <div class="chat-suggest-chip" onclick="sendSuggestion('การเงินเดือนนี้ดีไหม?')">💰 การเงินเดือนนี้ดีไหม?</div>
+      <div class="chat-suggest-chip" onclick="sendSuggestion('สีมงคลวันนี้ใส่สีอะไรดี?')">🎨 สีมงคลวันนี้</div>`;
+  }
+
+  function getRandomSuggestions() {
+    const all = [
+      { emoji: '🌟', text: 'ดวงวันนี้เป็นยังไง?' }, { emoji: '❤️', text: 'ดวงความรักช่วงนี้' },
+      { emoji: '💰', text: 'การเงินเดือนนี้ดีไหม?' }, { emoji: '🎯', text: 'เลขนำโชควันนี้' },
+      { emoji: '🎨', text: 'สีมงคลวันนี้ใส่สีอะไรดี?' }, { emoji: '💼', text: 'ดวงการงานสัปดาห์นี้' },
+      { emoji: '🏥', text: 'สุขภาพช่วงนี้เป็นยังไง?' }, { emoji: '✈️', text: 'ช่วงนี้เดินทางดีไหม?' },
+    ];
+    const shuffled = all.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 4).map(s =>
+      `<div class="chat-suggest-chip" onclick="sendSuggestion('${s.text}')">${s.emoji} ${s.text}</div>`
+    ).join('');
+  }
+
+  // ═══════════════════════════════════
+  //   CHAT VARIANT SWITCHING
+  // ═══════════════════════════════════
+  let chatVariant = 'A'; // 'A' = FAB, 'B' = Top bar
+
+  function setChatVariant(v) {
+    chatVariant = v;
+    const fab = document.getElementById('chatFab');
+    const topIcon = document.getElementById('chatTopIcon');
+    const tabNotify = document.getElementById('tabNotify');
+
+    if (v === 'A') {
+      // Variant A: FAB bottom-right, tab = แจ้งเตือน
+      if (fab) fab.style.display = '';
+      if (topIcon) topIcon.style.display = 'none';
+      if (tabNotify) {
+        tabNotify.innerHTML = '<i class="fa-solid fa-bell tab-icon"></i><span class="tab-label">แจ้งเตือน</span>';
+        tabNotify.onclick = () => navigateTo('notify');
+      }
+    } else {
+      // Variant B: No FAB, bell in header, tab = แชท AI
+      if (fab) fab.style.display = 'none';
+      if (topIcon) topIcon.style.display = 'block';
+      if (tabNotify) {
+        tabNotify.innerHTML = '<i class="fa-solid fa-comments tab-icon"></i><span class="tab-label">แชท</span>';
+        tabNotify.onclick = () => { if (!chatOpen) toggleChat(); };
+      }
+    }
+  }
+
+  // Handle navigateTo for chat-ai from sidebar
+  const origNavigateTo = navigateTo;
+  navigateTo = function(screenId) {
+    if (screenId === 'chat-ai') {
+      setChatVariant('A');
+      if (!chatOpen) toggleChat();
+      return;
+    }
+    if (screenId === 'chat-ai-b') {
+      setChatVariant('B');
+      // Show annotation but also navigate to today to show the top bar
+      if (chatOpen) { chatOpen = false; document.getElementById('chatOverlay').classList.remove('open'); document.getElementById('chatFab').classList.remove('open'); }
+      origNavigateTo('today');
+      // Override annotation to show variant B
+      updateAnnoPanel('chat-ai-b');
+      document.querySelectorAll('.flow-item').forEach(i => i.classList.toggle('active', i.dataset.screen === 'chat-ai-b'));
+      document.getElementById('breadcrumb').textContent = 'Chat AI — Variant B (Top)';
+      document.getElementById('epicLabel').textContent = 'Epic DAIL-770';
+      return;
+    }
+    if (chatOpen) { chatOpen = false; document.getElementById('chatOverlay').classList.remove('open'); document.getElementById('chatFab').classList.remove('open'); if (chatSidebarOpen) { chatSidebarOpen = false; closeChatSidebarUI(); } }
+    origNavigateTo(screenId);
+  };
+
+  // ═══════════════════════════════════
+  //   DRAGGABLE CHAT FAB
+  // ═══════════════════════════════════
+  (function() {
+    const fab = document.getElementById('chatFab');
+    if (!fab) return;
+    const phone = fab.closest('.phone-frame');
+    let isDragging = false, wasDragged = false;
+    let startX, startY, fabX, fabY;
+
+    // Convert CSS right/bottom to left/top for drag to work
+    function initPos() {
+      var w = phone.offsetWidth || 375;
+      var h = phone.offsetHeight || 812;
+      var size = 52;
+      fab.style.left = (w - size - 16) + 'px';
+      fab.style.top = (h - size - 96) + 'px';
+      fab.style.right = 'auto';
+      fab.style.bottom = 'auto';
+    }
+    setTimeout(initPos, 150);
+
+    function getPos(e) {
+      const t = e.touches ? e.touches[0] : e;
+      return { x: t.clientX, y: t.clientY };
+    }
+
+    function onStart(e) {
+      const pos = getPos(e);
+      const pr = phone.getBoundingClientRect();
+      startX = pos.x;
+      startY = pos.y;
+      fabX = fab.offsetLeft;
+      fabY = fab.offsetTop;
+      isDragging = true;
+      wasDragged = false;
+      fab.classList.add('dragging');
+    }
+
+    function onMove(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      const pos = getPos(e);
+      const dx = pos.x - startX;
+      const dy = pos.y - startY;
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) wasDragged = true;
+      const pr = phone.getBoundingClientRect();
+      let newX = fabX + dx;
+      let newY = fabY + dy;
+      // Clamp inside phone
+      newX = Math.max(0, Math.min(newX, pr.width - 52));
+      newY = Math.max(0, Math.min(newY, pr.height - 52));
+      fab.style.left = newX + 'px';
+      fab.style.top = newY + 'px';
+    }
+
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      fab.classList.remove('dragging');
+      // Snap to nearest edge (left or right) but keep Y position
+      const w = phone.offsetWidth || 375;
+      const cx = fab.offsetLeft + 26;
+      fab.style.transition = 'left 0.25s ease';
+      fab.style.left = (cx < w / 2 ? 12 : w - 52 - 12) + 'px';
+      setTimeout(() => { fab.style.transition = ''; }, 250);
+    }
+
+    // Override click — only open chat if NOT dragged
+    fab.removeAttribute('onclick');
+    fab.addEventListener('click', function(e) {
+      if (wasDragged) { e.stopPropagation(); return; }
+      toggleChat();
+    });
+
+    // Mouse events
+    fab.addEventListener('mousedown', onStart);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+    // Touch events
+    fab.addEventListener('touchstart', onStart, { passive: false });
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onEnd);
+  })();
+
+  // ═══════════════════════════════════
+  //   INIT
+  // ═══════════════════════════════════
+  renderCalendar();
+  renderCalendar2();
+  updateAnnoPanel('today');
+</script>
+</body>
+</html>
