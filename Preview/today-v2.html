@@ -821,13 +821,49 @@
           <div class="flow-item-sub">เล่าฝัน แปลความหมาย</div>
         </div>
       </div>
-      <div class="flow-item" data-screen="wallpaper" data-epic="DAIL-734" data-title="วอลเปเปอร์เสริมดวง">
+      <div class="flow-item" data-screen="wallpaper" data-epic="DAIL-734" data-title="วอลเปเปอร์">
         <div class="flow-item-icon" style="background:#3D1F2D; color:#F9A8D4;">
           <i class="fa-solid fa-image"></i>
         </div>
         <div class="flow-item-text">
           <div class="flow-item-name">วอลเปเปอร์</div>
-          <div class="flow-item-sub">วอลเปเปอร์เสริมดวง</div>
+          <div class="flow-item-sub">เมนูคอลเลคชั่นวอลเปเปอร์</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="wp-collection" data-epic="DAIL-734" data-title="คอลเลคชั่นวอลเปเปอร์">
+        <div class="flow-item-icon" style="background:#3D1F2D; color:#F9A8D4;">
+          <i class="fa-solid fa-images"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">→ คอลเลคชั่น</div>
+          <div class="flow-item-sub">เลือกวอลเปเปอร์ในคอลเลคชั่น</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="wp-enhance" data-epic="DAIL-734" data-title="เสริมพลังมงคล">
+        <div class="flow-item-icon" style="background:#3D1F2D; color:#F9A8D4;">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">→ เสริมพลังมงคล</div>
+          <div class="flow-item-sub">เลือกด้านเสริมดวง</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="wp-customize" data-epic="DAIL-734" data-title="ตกแต่งวอลเปเปอร์">
+        <div class="flow-item-icon" style="background:#3D1F2D; color:#F9A8D4;">
+          <i class="fa-solid fa-sliders"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">→ ตกแต่งวอลเปเปอร์</div>
+          <div class="flow-item-sub">ชื่อ ดาวราศี เลขมงคล</div>
+        </div>
+      </div>
+      <div class="flow-item" data-screen="wp-result" data-epic="DAIL-734" data-title="ดาวน์โหลด/แชร์">
+        <div class="flow-item-icon" style="background:#3D1F2D; color:#F9A8D4;">
+          <i class="fa-solid fa-download"></i>
+        </div>
+        <div class="flow-item-text">
+          <div class="flow-item-name">→ ดาวน์โหลด/แชร์</div>
+          <div class="flow-item-sub">บันทึก + แชร์วอลเปเปอร์</div>
         </div>
       </div>
       <div class="flow-item" data-screen="qr-mu" data-epic="DAIL-735" data-title="QR Mu">
@@ -1239,28 +1275,266 @@
         <!-- ═══════════ SCREEN: NOTIFY ═══════════ -->
         <div class="screen" id="screen-notify">
           <div class="status-bar"><span class="time">9:41</span><div></div></div>
-          <div class="app-header"><div class="app-header-title">แจ้งเตือน</div></div>
-          <div class="wire-placeholder" style="padding-top:80px;">
-            <div class="wire-icon">🔔</div>
-            <div class="wire-label">แจ้งเตือน</div>
-            <div class="wire-sub">แจ้งเตือนดวงรายวัน<br>วันพิเศษ และโปรโมชัน</div>
+
+          <!-- Header -->
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 20px 12px; background:var(--pink-light);">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <button class="app-back" onclick="navigateTo('today')"><i class="fa-solid fa-chevron-left"></i></button>
+              <div style="font-size:18px; font-weight:700; color:var(--fg);">การแจ้งเตือน</div>
+            </div>
+            <div style="display:flex; gap:14px;">
+              <div style="cursor:pointer; color:var(--fg-mid);"><i class="fa-solid fa-envelope-open" style="font-size:17px;"></i></div>
+              <div style="cursor:pointer; color:var(--fg-mid);"><i class="fa-solid fa-trash-can" style="font-size:17px;"></i></div>
+            </div>
+          </div>
+
+          <!-- Category Tabs -->
+          <div style="display:flex; gap:16px; padding:14px 20px 18px; background:linear-gradient(180deg, var(--pink-light) 0%, var(--bg) 100%);">
+            <!-- Tab: ทั้งหมด (active) -->
+            <div class="noti-tab active" data-tab="all" onclick="switchNotiTab(this, 'all')" style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
+              <div style="width:56px; height:56px; border-radius:16px; background:var(--pink); display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-grip" style="font-size:20px; color:#fff;"></i>
+              </div>
+              <span style="font-size:12px; font-weight:700; color:var(--fg);">ทั้งหมด</span>
+            </div>
+            <!-- Tab: ทั่วไป -->
+            <div class="noti-tab" data-tab="general" onclick="switchNotiTab(this, 'general')" style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
+              <div style="width:56px; height:56px; border-radius:16px; background:#FFF3E0; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-bullhorn" style="font-size:20px; color:#F59E0B;"></i>
+              </div>
+              <span style="font-size:12px; font-weight:500; color:var(--fg-mid);">ทั่วไป</span>
+            </div>
+            <!-- Tab: ฤกษ์ -->
+            <div class="noti-tab" data-tab="auspicious" onclick="switchNotiTab(this, 'auspicious')" style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
+              <div style="width:56px; height:56px; border-radius:16px; background:#E8F0FE; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-calendar-check" style="font-size:20px; color:#4285F4;"></i>
+              </div>
+              <span style="font-size:12px; font-weight:500; color:var(--fg-mid);">ฤกษ์</span>
+            </div>
+          </div>
+
+          <!-- Notification List -->
+          <div style="padding:0;">
+
+            <!-- Noti 1: ดวงรายวัน (unread) -->
+            <div style="display:flex; align-items:flex-start; gap:12px; padding:16px 20px; border-bottom:1px solid var(--border); cursor:pointer; background:#fff;">
+              <div style="width:40px; height:40px; border-radius:50%; background:#FFF0F6; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-bell" style="font-size:16px; color:#D4A0B0;"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg); margin-bottom:3px;">ดวงรายวัน (Daily Horoscope)</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.5; margin-bottom:4px;">"ดวงวันนี้พร้อมแล้ว! วันนี้เป็นวัน ดวงดี มาดูรายละเอียดกัน"</div>
+                <div style="font-size:11px; color:var(--fg-low);">18 ก.พ. 69 | 1 ชั่วโมงที่แล้ว</div>
+              </div>
+              <div style="width:10px; height:10px; border-radius:50%; background:var(--pink); flex-shrink:0; margin-top:6px;"></div>
+            </div>
+
+            <!-- Noti 2: เตือนก่อนนอน (unread) -->
+            <div style="display:flex; align-items:flex-start; gap:12px; padding:16px 20px; border-bottom:1px solid var(--border); cursor:pointer; background:#fff;">
+              <div style="width:40px; height:40px; border-radius:50%; background:#FFF0F6; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-bell" style="font-size:16px; color:#D4A0B0;"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg); margin-bottom:3px;">เตือนก่อนนอน (Nightly Reminder)</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.5; margin-bottom:4px;">"พรุ่งนี้เป็นวัน ควรระวัง เรื่องการเงิน อ่านคำแนะนำเตรียม ตัวได้เลย"</div>
+                <div style="font-size:11px; color:var(--fg-low);">18 ก.พ. 69 | 3 ชั่วโมงที่แล้ว</div>
+              </div>
+              <div style="width:10px; height:10px; border-radius:50%; background:var(--pink); flex-shrink:0; margin-top:6px;"></div>
+            </div>
+
+            <!-- Noti 3: ฤกษ์เฉพาะเรื่อง (read) -->
+            <div style="display:flex; align-items:flex-start; gap:12px; padding:16px 20px; border-bottom:1px solid var(--border); cursor:pointer; background:#fff;">
+              <div style="width:40px; height:40px; border-radius:50%; background:#F5F5F5; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-bell" style="font-size:16px; color:#C0C0C8;"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg); margin-bottom:3px;">ฤกษ์เฉพาะเรื่อง</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.5; margin-bottom:4px;">"พรุ่งนี้ดาวพฤหัสย้ายราศี ส่งผลดีต่อ <span style="color:var(--pink); font-weight:600;">การเงิน</span> ของคุณ"</div>
+                <div style="font-size:11px; color:var(--fg-low);">17 ก.พ. 69 | 1 วันที่แล้ว</div>
+              </div>
+            </div>
+
+            <!-- Noti 4: วันฤกษ์ดี (unread) -->
+            <div style="display:flex; align-items:flex-start; gap:12px; padding:16px 20px; border-bottom:1px solid var(--border); cursor:pointer; background:#fff;">
+              <div style="width:40px; height:40px; border-radius:50%; background:#FFF0F6; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-bell" style="font-size:16px; color:#D4A0B0;"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg); margin-bottom:3px;">วันฤกษ์ดี (Auspicious Day)</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.5; margin-bottom:4px;">"วันพุธนี้เป็นวัน ฤกษ์ดี เหมาะสำหรับเริ่มต้นสิ่งใหม่"</div>
+                <div style="font-size:11px; color:var(--fg-low);">17 ก.พ. 69 | 1 วันที่แล้ว</div>
+              </div>
+              <div style="width:10px; height:10px; border-radius:50%; background:var(--pink); flex-shrink:0; margin-top:6px;"></div>
+            </div>
+
+            <!-- Noti 5: Trial กำลังหมด -->
+            <div style="display:flex; align-items:flex-start; gap:12px; padding:16px 20px; border-bottom:1px solid var(--border); cursor:pointer; background:#fff;">
+              <div style="width:40px; height:40px; border-radius:50%; background:#F5F5F5; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-bell" style="font-size:16px; color:#C0C0C8;"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg); margin-bottom:3px;">Trial กำลังหมดอายุ</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.5; margin-bottom:4px;">"ทดลองใช้งาน Plus ของคุณจะหมดในอีก 3 วัน อัปเกรดเพื่อใช้งานต่อ"</div>
+                <div style="font-size:11px; color:var(--fg-low);">16 ก.พ. 69 | 2 วันที่แล้ว</div>
+              </div>
+            </div>
+
+            <!-- Noti 6: โปรโมชัน -->
+            <div style="display:flex; align-items:flex-start; gap:12px; padding:16px 20px; border-bottom:1px solid var(--border); cursor:pointer; background:#fff;">
+              <div style="width:40px; height:40px; border-radius:50%; background:#F5F5F5; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-bell" style="font-size:16px; color:#C0C0C8;"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg); margin-bottom:3px;">วอลเปเปอร์ใหม่!</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.5; margin-bottom:4px;">"คอลเลคชั่น Baby God เปิดให้ดาวน์โหลดแล้ว มาดูเทพน้อยน่ารักกัน"</div>
+                <div style="font-size:11px; color:var(--fg-low);">15 ก.พ. 69 | 3 วันที่แล้ว</div>
+              </div>
+            </div>
+
           </div>
         </div>
 
         <!-- ═══════════ SCREEN: PROFILE ═══════════ -->
         <div class="screen" id="screen-profile">
           <div class="status-bar"><span class="time">9:41</span><div></div></div>
-          <div class="app-header"><div class="app-header-title">โปรไฟล์</div></div>
-          <div class="profile-header">
-            <div class="profile-avatar">🧑</div>
-            <div class="profile-name">ซุปเปอร์ตีนไก่แซ่บ</div>
-            <div class="profile-badge badge-free">Free</div>
+
+          <!-- Hero header with magical background -->
+          <div style="position:relative; background:linear-gradient(180deg, #FDEEF4 0%, #F5E8F0 40%, #EDE0E8 70%); padding:0 0 24px; overflow:hidden;">
+            <!-- Back button -->
+            <div style="position:relative; z-index:2; padding:8px 20px 0;">
+              <button class="app-back" onclick="navigateTo('today')"><i class="fa-solid fa-chevron-left"></i></button>
+            </div>
+            <!-- Decorative elements -->
+            <div style="position:absolute; top:10px; left:20px; font-size:28px; opacity:0.15; transform:rotate(-15deg);">🃏</div>
+            <div style="position:absolute; top:30px; right:30px; font-size:22px; opacity:0.12; transform:rotate(10deg);">🔮</div>
+            <div style="position:absolute; top:8px; right:70px; font-size:18px; opacity:0.10;">🪐</div>
+            <div style="position:absolute; top:50px; left:60px; font-size:16px; opacity:0.10; transform:rotate(-5deg);">✨</div>
+            <div style="position:absolute; top:15px; left:140px; font-size:14px; opacity:0.08;">🌙</div>
+            <div style="position:absolute; top:60px; right:20px; font-size:12px; opacity:0.08;">🃏</div>
+            <!-- Cute cloud character -->
+            <div style="position:absolute; top:20px; right:110px; z-index:1;">
+              <div style="width:36px; height:26px; background:rgba(200,220,240,0.5); border-radius:50%; position:relative;">
+                <div style="position:absolute; top:-4px; left:6px; width:24px; height:20px; background:rgba(200,220,240,0.5); border-radius:50%;"></div>
+                <div style="position:absolute; top:-8px; left:12px; width:16px; height:16px; background:rgba(200,220,240,0.6); border-radius:50%;"></div>
+                <div style="position:absolute; bottom:4px; left:8px; width:3px; height:3px; background:#555; border-radius:50%;"></div>
+                <div style="position:absolute; bottom:4px; left:18px; width:3px; height:3px; background:#555; border-radius:50%;"></div>
+              </div>
+            </div>
+            <!-- Wave/cloud bottom edge -->
+            <div style="position:absolute; bottom:-1px; left:0; right:0; height:30px; z-index:1;">
+              <svg width="375" height="30" viewBox="0 0 375 30" preserveAspectRatio="none" style="width:100%; display:block;">
+                <path d="M0 20 Q60 0 120 15 Q180 30 240 12 Q300 -2 375 18 L375 30 L0 30 Z" fill="#FAFAFA"/>
+              </svg>
+            </div>
+            <!-- Avatar circle -->
+            <div style="position:relative; z-index:2; text-align:center; margin-top:16px;">
+              <div style="width:110px; height:110px; border-radius:50%; background:#fff; margin:0 auto; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(0,0,0,0.08); border:3px solid #fff; position:relative;">
+                <!-- Zodiac illustration (Aries/สิงห์ - lion) -->
+                <div style="width:100%; height:100%; border-radius:50%; background:linear-gradient(180deg, #FFF8F0, #FDECD0); display:flex; align-items:center; justify-content:center; font-size:52px;">
+                  ♌
+                </div>
+                <!-- Edit badge -->
+                <div style="position:absolute; bottom:-2px; right:-2px; padding:5px 12px; border-radius:14px; background:rgba(50,50,50,0.75); backdrop-filter:blur(8px); display:flex; align-items:center; gap:4px; cursor:pointer;">
+                  <i class="fa-solid fa-pen" style="font-size:9px; color:#fff;"></i>
+                  <span style="font-size:11px; font-weight:600; color:#fff;">แก้ไข</span>
+                </div>
+              </div>
+              <!-- Name & zodiac -->
+              <div style="margin-top:12px; font-size:22px; font-weight:800; color:var(--fg);">Tommy</div>
+              <div style="font-size:14px; color:var(--fg-mid); margin-top:2px;">ราศีสิงห์</div>
+            </div>
           </div>
-          <div class="settings-list">
-            <div class="settings-item" onclick="navigateTo('membership')"><div class="settings-item-left"><div class="settings-icon" style="background:#F0E6FF;"><i class="fa-solid fa-id-card" style="color:#8B5CF6"></i></div><span style="font-size:14px;color:var(--fg)">สมาชิกของฉัน</span></div><i class="fa-solid fa-chevron-right" style="color:var(--fg-low);font-size:12px"></i></div>
-            <div class="settings-item" onclick="navigateTo('plan-free')"><div class="settings-item-left"><div class="settings-icon" style="background:#FFE6F0;"><i class="fa-solid fa-crown" style="color:var(--pink)"></i></div><span style="font-size:14px;color:var(--fg)">อัปเกรดแพลน</span></div><i class="fa-solid fa-chevron-right" style="color:var(--fg-low);font-size:12px"></i></div>
-            <div class="settings-item"><div class="settings-item-left"><div class="settings-icon" style="background:#E1F2E0;"><i class="fa-solid fa-gear" style="color:var(--green)"></i></div><span style="font-size:14px;color:var(--fg)">ตั้งค่า</span></div><i class="fa-solid fa-chevron-right" style="color:var(--fg-low);font-size:12px"></i></div>
+
+          <!-- โปรไฟล์ดูดวง section -->
+          <div style="padding:20px 20px 8px;">
+            <div style="font-size:17px; font-weight:700; color:var(--fg); margin-bottom:14px;">โปรไฟล์ดูดวง</div>
+            <div style="display:flex; gap:12px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px;">
+              <!-- Profile 1: Tommy (active) -->
+              <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; cursor:pointer;">
+                <div style="width:60px; height:60px; border-radius:50%; border:2.5px solid var(--purple); padding:2px; position:relative;">
+                  <div style="width:100%; height:100%; border-radius:50%; background:linear-gradient(180deg,#FFF0F6,#F5E8F0); display:flex; align-items:center; justify-content:center; font-size:28px;">♈</div>
+                  <div style="position:absolute; bottom:-2px; right:-2px; width:18px; height:18px; border-radius:50%; background:var(--purple); display:flex; align-items:center; justify-content:center; border:2px solid #fff;">
+                    <i class="fa-solid fa-check" style="font-size:8px; color:#fff;"></i>
+                  </div>
+                </div>
+                <span style="font-size:11px; font-weight:600; color:var(--fg);">Tommy</span>
+              </div>
+              <!-- Profile 2: Nack -->
+              <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; cursor:pointer;">
+                <div style="width:60px; height:60px; border-radius:50%; border:2.5px solid transparent; padding:2px;">
+                  <div style="width:100%; height:100%; border-radius:50%; background:linear-gradient(180deg,#FFF0F6,#F5E8F0); display:flex; align-items:center; justify-content:center; font-size:28px;">♓</div>
+                </div>
+                <span style="font-size:11px; font-weight:500; color:var(--fg-mid);">Nack</span>
+              </div>
+              <!-- Profile 3: Jennie -->
+              <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; cursor:pointer;">
+                <div style="width:60px; height:60px; border-radius:50%; border:2.5px solid transparent; padding:2px;">
+                  <div style="width:100%; height:100%; border-radius:50%; background:linear-gradient(180deg,#FFF0F6,#F5E8F0); display:flex; align-items:center; justify-content:center; font-size:28px;">♋</div>
+                </div>
+                <span style="font-size:11px; font-weight:500; color:var(--fg-mid);">Jennie</span>
+              </div>
+              <!-- Profile 4: Mark -->
+              <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; cursor:pointer;">
+                <div style="width:60px; height:60px; border-radius:50%; border:2.5px solid transparent; padding:2px;">
+                  <div style="width:100%; height:100%; border-radius:50%; background:linear-gradient(180deg,#FFF0F6,#F5E8F0); display:flex; align-items:center; justify-content:center; font-size:28px;">♒</div>
+                </div>
+                <span style="font-size:11px; font-weight:500; color:var(--fg-mid);">Mark</span>
+              </div>
+              <!-- Add new profile -->
+              <div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; cursor:pointer;">
+                <div style="width:60px; height:60px; border-radius:50%; border:2px dashed var(--purple); display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-plus" style="font-size:20px; color:var(--purple);"></i>
+                </div>
+                <span style="font-size:11px; font-weight:500; color:var(--purple);">เพิ่ม</span>
+              </div>
+            </div>
           </div>
+
+          <!-- Divider -->
+          <div style="height:1px; background:var(--border); margin:12px 20px;"></div>
+
+          <!-- ศูนย์ช่วยเหลือ section -->
+          <div style="padding:8px 20px 0;">
+            <div style="font-size:17px; font-weight:700; color:var(--fg); margin-bottom:12px;">ศูนย์ช่วยเหลือ</div>
+
+            <!-- การตั้งค่า -->
+            <div style="display:flex; align-items:center; gap:14px; padding:14px 16px; margin-bottom:10px; background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.04); cursor:pointer;">
+              <div style="width:44px; height:44px; border-radius:12px; background:#FFF0F6; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-gear" style="font-size:18px; color:var(--pink);"></i>
+              </div>
+              <div style="flex:1;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg);">การตั้งค่า</div>
+                <div style="font-size:12px; color:var(--fg-mid); margin-top:2px;">ปรับแต่งการใช้งานแอปให้เหมาะกับคุณ</div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="color:var(--fg-low); font-size:14px;"></i>
+            </div>
+
+            <!-- จัดการสมาชิก -->
+            <div onclick="navigateTo('membership')" style="display:flex; align-items:center; gap:14px; padding:14px 16px; margin-bottom:10px; background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.04); cursor:pointer;">
+              <div style="width:44px; height:44px; border-radius:12px; background:#FFF0F6; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-id-card" style="font-size:18px; color:var(--pink);"></i>
+              </div>
+              <div style="flex:1;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg);">จัดการสมาชิก</div>
+                <div style="font-size:12px; color:var(--fg-mid); margin-top:2px;">กำหนดสิทธิ์และฟีเจอร์ของผู้ใช้ในแต่ละระดับ</div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="color:var(--fg-low); font-size:14px;"></i>
+            </div>
+
+            <!-- เกี่ยวกับเรา -->
+            <div style="display:flex; align-items:center; gap:14px; padding:14px 16px; margin-bottom:10px; background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.04); cursor:pointer;">
+              <div style="width:44px; height:44px; border-radius:12px; background:#FFF0F6; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-book-open" style="font-size:18px; color:var(--pink);"></i>
+              </div>
+              <div style="flex:1;">
+                <div style="font-size:15px; font-weight:700; color:var(--fg);">เกี่ยวกับเรา</div>
+                <div style="font-size:12px; color:var(--fg-mid); margin-top:2px;">เรียนรู้เพิ่มเติมเกี่ยวกับแอปและทีมผู้พัฒนา</div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="color:var(--fg-low); font-size:14px;"></i>
+            </div>
+          </div>
+
+          <div style="height:20px;"></div>
         </div>
 
         <!-- ═══════════ SCREEN: FORTUNE HUB ═══════════ -->
@@ -1270,44 +1544,79 @@
           <div class="section" style="padding-top:8px">
             <div class="section-header"><div class="section-title">เลือกวิธีทำนาย</div></div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+
+              <!-- เซียมซี -->
               <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('siamsi')">
-                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FFF3E0,#FFE0B2)"><div style="font-size:48px">🎋</div><div class="fortune-method-badge badge-hot">แนะนำ</div></div>
+                <div class="fortune-method-img" style="background:linear-gradient(160deg,#FFF5E8 0%,#FDECD0 50%,#FFE0B2 100%); position:relative; overflow:hidden;">
+                  <div style="position:absolute; top:8px; left:12px; width:40px; height:40px; border-radius:50%; background:rgba(255,200,100,0.15);"></div>
+                  <div style="position:absolute; bottom:5px; right:8px; width:25px; height:25px; border-radius:50%; background:rgba(255,180,80,0.1);"></div>
+                  <img src="siam-si/MicroService_FortuneSticks_Character.webp" alt="" style="height:80px; object-fit:contain; position:relative; z-index:1; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.1));">
+                  <div class="fortune-method-badge badge-hot">แนะนำ</div>
+                </div>
                 <div class="fortune-method-info"><div class="fortune-method-name">เซียมซี</div><div class="fortune-method-sub">ทำนายประจำวัน</div></div>
               </div>
+
+              <!-- เปิดไพ่ทาโร่ -->
               <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('tarot')">
-                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FDE8F0,#F0E0F8)"><div style="font-size:48px">🃏</div><div class="fortune-method-badge badge-new">ใหม่</div></div>
+                <div class="fortune-method-img" style="background:linear-gradient(160deg,#F5EEFF 0%,#EDE0FA 50%,#E0D0F5 100%); position:relative; overflow:hidden;">
+                  <div style="position:absolute; top:10px; right:15px; font-size:8px; color:rgba(140,100,220,0.2);">✦</div>
+                  <div style="position:absolute; bottom:15px; left:10px; font-size:6px; color:rgba(140,100,220,0.15);">✦</div>
+                  <div style="font-size:60px; position:relative; z-index:1; filter:drop-shadow(0 3px 6px rgba(100,60,180,0.15));">🃏</div>
+                  <div class="fortune-method-badge badge-new">ใหม่</div>
+                </div>
                 <div class="fortune-method-info"><div class="fortune-method-name">เปิดไพ่ทาโร่</div><div class="fortune-method-sub">เปิดไพ่ 3 ใบ</div></div>
               </div>
+
+              <!-- ทำนายฝัน -->
               <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('dream')">
-                <div class="fortune-method-img" style="background:linear-gradient(135deg,#E8EAF6,#C5CAE9)"><div style="font-size:48px">💭</div><div class="fortune-method-badge badge-new">ใหม่</div></div>
+                <div class="fortune-method-img" style="background:linear-gradient(160deg,#E8F4FD 0%,#D0E8F8 50%,#C0DCF0 100%); position:relative; overflow:hidden;">
+                  <div style="position:absolute; top:12px; left:15px; width:20px; height:12px; background:rgba(180,210,240,0.4); border-radius:50%; filter:blur(3px);"></div>
+                  <div style="position:absolute; bottom:20px; right:12px; width:16px; height:10px; background:rgba(180,210,240,0.3); border-radius:50%; filter:blur(2px);"></div>
+                  <div style="font-size:60px; position:relative; z-index:1; filter:drop-shadow(0 3px 6px rgba(60,120,180,0.15));">🌙</div>
+                  <div class="fortune-method-badge badge-new">ใหม่</div>
+                </div>
                 <div class="fortune-method-info"><div class="fortune-method-name">ทำนายฝัน</div><div class="fortune-method-sub">เล่าฝัน แปลความหมาย</div></div>
               </div>
+
+              <!-- วอลเปเปอร์ -->
               <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('wallpaper')">
-                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FFF0F6,#FDDCE8)"><div style="font-size:48px">🖼️</div><div class="fortune-method-badge badge-new">ใหม่</div></div>
+                <div class="fortune-method-img" style="background:linear-gradient(160deg,#FFF0F6 0%,#FDDCE8 50%,#F8C8DA 100%); position:relative; overflow:hidden;">
+                  <div style="position:absolute; top:6px; right:10px; font-size:7px; color:rgba(220,100,160,0.2);">✦</div>
+                  <div style="position:absolute; bottom:10px; left:8px; font-size:5px; color:rgba(220,100,160,0.15);">✦</div>
+                  <img src="wallpaper-assets/baby-god.jpg" alt="" style="height:72px; width:72px; object-fit:cover; border-radius:12px; position:relative; z-index:1; box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+                  <div class="fortune-method-badge badge-new">ใหม่</div>
+                </div>
                 <div class="fortune-method-info"><div class="fortune-method-name">วอลเปเปอร์</div><div class="fortune-method-sub">วอลเปเปอร์เสริมดวง</div></div>
               </div>
+
+              <!-- QR Mu -->
               <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('qr-mu')">
-                <div class="fortune-method-img" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2)"><div style="font-size:48px">📱</div><div class="fortune-method-badge badge-hot">แนะนำ</div></div>
+                <div class="fortune-method-img" style="background:linear-gradient(160deg,#E8FFF0 0%,#D0F0E0 50%,#C0E8D5 100%); position:relative; overflow:hidden;">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:60px; height:60px; border-radius:12px; background:rgba(255,255,255,0.5); border:2px dashed rgba(80,180,120,0.2);"></div>
+                  <div style="font-size:56px; position:relative; z-index:1; filter:drop-shadow(0 3px 6px rgba(40,140,80,0.12));">📱</div>
+                  <div class="fortune-method-badge badge-hot">แนะนำ</div>
+                </div>
                 <div class="fortune-method-info"><div class="fortune-method-name">QR Mu</div><div class="fortune-method-sub">สร้าง QR ดวงส่วนตัว</div></div>
               </div>
+
+              <!-- ปฏิทินโหราศาสตร์ -->
               <div class="fortune-method-card" style="min-width:auto;max-width:none;" onclick="navigateTo('astro-calendar')">
-                <div class="fortune-method-img" style="background:linear-gradient(135deg,#FFF8E1,#FFECB3)"><div style="font-size:48px">📜</div></div>
+                <div class="fortune-method-img" style="background:linear-gradient(160deg,#FFF8E8 0%,#FDECC0 50%,#F8E0A0 100%); position:relative; overflow:hidden;">
+                  <div style="position:absolute; top:10px; left:12px; font-size:7px; color:rgba(200,160,60,0.2);">✦</div>
+                  <div style="position:absolute; bottom:8px; right:15px; font-size:5px; color:rgba(200,160,60,0.15);">✦</div>
+                  <div style="font-size:56px; position:relative; z-index:1; filter:drop-shadow(0 3px 6px rgba(180,140,40,0.15));">📜</div>
+                </div>
                 <div class="fortune-method-info"><div class="fortune-method-name">ปฏิทินโหราศาสตร์</div><div class="fortune-method-sub">ปฏิทิน 100 ปี</div></div>
               </div>
+
             </div>
           </div>
         </div>
 
         <!-- ═══════════ SCREEN: SIAMSI ═══════════ -->
-        <div class="screen" id="screen-siamsi">
-          <div class="status-bar"><span class="time">9:41</span><div></div></div>
-          <div class="app-header"><button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">เซียมซี</div></div>
-          <div class="wire-placeholder" style="padding-top:40px;">
-            <div class="wire-icon">🎋</div>
-            <div class="wire-label">เซียมซี</div>
-            <div class="wire-sub">สุ่มเซียมซี ได้คำทำนายประจำวัน<br>เขย่ากระบอก เลือกไม้</div>
-            <button class="phone-btn-primary" style="width:auto; margin-top:24px; padding:14px 40px;" onclick="showPhoneModal('quota-modal')">เสี่ยงเซียมซี</button>
-          </div>
+        <div class="screen" id="screen-siamsi" style="background:#F1F2FF;">
+          <!-- Full embedded siam-si flow (4 screens: Welcome → Shake → Result → Fortune) -->
+          <iframe id="siamsiFrame" src="about:blank" data-src="siam-si/siam-si.html" style="width:100%; height:100%; border:none; position:absolute; inset:0; z-index:1; background:#F1F2FF;" allow="accelerometer"></iframe>
         </div>
 
         <!-- ═══════════ SCREEN: TAROT ═══════════ -->
@@ -1334,108 +1643,276 @@
 
         <!-- ═══════════ SCREEN: WALLPAPER ═══════════ -->
         <div class="screen" id="screen-wallpaper">
-          <div class="status-bar"><span class="time">9:41</span><div></div></div>
-          <div class="app-header"><button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button><div class="app-header-title">วอลเปเปอร์เสริมดวง</div></div>
+          <div class="status-bar"><span class="time">14:39</span><div></div></div>
 
-          <!-- Personalized banner -->
-          <div style="margin:0 20px 12px; padding:14px 16px; border-radius:14px; background:linear-gradient(135deg,#F0E6FF,#FFE6F0); display:flex; align-items:center; gap:12px;">
-            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#EC599D,#9B8AFF);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">✨</div>
-            <div style="flex:1;">
-              <div style="font-size:13px; font-weight:700; color:var(--fg);">แนะนำสำหรับคุณ</div>
-              <div style="font-size:11px; color:var(--fg-mid);">ราศีกุมภ์ • ธาตุน้ำ — สีมงคลวันนี้: สีทอง</div>
+          <!-- Header -->
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 20px 16px;">
+            <button class="app-back" onclick="navigateTo('fortune-hub')"><i class="fa-solid fa-chevron-left"></i></button>
+            <div style="font-size:20px; font-weight:700; color:var(--fg);">วอลเปเปอร์</div>
+            <div style="width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--fg);">
+              <i class="fa-solid fa-receipt" style="font-size:18px;"></i>
+            </div>
+          </div>
+
+          <!-- Collection Cards -->
+          <div style="padding:0 16px; display:flex; flex-direction:column; gap:14px;">
+
+            <!-- Card 1: Stellar Essence -->
+            <div style="position:relative; border-radius:20px; overflow:hidden; height:160px; cursor:pointer; box-shadow:0 2px 16px rgba(0,0,0,0.08);" onclick="showPhoneModal('wp-preview')">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #E8D0F8 0%, #D4B8F0 30%, #C9A8E8 50%, #E0C8F0 100%);"></div>
+              <!-- Sparkle decorations -->
+              <div style="position:absolute; top:12px; right:80px; font-size:8px; color:rgba(255,255,255,0.6);">✦</div>
+              <div style="position:absolute; top:40px; right:130px; font-size:6px; color:rgba(255,255,255,0.4);">✦</div>
+              <div style="position:absolute; bottom:30px; left:200px; font-size:7px; color:rgba(255,255,255,0.5);">✦</div>
+              <!-- Free trial badge -->
+              <div style="position:absolute; top:14px; left:14px; z-index:2;">
+                <div style="padding:5px 14px; border-radius:8px; background:linear-gradient(135deg,#D4A44C,#F0C96E,#D4A44C); color:#fff; font-size:11px; font-weight:700; box-shadow:0 2px 8px rgba(212,164,76,0.3);">ทดลองใช้ฟรี 1 ครั้ง</div>
+              </div>
+              <!-- Text content -->
+              <div style="position:absolute; bottom:0; left:0; right:0; padding:0 18px 18px; z-index:2;">
+                <div style="font-size:22px; font-weight:800; color:var(--fg); margin-bottom:4px; letter-spacing:-0.3px;">Stellar Essence</div>
+                <div style="font-size:11px; color:#5A4A6A; line-height:1.5; max-width:200px;">คอลเลคชั่นวอลเปเปอร์เฉพาะบุคคล<br>ออกแบบจากลัคนาราศี ดาวเด่น และดาวจร<br>เพื่อเสริมพลังให้ตรงกับตัวคุณมากที่สุด<br><strong>โดย เจแปน ภาณุพรรณ</strong></div>
+              </div>
+              <!-- Arrow -->
+              <div style="position:absolute; right:14px; top:50%; transform:translateY(-50%); width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; z-index:2;">
+                <i class="fa-solid fa-chevron-right" style="font-size:12px; color:#7A6A8A;"></i>
+              </div>
+              <!-- Character image -->
+              <div style="position:absolute; right:20px; bottom:0; width:130px; height:150px; z-index:1;">
+                <img src="wallpaper-assets/stellar-essence.jpg" alt="Stellar Essence" style="width:100%; height:100%; object-fit:cover; object-position:center top; border-radius:12px 12px 0 0; opacity:0.85; mix-blend-mode:multiply;">
+              </div>
+            </div>
+
+            <!-- Card 2: Divine Realism -->
+            <div style="position:relative; border-radius:20px; overflow:hidden; height:150px; cursor:pointer; box-shadow:0 2px 16px rgba(0,0,0,0.08);" onclick="showPhoneModal('wp-preview')">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #1A1040 0%, #2D1B69 30%, #4A2D8A 60%, #6B45A8 100%);"></div>
+              <!-- Sparkle decorations -->
+              <div style="position:absolute; top:20px; left:180px; font-size:10px; color:rgba(255,255,255,0.3);">✦</div>
+              <div style="position:absolute; top:60px; right:100px; font-size:6px; color:rgba(255,255,255,0.2);">✦</div>
+              <div style="position:absolute; bottom:20px; left:120px; font-size:8px; color:rgba(255,255,255,0.25);">✦</div>
+              <!-- Text content -->
+              <div style="position:absolute; top:0; left:0; padding:22px 18px; z-index:2;">
+                <div style="font-size:22px; font-weight:800; color:#fff; margin-bottom:6px; letter-spacing:-0.3px;">Divine Realism</div>
+                <div style="font-size:11px; color:rgba(255,255,255,0.7); line-height:1.5;">พระแม่ลักษมี พระแม่สรัสวดี พระแม่กาลี<br>พระศิวะ พระพิฆเนศ พระพรหม พระแม่อุมาเทวี</div>
+              </div>
+              <!-- Arrow -->
+              <div style="position:absolute; right:14px; top:50%; transform:translateY(-50%); width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; z-index:2;">
+                <i class="fa-solid fa-chevron-right" style="font-size:12px; color:rgba(255,255,255,0.7);"></i>
+              </div>
+              <!-- Deity image -->
+              <div style="position:absolute; right:10px; bottom:0; width:130px; height:145px; z-index:1;">
+                <img src="wallpaper-assets/divine-realism.jpg" alt="Divine Realism" style="width:100%; height:100%; object-fit:cover; object-position:center 20%; border-radius:12px 12px 0 0; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
+              </div>
+            </div>
+
+            <!-- Card 3: Sacred Line -->
+            <div style="position:relative; border-radius:20px; overflow:hidden; height:150px; cursor:pointer; box-shadow:0 2px 16px rgba(0,0,0,0.08);" onclick="showPhoneModal('wp-preview')">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #F5F0E8 0%, #EDE5D8 40%, #E8DFD0 70%, #F0E8DD 100%);"></div>
+              <!-- Subtle mountain shapes -->
+              <div style="position:absolute; bottom:0; right:0; width:200px; height:80px; background:linear-gradient(160deg, rgba(200,185,160,0.2), rgba(180,165,140,0.1)); clip-path:polygon(30% 100%, 50% 20%, 70% 60%, 100% 0%, 100% 100%);"></div>
+              <!-- Text content -->
+              <div style="position:absolute; top:0; left:0; padding:22px 18px; z-index:2;">
+                <div style="font-size:22px; font-weight:800; color:#6B5A40; margin-bottom:6px; letter-spacing:-0.3px;">Sacred Line</div>
+                <div style="font-size:11px; color:#8A7A60; line-height:1.5; max-width:200px;">พระแม่ลักษมี พระพิฆเนศ พระแม่อุมาเทวี<br>พระศิวะ พระพรหม ท้าวเวสสุวรรณ<br>เจ้าแม่กวนอิม พระแม่กาลี พญานาค</div>
+              </div>
+              <!-- Arrow -->
+              <div style="position:absolute; right:14px; top:50%; transform:translateY(-50%); width:28px; height:28px; border-radius:50%; background:rgba(180,160,120,0.2); display:flex; align-items:center; justify-content:center; z-index:2;">
+                <i class="fa-solid fa-chevron-right" style="font-size:12px; color:#8A7A60;"></i>
+              </div>
+              <!-- Deity image -->
+              <div style="position:absolute; right:10px; bottom:0; width:130px; height:145px; z-index:1;">
+                <img src="wallpaper-assets/sacred-line.jpg" alt="Sacred Line" style="width:100%; height:100%; object-fit:cover; object-position:center 15%; border-radius:12px 12px 0 0; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.1));">
+              </div>
+            </div>
+
+            <!-- Card 4: Gongbi Grace -->
+            <div style="position:relative; border-radius:20px; overflow:hidden; height:160px; cursor:pointer; box-shadow:0 2px 16px rgba(0,0,0,0.08);" onclick="showPhoneModal('wp-preview')">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #1A2A20 0%, #2A3D30 30%, #1E3028 60%, #253D2E 100%);"></div>
+              <!-- Gold circle glow -->
+              <div style="position:absolute; right:40px; top:20px; width:100px; height:100px; border-radius:50%; background:radial-gradient(circle, rgba(220,180,80,0.25) 0%, transparent 70%);"></div>
+              <!-- Text content -->
+              <div style="position:absolute; top:0; left:0; padding:22px 18px; z-index:2;">
+                <div style="font-size:22px; font-weight:800; color:#D4B060; margin-bottom:6px; letter-spacing:-0.3px;">Gongbi Grace</div>
+                <div style="font-size:10px; color:rgba(255,255,255,0.6); line-height:1.6; max-width:195px;">เจ้าแม่กวนอิม ไฉ่ซิงเอี้ย ตั๊งอิ้วง เง็กเซียนฮ่องเต้<br>ท่านจิ้ง ได้ฮงกง เจ้าพ่อกวนอู ฮก ลก ซิ่ว<br>ท่านแซกง เจ้าแม่ทับทิม เจ้าพ่อเห้งเจีย นาจา<br>เทพเจ้าเย่ว์เหล่า เปาก๊ง พระสังกัจจายน์</div>
+              </div>
+              <!-- Arrow -->
+              <div style="position:absolute; right:14px; top:50%; transform:translateY(-50%); width:28px; height:28px; border-radius:50%; background:rgba(212,176,96,0.2); display:flex; align-items:center; justify-content:center; z-index:2;">
+                <i class="fa-solid fa-chevron-right" style="font-size:12px; color:rgba(212,176,96,0.7);"></i>
+              </div>
+              <!-- Deity image -->
+              <div style="position:absolute; right:10px; bottom:0; width:120px; height:150px; z-index:1;">
+                <img src="wallpaper-assets/gongbi-grace.jpg" alt="Gongbi Grace" style="width:100%; height:100%; object-fit:cover; object-position:center 10%; border-radius:12px 12px 0 0; filter:drop-shadow(0 4px 12px rgba(220,180,80,0.3));">
+              </div>
+            </div>
+
+            <!-- Card 5: Baby God -->
+            <div style="position:relative; border-radius:20px; overflow:hidden; height:160px; cursor:pointer; box-shadow:0 2px 16px rgba(0,0,0,0.08);" onclick="showPhoneModal('wp-preview')">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #FFF5E8 0%, #FDECD0 40%, #FFF0D8 70%, #FFF8F0 100%);"></div>
+              <!-- Soft cloud shapes -->
+              <div style="position:absolute; top:10px; right:60px; width:80px; height:30px; background:rgba(255,220,180,0.3); border-radius:50%; filter:blur(8px);"></div>
+              <div style="position:absolute; bottom:30px; left:180px; width:60px; height:20px; background:rgba(255,210,170,0.2); border-radius:50%; filter:blur(6px);"></div>
+              <!-- Text content -->
+              <div style="position:absolute; top:0; left:0; padding:22px 18px; z-index:2;">
+                <div style="font-size:22px; font-weight:800; color:#C45030; margin-bottom:6px; letter-spacing:-0.3px;">Baby God</div>
+                <div style="font-size:11px; color:#8A6A50; line-height:1.5; max-width:195px;">พระแม่ลักษมี พระพิฆเนศ พระศิวะ พระพรหม<br>พระแม่กาลี พระแม่อุมาเทวี พระแม่สรัสวดี<br>พระแม่ทุรคา พระวิษณุ พระตรีมูรติ</div>
+              </div>
+              <!-- Arrow -->
+              <div style="position:absolute; right:14px; top:50%; transform:translateY(-50%); width:28px; height:28px; border-radius:50%; background:rgba(196,80,48,0.1); display:flex; align-items:center; justify-content:center; z-index:2;">
+                <i class="fa-solid fa-chevron-right" style="font-size:12px; color:rgba(196,80,48,0.5);"></i>
+              </div>
+              <!-- Baby deity image -->
+              <div style="position:absolute; right:10px; bottom:0; width:120px; height:145px; z-index:1;">
+                <img src="wallpaper-assets/baby-god.jpg" alt="Baby God" style="width:100%; height:100%; object-fit:cover; object-position:center 10%; border-radius:12px 12px 0 0; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.1));">
+              </div>
+            </div>
+
+          </div>
+
+          <div style="height:30px;"></div>
+
+          <!-- Wallpaper Preview Modal -->
+          <div class="phone-modal-overlay" id="wp-preview" onclick="closePhoneModal('wp-preview')">
+            <div class="phone-modal-sheet" onclick="event.stopPropagation()" style="padding:0; border-radius:24px 24px 0 0; overflow:hidden; max-height:75%;">
+              <!-- Preview image area -->
+              <div style="height:300px; background:linear-gradient(135deg, #E8D0F8 0%, #D4B8F0 40%, #C9A8E8 100%); display:flex; align-items:center; justify-content:center; position:relative;">
+                <!-- Phone frame overlay -->
+                <div style="position:absolute; inset:24px 80px; border:2.5px solid rgba(255,255,255,0.25); border-radius:28px;"></div>
+                <!-- Collection preview image -->
+                <img src="wallpaper-assets/stellar-essence.jpg" alt="" style="width:140px; height:180px; object-fit:cover; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.15); position:relative; z-index:1;">
+                <!-- Close btn -->
+                <div onclick="closePhoneModal('wp-preview')" style="position:absolute; top:14px; right:14px; width:34px; height:34px; border-radius:50%; background:rgba(0,0,0,0.25); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; font-size:15px; z-index:2;"><i class="fa-solid fa-xmark"></i></div>
+              </div>
+              <!-- Info -->
+              <div style="padding:20px;">
+                <div style="font-size:20px; font-weight:800; color:var(--fg); margin-bottom:8px;">Stellar Essence</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.7; margin-bottom:16px;">
+                  คอลเลคชั่นวอลเปเปอร์เฉพาะบุคคล<br>
+                  ออกแบบจากลัคนาราศี ดาวเด่น และดาวจร เพื่อเสริมพลังให้ตรงกับตัวคุณมากที่สุด
+                </div>
+                <!-- Tags -->
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;">
+                  <span style="padding:5px 12px; border-radius:20px; background:#F3EAFF; font-size:12px; color:#6B45A8; font-weight:500; border:1px solid #E8DAFF;">#เสริมดวง</span>
+                  <span style="padding:5px 12px; border-radius:20px; background:#F3EAFF; font-size:12px; color:#6B45A8; font-weight:500; border:1px solid #E8DAFF;">#เฉพาะบุคคล</span>
+                  <span style="padding:5px 12px; border-radius:20px; background:#F3EAFF; font-size:12px; color:#6B45A8; font-weight:500; border:1px solid #E8DAFF;">#ราศี</span>
+                </div>
+                <!-- Actions -->
+                <div style="display:flex; gap:10px;">
+                  <button class="phone-btn-primary" style="flex:1; margin:0; display:flex; align-items:center; justify-content:center; gap:8px; font-size:15px; padding:14px;" onclick="closePhoneModal('wp-preview'); navigateTo('wp-collection');"><i class="fa-solid fa-images"></i> ดูคอลเลคชั่น</button>
+                  <button class="phone-btn-outline" style="width:54px; margin:0; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: WALLPAPER COLLECTION (Baby God) ═══════════ -->
+        <div class="screen" id="screen-wp-collection">
+          <div class="status-bar"><span class="time">14:39</span><div></div></div>
+
+          <!-- Header with back button -->
+          <div style="display:flex; align-items:center; gap:12px; padding:8px 20px 12px; background:#fff;">
+            <button class="app-back" onclick="navigateTo('wallpaper')"><i class="fa-solid fa-chevron-left"></i></button>
+            <div style="flex:1; text-align:center; font-size:18px; font-weight:700; color:var(--fg);">วอลเปเปอร์</div>
+            <div style="width:32px;"></div>
+          </div>
+
+          <!-- Collection Banner -->
+          <div style="margin:0 16px 16px; position:relative; border-radius:20px; overflow:hidden; height:140px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+            <div style="position:absolute; inset:0; background:linear-gradient(135deg, #FFF5E8 0%, #FDECD0 40%, #FFF0D8 70%, #FFF8F0 100%);"></div>
+            <!-- Diamond pattern decorations -->
+            <div style="position:absolute; inset:0; opacity:0.08; background-image:repeating-linear-gradient(45deg, transparent, transparent 20px, #C4A070 20px, #C4A070 21px), repeating-linear-gradient(-45deg, transparent, transparent 20px, #C4A070 20px, #C4A070 21px);"></div>
+            <!-- Sparkle dots -->
+            <div style="position:absolute; top:15px; left:160px; width:4px; height:4px; border-radius:50%; background:rgba(212,160,80,0.3);"></div>
+            <div style="position:absolute; top:40px; left:200px; width:3px; height:3px; border-radius:50%; background:rgba(212,160,80,0.2);"></div>
+            <div style="position:absolute; bottom:25px; right:150px; width:5px; height:5px; border-radius:50%; background:rgba(212,160,80,0.25);"></div>
+            <!-- Text -->
+            <div style="position:absolute; top:0; left:0; padding:20px 18px; z-index:2;">
+              <div style="font-size:22px; font-weight:800; color:#C45030; margin-bottom:6px; letter-spacing:-0.3px;">Baby God</div>
+              <div style="font-size:10px; color:#8A6A50; line-height:1.5; max-width:180px;">พระแม่ลักษมี พระพิฆเนศ พระศิวะ พระพรหม<br>พระแม่กาลี พระแม่อุมาเทวี พระแม่สรัสวดี<br>พระแม่ทุรคา พระวิษณุ พระตรีมูรติ</div>
+            </div>
+            <!-- Baby god image -->
+            <div style="position:absolute; right:10px; bottom:0; width:130px; height:135px; z-index:1;">
+              <img src="wallpaper-assets/baby-god.jpg" alt="Baby God" style="width:100%; height:100%; object-fit:cover; object-position:center 10%; border-radius:12px 12px 0 0; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.1));">
             </div>
           </div>
 
           <!-- Category Tabs -->
-          <div style="display:flex; gap:8px; padding:0 20px 14px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
-            <div style="padding:7px 16px; border-radius:20px; background:var(--pink); color:#fff; font-size:13px; font-weight:600; white-space:nowrap; cursor:pointer; flex-shrink:0;">ทั้งหมด</div>
-            <div style="padding:7px 16px; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--fg-mid); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0;">💰 เสริมเงิน</div>
-            <div style="padding:7px 16px; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--fg-mid); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0;">❤️ เสริมรัก</div>
-            <div style="padding:7px 16px; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--fg-mid); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0;">💼 เสริมงาน</div>
-            <div style="padding:7px 16px; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--fg-mid); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0;">🍀 เสริมโชค</div>
+          <div style="display:flex; gap:10px; padding:0 16px 16px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <div style="display:flex; align-items:center; gap:6px; padding:9px 18px; border-radius:24px; background:var(--purple); color:#fff; font-size:13px; font-weight:600; white-space:nowrap; cursor:pointer; flex-shrink:0;">
+              <i class="fa-solid fa-grid-2" style="font-size:12px;"></i> ทั้งหมด
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; padding:9px 18px; border-radius:24px; background:#F3F0FF; color:var(--purple); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0; border:1px solid #E8E0F0;">
+              <i class="fa-solid fa-sack-dollar" style="font-size:12px;"></i> การเงิน
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; padding:9px 18px; border-radius:24px; background:#F3F0FF; color:var(--purple); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0; border:1px solid #E8E0F0;">
+              <i class="fa-solid fa-briefcase" style="font-size:12px;"></i> การงาน
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; padding:9px 18px; border-radius:24px; background:#F3F0FF; color:var(--purple); font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; flex-shrink:0; border:1px solid #E8E0F0;">
+              <i class="fa-solid fa-heart" style="font-size:12px;"></i> ความรัก
+            </div>
           </div>
 
           <!-- Wallpaper Grid -->
-          <div style="padding:0 20px;">
+          <div style="padding:0 16px;">
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
 
-              <!-- Card 1: มังกรทอง -->
-              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
-                <div style="height:200px; background:linear-gradient(160deg,#FFD54F,#FF8F00,#E65100); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
-                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🐉</div>
-                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;">ฟรี</div>
-                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 2.4K</div>
+              <!-- Card 1: พระแม่ลักษมี -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); cursor:pointer; background:#FFF8F0;" onclick="navigateTo('wp-enhance')">
+                <div style="height:180px; background:linear-gradient(180deg, #FFF5E8, #FDECD0); display:flex; align-items:center; justify-content:center; padding:8px;">
+                  <img src="wallpaper-assets/lakshmi-card.jpg" alt="พระแม่ลักษมี" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
                 </div>
-                <div style="padding:10px 12px; background:#fff;">
-                  <div style="font-size:13px; font-weight:700; color:var(--fg);">มังกรทอง</div>
-                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">💰 เสริมเงิน • ดึงดูดโชคลาภ</div>
+                <div style="padding:10px 12px;">
+                  <div style="font-size:14px; font-weight:700; color:var(--fg);">พระแม่ลักษมี</div>
                 </div>
               </div>
 
-              <!-- Card 2: ดอกบัวศักดิ์สิทธิ์ -->
-              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
-                <div style="height:200px; background:linear-gradient(160deg,#F8BBD0,#E91E63,#880E4F); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
-                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🪷</div>
-                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;">ฟรี</div>
-                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 3.1K</div>
+              <!-- Card 2: พระแม่กาลี -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); cursor:pointer; background:#FFF8F0;" onclick="navigateTo('wp-enhance')">
+                <div style="height:180px; background:linear-gradient(180deg, #FFF5E8, #FDECD0); display:flex; align-items:center; justify-content:center; padding:8px;">
+                  <img src="wallpaper-assets/kali-card.jpg" alt="พระแม่กาลี" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
                 </div>
-                <div style="padding:10px 12px; background:#fff;">
-                  <div style="font-size:13px; font-weight:700; color:var(--fg);">ดอกบัวศักดิ์สิทธิ์</div>
-                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">❤️ เสริมรัก • เมตตามหานิยม</div>
+                <div style="padding:10px 12px;">
+                  <div style="font-size:14px; font-weight:700; color:var(--fg);">พระแม่กาลี</div>
                 </div>
               </div>
 
-              <!-- Card 3: จักรวาลนำโชค -->
-              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
-                <div style="height:200px; background:linear-gradient(160deg,#CE93D8,#7B1FA2,#4A148C); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
-                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🌌</div>
-                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:linear-gradient(135deg,#EC599D,#9B8AFF);color:#fff;font-size:10px;font-weight:600;">Pro</div>
-                  <div style="position:absolute;top:8px;right:8px;"><i class="fa-solid fa-lock" style="color:rgba(255,255,255,0.6);font-size:12px;"></i></div>
-                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 5.8K</div>
+              <!-- Card 3: พระวิษณุ -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); cursor:pointer; background:#FFF8F0;" onclick="navigateTo('wp-enhance')">
+                <div style="height:180px; background:linear-gradient(180deg, #FFF5E8, #FDECD0); display:flex; align-items:center; justify-content:center; padding:8px;">
+                  <img src="wallpaper-assets/vishnu-card.jpg" alt="พระวิษณุ" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
                 </div>
-                <div style="padding:10px 12px; background:#fff;">
-                  <div style="font-size:13px; font-weight:700; color:var(--fg);">จักรวาลนำโชค</div>
-                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">🍀 เสริมโชค • เปิดทางสว่าง</div>
+                <div style="padding:10px 12px;">
+                  <div style="font-size:14px; font-weight:700; color:var(--fg);">พระวิษณุ</div>
                 </div>
               </div>
 
-              <!-- Card 4: คลื่นทะเลแห่งปัญญา -->
-              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
-                <div style="height:200px; background:linear-gradient(160deg,#80DEEA,#0097A7,#00695C); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
-                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🌊</div>
-                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;">ฟรี</div>
-                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 1.7K</div>
+              <!-- Card 4: พระพิฆเนศ -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); cursor:pointer; background:#FFF8F0;" onclick="navigateTo('wp-enhance')">
+                <div style="height:180px; background:linear-gradient(180deg, #FFF5E8, #FDECD0); display:flex; align-items:center; justify-content:center; padding:8px;">
+                  <img src="wallpaper-assets/ganesha-card.jpg" alt="พระพิฆเนศ" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
                 </div>
-                <div style="padding:10px 12px; background:#fff;">
-                  <div style="font-size:13px; font-weight:700; color:var(--fg);">คลื่นทะเลแห่งปัญญา</div>
-                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">💼 เสริมงาน • สติปัญญา</div>
+                <div style="padding:10px 12px;">
+                  <div style="font-size:14px; font-weight:700; color:var(--fg);">พระพิฆเนศ</div>
                 </div>
               </div>
 
-              <!-- Card 5: พระจันทร์ทอง -->
-              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
-                <div style="height:200px; background:linear-gradient(160deg,#1A237E,#283593,#5C6BC0); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
-                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🌙</div>
-                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:linear-gradient(135deg,#EC599D,#9B8AFF);color:#fff;font-size:10px;font-weight:600;">Pro</div>
-                  <div style="position:absolute;top:8px;right:8px;"><i class="fa-solid fa-lock" style="color:rgba(255,255,255,0.6);font-size:12px;"></i></div>
-                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 4.2K</div>
+              <!-- Card 5: พระพรหม -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); cursor:pointer; background:#FFF8F0;" onclick="navigateTo('wp-enhance')">
+                <div style="height:180px; background:linear-gradient(180deg, #FFF5E8, #FDECD0); display:flex; align-items:center; justify-content:center; padding:8px;">
+                  <img src="wallpaper-assets/stellar-essence.jpg" alt="พระพรหม" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
                 </div>
-                <div style="padding:10px 12px; background:#fff;">
-                  <div style="font-size:13px; font-weight:700; color:var(--fg);">พระจันทร์ทอง</div>
-                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">✨ เสริมรวม • พลังจันทรา</div>
+                <div style="padding:10px 12px;">
+                  <div style="font-size:14px; font-weight:700; color:var(--fg);">พระพรหม</div>
                 </div>
               </div>
 
-              <!-- Card 6: ดอกไม้มงคล -->
-              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06); cursor:pointer; position:relative;" onclick="showPhoneModal('wp-preview')">
-                <div style="height:200px; background:linear-gradient(160deg,#FDDCE8,#D5A6E0,#B39DDB); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
-                  <div style="font-size:56px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">🌸</div>
-                  <div style="position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:600;">ฟรี</div>
-                  <div style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;color:rgba(255,255,255,0.8);font-size:10px;"><i class="fa-solid fa-download" style="font-size:8px;"></i> 2.9K</div>
+              <!-- Card 6: พระแม่อุมาเทวี -->
+              <div style="border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); cursor:pointer; background:#FFF8F0;" onclick="navigateTo('wp-enhance')">
+                <div style="height:180px; background:linear-gradient(180deg, #FFF5E8, #FDECD0); display:flex; align-items:center; justify-content:center; padding:8px;">
+                  <img src="wallpaper-assets/divine-realism.jpg" alt="พระแม่อุมาเทวี" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
                 </div>
-                <div style="padding:10px 12px; background:#fff;">
-                  <div style="font-size:13px; font-weight:700; color:var(--fg);">ดอกไม้มงคล</div>
-                  <div style="font-size:11px; color:var(--fg-mid); margin-top:2px;">❤️ เสริมรัก • เสน่ห์แรง</div>
+                <div style="padding:10px 12px;">
+                  <div style="font-size:14px; font-weight:700; color:var(--fg);">พระแม่อุมาเทวี</div>
                 </div>
               </div>
 
@@ -1443,40 +1920,295 @@
           </div>
 
           <div style="height:30px;"></div>
+        </div>
 
-          <!-- Wallpaper Preview Modal -->
-          <div class="phone-modal-overlay" id="wp-preview" onclick="closePhoneModal('wp-preview')">
-            <div class="phone-modal-sheet" onclick="event.stopPropagation()" style="padding:0; border-radius:24px 24px 0 0; overflow:hidden;">
-              <!-- Preview image -->
-              <div style="height:320px; background:linear-gradient(160deg,#FFD54F,#FF8F00,#E65100); display:flex; align-items:center; justify-content:center; position:relative;">
-                <div style="font-size:80px; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2));">🐉</div>
-                <!-- Phone frame overlay hint -->
-                <div style="position:absolute; inset:20px 60px; border:2px solid rgba(255,255,255,0.2); border-radius:24px;"></div>
-                <!-- Close btn -->
-                <div onclick="closePhoneModal('wp-preview')" style="position:absolute; top:12px; right:12px; width:32px; height:32px; border-radius:50%; background:rgba(0,0,0,0.3); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; font-size:14px;"><i class="fa-solid fa-xmark"></i></div>
+        <!-- ═══════════ SCREEN: WALLPAPER ENHANCE (เสริมพลังมงคล) ═══════════ -->
+        <div class="screen" id="screen-wp-enhance">
+          <div class="status-bar"><span class="time">14:39</span><div></div></div>
+
+          <!-- Background gradient -->
+          <div style="position:absolute; inset:0; z-index:0; background:linear-gradient(180deg, #F5F0FF 0%, #EDE5FF 20%, #F8F4FF 40%, #FAFAFA 60%);"></div>
+
+          <!-- Header -->
+          <div style="position:relative; z-index:1; display:flex; align-items:center; gap:12px; padding:8px 20px 0;">
+            <button class="app-back" onclick="navigateTo('wp-collection')"><i class="fa-solid fa-chevron-left"></i></button>
+            <div style="flex:1; text-align:center; font-size:18px; font-weight:700; color:var(--fg);">สร้างวอลเปเปอร์</div>
+            <div style="width:32px;"></div>
+          </div>
+
+          <!-- Title section -->
+          <div style="position:relative; z-index:1; text-align:center; padding:20px 24px 8px;">
+            <div style="font-size:24px; font-weight:800; color:var(--fg); margin-bottom:8px;">เสริมพลังมงคล</div>
+            <div style="font-size:14px; color:var(--fg-mid); line-height:1.6; margin-bottom:4px;">เสริมพลังมงคลจากสัญลักษณ์ตามด้านที่คุณต้องการ</div>
+            <div style="font-size:14px; font-weight:600; color:var(--purple);">(เลือกได้ 1 อย่าง)</div>
+          </div>
+
+          <!-- Option Cards -->
+          <div style="position:relative; z-index:1; padding:16px 20px; display:flex; flex-direction:column; gap:12px;">
+
+            <!-- Option 1: การงาน -->
+            <div class="wp-enhance-option" onclick="selectEnhance(this)" style="display:flex; align-items:flex-start; gap:14px; padding:18px 16px; border-radius:16px; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:2px solid transparent; cursor:pointer; transition:all 0.2s;">
+              <div style="width:36px; height:36px; border-radius:10px; background:#F3F0FF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-briefcase" style="font-size:16px; color:var(--purple);"></i>
               </div>
-              <!-- Info -->
-              <div style="padding:20px;">
-                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-                  <div style="font-size:18px; font-weight:700; color:var(--fg);">มังกรทอง</div>
-                  <div style="display:flex; align-items:center; gap:4px; font-size:12px; color:var(--fg-low);"><i class="fa-solid fa-download" style="font-size:10px;"></i> 2.4K ดาวน์โหลด</div>
-                </div>
-                <div style="font-size:13px; color:var(--fg-mid); line-height:1.6; margin-bottom:16px;">
-                  💰 เสริมดวงการเงิน • ดึงดูดโชคลาภ<br>
-                  เหมาะสำหรับราศีที่ธาตุไฟ-ทอง ช่วยเปิดทางโชคด้านการเงิน เสริมพลังความมั่งคั่ง
-                </div>
-                <!-- Tags -->
-                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px;">
-                  <span style="padding:4px 10px; border-radius:8px; background:#FFF3E0; font-size:11px; color:#E65100; font-weight:500;">#เสริมเงิน</span>
-                  <span style="padding:4px 10px; border-radius:8px; background:#FFF3E0; font-size:11px; color:#E65100; font-weight:500;">#โชคลาภ</span>
-                  <span style="padding:4px 10px; border-radius:8px; background:#FFF3E0; font-size:11px; color:#E65100; font-weight:500;">#มังกร</span>
-                </div>
-                <!-- Actions -->
-                <div style="display:flex; gap:10px;">
-                  <button class="phone-btn-primary" style="flex:1; margin:0; display:flex; align-items:center; justify-content:center; gap:6px;"><i class="fa-solid fa-download"></i> ดาวน์โหลด</button>
-                  <button class="phone-btn-outline" style="width:50px; margin:0; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-share-nodes"></i></button>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:17px; font-weight:700; color:var(--fg); margin-bottom:4px;">การงาน</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.6;">ก้าวข้ามอุปสรรคด้วยพลังใจที่มั่นคง เสริมความกล้า การตัดสินใจ และโอกาสแห่งความสำเร็จ</div>
+              </div>
+              <div class="wp-enhance-radio" style="width:24px; height:24px; border-radius:50%; border:2px solid #D0D0D8; flex-shrink:0; margin-top:4px; display:flex; align-items:center; justify-content:center; transition:all 0.2s;"></div>
+            </div>
+
+            <!-- Option 2: การเงิน -->
+            <div class="wp-enhance-option" onclick="selectEnhance(this)" style="display:flex; align-items:flex-start; gap:14px; padding:18px 16px; border-radius:16px; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:2px solid transparent; cursor:pointer; transition:all 0.2s;">
+              <div style="width:36px; height:36px; border-radius:10px; background:#F3F0FF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-sack-dollar" style="font-size:16px; color:var(--purple);"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:17px; font-weight:700; color:var(--fg); margin-bottom:4px;">การเงิน</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.6;">เปิดทางการเงินให้คล่องตัว มีคนอุปถัมภ์ช่วยเหลือ ดึงดูดโชคลาภเล็ก–กลาง และโอกาสใหม่ๆ เข้ามา</div>
+              </div>
+              <div class="wp-enhance-radio" style="width:24px; height:24px; border-radius:50%; border:2px solid #D0D0D8; flex-shrink:0; margin-top:4px; display:flex; align-items:center; justify-content:center; transition:all 0.2s;"></div>
+            </div>
+
+            <!-- Option 3: ความรัก -->
+            <div class="wp-enhance-option" onclick="selectEnhance(this)" style="display:flex; align-items:flex-start; gap:14px; padding:18px 16px; border-radius:16px; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:2px solid transparent; cursor:pointer; transition:all 0.2s;">
+              <div style="width:36px; height:36px; border-radius:10px; background:#F3F0FF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-heart" style="font-size:16px; color:var(--purple);"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:17px; font-weight:700; color:var(--fg); margin-bottom:4px;">ความรัก</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.6;">เติมความอ่อนโยน เข้าใจกันมากขึ้น ลดความตึงเครียด ทำให้ความสัมพันธ์มั่นคง</div>
+              </div>
+              <div class="wp-enhance-radio" style="width:24px; height:24px; border-radius:50%; border:2px solid #D0D0D8; flex-shrink:0; margin-top:4px; display:flex; align-items:center; justify-content:center; transition:all 0.2s;"></div>
+            </div>
+
+            <!-- Option 4: สุขภาพ -->
+            <div class="wp-enhance-option" onclick="selectEnhance(this)" style="display:flex; align-items:flex-start; gap:14px; padding:18px 16px; border-radius:16px; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:2px solid transparent; cursor:pointer; transition:all 0.2s;">
+              <div style="width:36px; height:36px; border-radius:10px; background:#F3F0FF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-shield-heart" style="font-size:16px; color:var(--purple);"></i>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:17px; font-weight:700; color:var(--fg); margin-bottom:4px;">สุขภาพ</div>
+                <div style="font-size:13px; color:var(--fg-mid); line-height:1.6;">เยียวยาทั้งกายและใจ ผ่อนคลายจากความเครียด ฟื้นฟูพลังชีวิต เพิ่มความสงบจากภายใน</div>
+              </div>
+              <div class="wp-enhance-radio" style="width:24px; height:24px; border-radius:50%; border:2px solid #D0D0D8; flex-shrink:0; margin-top:4px; display:flex; align-items:center; justify-content:center; transition:all 0.2s;"></div>
+            </div>
+
+          </div>
+
+          <!-- Bottom button (sticky) -->
+          <div style="position:relative; z-index:1; padding:20px 20px 30px;">
+            <button id="wpEnhanceBtn" class="phone-btn-primary" style="width:100%; margin:0; padding:16px; font-size:16px; font-weight:700; opacity:0.4; pointer-events:none; transition:all 0.3s;" onclick="navigateTo('wp-customize')">ถัดไป</button>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: WALLPAPER CUSTOMIZE (ตกแต่งวอลเปเปอร์) ═══════════ -->
+        <div class="screen" id="screen-wp-customize">
+          <div class="status-bar"><span class="time">14:39</span><div></div></div>
+
+          <!-- Background -->
+          <div style="position:absolute; inset:0; z-index:0; background:linear-gradient(180deg, #F0EAFF 0%, #E8E0F8 15%, #F5F2FF 35%, #FAFAFA 55%);"></div>
+
+          <!-- Header -->
+          <div style="position:relative; z-index:1; display:flex; align-items:center; gap:12px; padding:8px 20px 0;">
+            <button class="app-back" onclick="navigateTo('wp-enhance')"><i class="fa-solid fa-chevron-left"></i></button>
+            <div style="flex:1; text-align:center; font-size:18px; font-weight:700; color:var(--fg);">สร้างวอลเปเปอร์</div>
+            <div style="width:32px;"></div>
+          </div>
+
+          <!-- Wallpaper Preview Card -->
+          <div style="position:relative; z-index:1; padding:16px 40px 12px;">
+            <div id="wpPreviewCard" style="position:relative; width:100%; aspect-ratio:9/16; max-height:380px; border-radius:20px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.1); background:#FFF8F0;">
+              <!-- Deity image -->
+              <img src="wallpaper-assets/lakshmi-card.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
+              <!-- Zodiac constellation overlay -->
+              <div id="wpOverlayZodiac" style="position:absolute; top:14px; right:20px; transition:opacity 0.35s ease, transform 0.35s ease;">
+                <div style="color:rgba(200,160,180,0.6); font-size:10px; letter-spacing:2px;">
+                  <div style="display:flex; gap:3px; justify-content:center; margin-bottom:2px;">
+                    <span>✦</span><span style="font-size:6px;">·</span><span>✦</span><span style="font-size:6px;">·</span><span>✦</span>
+                  </div>
+                  <div style="display:flex; gap:4px; justify-content:center;">
+                    <span style="font-size:6px;">·</span><span>✦</span><span style="font-size:8px;">★</span><span>✦</span><span style="font-size:6px;">·</span>
+                  </div>
+                  <div style="display:flex; gap:3px; justify-content:center; margin-top:2px;">
+                    <span>✦</span><span style="font-size:6px;">·</span><span>✦</span>
+                  </div>
                 </div>
               </div>
+              <!-- Name overlay -->
+              <div id="wpOverlayName" style="position:absolute; bottom:20px; left:0; right:0; text-align:center; transition:opacity 0.35s ease, transform 0.35s ease;">
+                <span id="wpNameDisplay" style="font-size:14px; font-weight:600; color:#9A7A60; letter-spacing:0.5px;">จิรภัทร์ เจริญชัย</span>
+              </div>
+              <!-- Lucky numbers overlay -->
+              <div id="wpOverlayNumbers" style="position:absolute; bottom:44px; left:0; right:0; text-align:center; opacity:0; transform:translateY(8px); transition:opacity 0.35s ease, transform 0.35s ease; pointer-events:none;">
+                <div style="display:inline-flex; gap:6px; padding:4px 12px; border-radius:10px; background:rgba(255,255,255,0.5); backdrop-filter:blur(4px);">
+                  <span style="font-size:12px; font-weight:700; color:#B08A40;">9</span>
+                  <span style="font-size:12px; font-weight:700; color:#B08A40;">19</span>
+                  <span style="font-size:12px; font-weight:700; color:#B08A40;">24</span>
+                  <span style="font-size:12px; font-weight:700; color:#B08A40;">36</span>
+                  <span style="font-size:12px; font-weight:700; color:#B08A40;">45</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customization Controls -->
+          <div style="position:relative; z-index:1;">
+
+            <!-- Toggle 1: ชื่อ - นามสกุล (expanded by default) -->
+            <div style="border-bottom:1px solid var(--border);">
+              <div onclick="toggleWpOption('name')" style="display:flex; align-items:center; gap:12px; padding:14px 20px; cursor:pointer;">
+                <div style="width:32px; height:32px; border-radius:8px; background:#F3F0FF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <i class="fa-solid fa-id-card" style="font-size:14px; color:var(--fg-mid);"></i>
+                </div>
+                <div style="flex:1; font-size:16px; font-weight:700; color:var(--fg);">ชื่อ - นามสกุล</div>
+                <div id="wpCheckName" style="width:26px; height:26px; border-radius:8px; background:#2D1B69; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; transition:all 0.2s;">
+                  <i class="fa-solid fa-check" style="font-size:13px; color:#fff;"></i>
+                </div>
+              </div>
+              <!-- Expanded input area -->
+              <div id="wpNameExpand" style="padding:0 20px 14px; transition:max-height 0.3s ease; overflow:hidden;">
+                <div style="position:relative; background:#F5F0FF; border-radius:12px; border:1.5px solid #E0D8F0; padding:0;">
+                  <input id="wpNameInput" type="text" value="จิรภัทร์ เจริญชัย" maxlength="30" placeholder="พิมพ์ชื่อ - นามสกุล" oninput="updateWpName(this)" style="width:100%; padding:14px 60px 14px 16px; border:none; background:transparent; font-family:var(--font); font-size:15px; color:var(--fg); outline:none; box-sizing:border-box;">
+                  <span id="wpNameCount" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--fg-low);">17/30</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toggle 2: ดาวประจำราศี -->
+            <div style="border-bottom:1px solid var(--border);">
+              <div onclick="toggleWpOption('zodiac')" style="display:flex; align-items:center; gap:12px; padding:14px 20px; cursor:pointer;">
+                <div style="width:32px; height:32px; border-radius:8px; background:#F3F0FF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <i class="fa-solid fa-star-half-stroke" style="font-size:14px; color:var(--fg-mid);"></i>
+                </div>
+                <div style="flex:1; font-size:16px; font-weight:700; color:var(--fg);">ดาวประจำราศี</div>
+                <div id="wpCheckZodiac" style="width:26px; height:26px; border-radius:8px; background:#2D1B69; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; transition:all 0.2s;">
+                  <i class="fa-solid fa-check" style="font-size:13px; color:#fff;"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toggle 3: ชุดเลขมงคลพุทธคุณ -->
+            <div style="border-bottom:1px solid var(--border);">
+              <div onclick="toggleWpOption('numbers')" style="display:flex; align-items:center; gap:12px; padding:14px 20px; cursor:pointer;">
+                <div style="width:32px; height:32px; border-radius:8px; background:#F3F0FF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <i class="fa-solid fa-list-ol" style="font-size:14px; color:var(--fg-mid);"></i>
+                </div>
+                <div style="flex:1; font-size:16px; font-weight:700; color:var(--fg);">ชุดเลขมงคลพุทธคุณ</div>
+                <div id="wpCheckNumbers" style="width:26px; height:26px; border-radius:8px; background:#fff; border:2px solid #D0D0D8; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; transition:all 0.2s;">
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom button -->
+          <div style="position:relative; z-index:1; padding:20px 20px 30px;">
+            <button class="phone-btn-primary" style="width:100%; margin:0; padding:16px; font-size:16px; font-weight:700; background:#2D1B69;" onclick="navigateTo('wp-result')">ถัดไป</button>
+          </div>
+        </div>
+
+        <!-- ═══════════ SCREEN: WALLPAPER RESULT (ดาวน์โหลด/แชร์) ═══════════ -->
+        <div class="screen" id="screen-wp-result">
+          <div class="status-bar"><span class="time">14:39</span><div></div></div>
+
+          <!-- Background -->
+          <div style="position:absolute; inset:0; z-index:0; background:linear-gradient(180deg, #F0EAFF 0%, #E8E0F8 20%, #F5F2FF 40%, #FAFAFA 55%);"></div>
+
+          <!-- Header -->
+          <div style="position:relative; z-index:1; display:flex; align-items:center; gap:12px; padding:8px 20px 0;">
+            <button class="app-back" onclick="navigateTo('wp-customize')"><i class="fa-solid fa-chevron-left"></i></button>
+            <div style="flex:1; text-align:center; font-size:18px; font-weight:700; color:var(--fg);">วอลเปเปอร์ของคุณ</div>
+            <div style="width:32px;"></div>
+          </div>
+
+          <!-- Success badge -->
+          <div style="position:relative; z-index:1; text-align:center; padding:12px 20px 4px;">
+            <div style="display:inline-flex; align-items:center; gap:6px; padding:6px 16px; border-radius:20px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2);">
+              <i class="fa-solid fa-circle-check" style="font-size:14px; color:#22C55E;"></i>
+              <span style="font-size:13px; font-weight:600; color:#16A34A;">สร้างวอลเปเปอร์สำเร็จ!</span>
+            </div>
+          </div>
+
+          <!-- Wallpaper Preview (full size) -->
+          <div style="position:relative; z-index:1; padding:12px 32px 16px;">
+            <div style="position:relative; width:100%; aspect-ratio:9/16; max-height:420px; border-radius:24px; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.15); background:#FFF8F0;">
+              <!-- Deity image -->
+              <img src="wallpaper-assets/lakshmi-card.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
+              <!-- Zodiac constellation -->
+              <div style="position:absolute; top:16px; right:22px;">
+                <div style="color:rgba(200,160,180,0.6); font-size:10px; letter-spacing:2px;">
+                  <div style="display:flex; gap:3px; justify-content:center; margin-bottom:2px;">
+                    <span>✦</span><span style="font-size:6px;">·</span><span>✦</span><span style="font-size:6px;">·</span><span>✦</span>
+                  </div>
+                  <div style="display:flex; gap:4px; justify-content:center;">
+                    <span style="font-size:6px;">·</span><span>✦</span><span style="font-size:8px;">★</span><span>✦</span><span style="font-size:6px;">·</span>
+                  </div>
+                  <div style="display:flex; gap:3px; justify-content:center; margin-top:2px;">
+                    <span>✦</span><span style="font-size:6px;">·</span><span>✦</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Lucky numbers -->
+              <div style="position:absolute; bottom:48px; left:0; right:0; text-align:center;">
+                <div style="display:inline-flex; gap:8px; padding:5px 16px; border-radius:12px; background:rgba(255,255,255,0.45); backdrop-filter:blur(6px);">
+                  <span style="font-size:13px; font-weight:700; color:#B08A40;">9</span>
+                  <span style="font-size:13px; font-weight:700; color:#B08A40;">19</span>
+                  <span style="font-size:13px; font-weight:700; color:#B08A40;">24</span>
+                  <span style="font-size:13px; font-weight:700; color:#B08A40;">36</span>
+                  <span style="font-size:13px; font-weight:700; color:#B08A40;">45</span>
+                </div>
+              </div>
+              <!-- Name -->
+              <div style="position:absolute; bottom:22px; left:0; right:0; text-align:center;">
+                <span style="font-size:15px; font-weight:600; color:#9A7A60; letter-spacing:0.5px;">จิรภัทร์ เจริญชัย</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="position:relative; z-index:1; padding:8px 20px 0;">
+
+            <!-- Download button -->
+            <button class="phone-btn-primary" onclick="showPhoneModal('wp-saved-toast')" style="width:100%; margin:0 0 10px; padding:16px; font-size:16px; font-weight:700; background:#2D1B69; display:flex; align-items:center; justify-content:center; gap:8px;">
+              <i class="fa-solid fa-download" style="font-size:16px;"></i> บันทึกลงเครื่อง
+            </button>
+
+            <!-- Share button row -->
+            <div style="display:flex; gap:10px;">
+              <!-- Share to LINE -->
+              <button onclick="showPhoneModal('wp-saved-toast')" style="flex:1; padding:14px; border-radius:14px; border:1.5px solid #06C755; background:#fff; font-family:var(--font); font-size:14px; font-weight:600; color:#06C755; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s;">
+                <i class="fa-brands fa-line" style="font-size:18px;"></i> LINE
+              </button>
+              <!-- Share general -->
+              <button onclick="showPhoneModal('wp-saved-toast')" style="flex:1; padding:14px; border-radius:14px; border:1.5px solid var(--purple); background:#fff; font-family:var(--font); font-size:14px; font-weight:600; color:var(--purple); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s;">
+                <i class="fa-solid fa-share-nodes" style="font-size:16px;"></i> แชร์
+              </button>
+            </div>
+
+            <!-- Set as wallpaper hint -->
+            <div style="text-align:center; padding:14px 0 0;">
+              <div style="font-size:12px; color:var(--fg-low); line-height:1.6;">
+                <i class="fa-solid fa-circle-info" style="font-size:10px; margin-right:4px;"></i>
+                บันทึกรูปแล้วไปตั้งค่า > วอลเปเปอร์ เพื่อใช้งาน
+              </div>
+            </div>
+          </div>
+
+          <!-- Back to home -->
+          <div style="position:relative; z-index:1; padding:12px 20px 24px; text-align:center;">
+            <button onclick="navigateTo('wallpaper')" style="padding:10px 24px; border:none; background:none; font-family:var(--font); font-size:14px; font-weight:600; color:var(--purple); cursor:pointer; text-decoration:underline; text-underline-offset:3px;">
+              กลับหน้าวอลเปเปอร์
+            </button>
+          </div>
+
+          <!-- Save success toast -->
+          <div class="phone-modal-overlay" id="wp-saved-toast" onclick="closePhoneModal('wp-saved-toast')">
+            <div onclick="event.stopPropagation()" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.8); backdrop-filter:blur(12px); border-radius:20px; padding:28px 36px; text-align:center; min-width:200px;">
+              <div style="font-size:48px; margin-bottom:12px;">✅</div>
+              <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:4px;">สำเร็จ!</div>
+              <div style="font-size:13px; color:rgba(255,255,255,0.7);">บันทึกวอลเปเปอร์แล้ว</div>
+              <button onclick="closePhoneModal('wp-saved-toast')" style="margin-top:16px; padding:10px 32px; border-radius:12px; border:none; background:#fff; font-family:var(--font); font-size:14px; font-weight:600; color:var(--fg); cursor:pointer;">ตกลง</button>
             </div>
           </div>
         </div>
@@ -2203,19 +2935,22 @@
       ]
     },
     'notify': {
-      title: 'แจ้งเตือน',
+      title: 'การแจ้งเตือน',
       subtitle: 'Main Tab | DAIL-715',
       cards: [
-        { badge: 'info', badgeLabel: 'info', title: 'Notification Center', body: 'แสดงรายการแจ้งเตือน\nดวงรายวัน วันพิเศษ โปรโมชัน' },
+        { badge: 'info', badgeLabel: 'info', title: 'Notification Center', body: 'แสดงรายการแจ้งเตือนทั้งหมด\nมี unread dot สีชมพูสำหรับรายการที่ยังไม่อ่าน' },
+        { badge: 'info', badgeLabel: 'info', title: 'Category Tabs', body: '3 หมวดหมู่:\n• ทั้งหมด — แสดงทุกแจ้งเตือน\n• ทั่วไป — ดวงรายวัน, โปรโมชัน\n• ฤกษ์ — ฤกษ์ดี, ดาวย้าย' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'Header Actions', body: '• ไอคอนซองจดหมาย → อ่านทั้งหมด\n• ไอคอนถังขยะ → ลบทั้งหมด' },
+        { badge: 'note', badgeLabel: 'note', title: 'ประเภทแจ้งเตือน', body: '• ดวงรายวัน (Daily Horoscope)\n• เตือนก่อนนอน (Nightly Reminder)\n• ฤกษ์เฉพาะเรื่อง\n• วันฤกษ์ดี (Auspicious Day)\n• Trial หมดอายุ\n• วอลเปเปอร์ใหม่' },
       ]
     },
     'profile': {
       title: 'โปรไฟล์',
       subtitle: 'Main Tab | DAIL-720',
       cards: [
-        { badge: 'info', badgeLabel: 'info', title: 'ข้อมูลผู้ใช้', body: 'แสดงชื่อ avatar และ badge แพลน\nFree / Plus' },
-        { badge: 'tap', badgeLabel: 'tap', title: 'สมาชิกของฉัน', body: 'ไปหน้าจัดการสมาชิก\nดูสถานะ ยกเลิกได้' },
-        { badge: 'tap', badgeLabel: 'tap', title: 'อัปเกรดแพลน', body: 'ไปหน้า Plan Comparison' },
+        { badge: 'info', badgeLabel: 'info', title: 'Hero Header', body: 'พื้นหลัง gradient ชมพู + ของตกแต่ง\n(ไพ่ ดาว ลูกแก้ว เมฆน่ารัก)\nAvatar ราศี + ปุ่ม "แก้ไข"\nชื่อ + ราศี' },
+        { badge: 'info', badgeLabel: 'info', title: 'โปรไฟล์ดูดวง', body: 'Horizontal scroll โปรไฟล์ครอบครัว/เพื่อน\nProfile ที่ active มีกรอบสีม่วง + เครื่องหมายถูก\nปุ่ม "+" เพิ่มโปรไฟล์ใหม่' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ศูนย์ช่วยเหลือ', body: '• การตั้งค่า → ปรับแต่งแอป\n• จัดการสมาชิก → สิทธิ์และฟีเจอร์\n• เกี่ยวกับเรา → ข้อมูลแอป/ทีม' },
       ]
     },
     'fortune-hub': {
@@ -2230,9 +2965,10 @@
       title: 'เซียมซี',
       subtitle: 'Feature | DAIL-731',
       cards: [
-        { badge: 'info', badgeLabel: 'info', title: 'เซียมซีวันนี้', body: 'สุ่มเซียมซี ได้คำทำนายประจำวัน\nมีอนิเมชันเขย่ากระบอก' },
-        { badge: 'tap', badgeLabel: 'tap', title: 'เสี่ยงเซียมซี', body: 'กดปุ่ม → ถ้า quota หมด\n→ แสดง Gate: Quota หมด (bottom sheet)' },
-        { badge: 'warn', badgeLabel: 'warn', title: 'Quota', body: 'Free: เซียมซี 1 ครั้ง/วัน\nPlus: เซียมซี 3 ครั้ง/วัน' },
+        { badge: 'info', badgeLabel: 'info', title: 'Embedded Flow', body: 'ใช้ iframe embed จาก siam-si/siam-si.html\nแสดง flow เต็มรูปแบบภายใน phone frame' },
+        { badge: 'info', badgeLabel: 'info', title: '3 หน้าจอ', body: '1. Welcome — ภาพกระบอกเซียมซี + ปุ่มเริ่ม\n2. Shake — เขย่ากระบอก (energy bar)\n3. Result — เฉลยไม้เซียมซี + คำทำนาย' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'Interaction', body: 'กดปุ่มเริ่ม → เขย่า/แตะหน้าจอ\n→ energy bar เต็ม → ไม้เซียมซีหลุดออก\n→ แสดงผลคำทำนาย' },
+        { badge: 'note', badgeLabel: 'note', title: 'ปุ่ม Back', body: 'ปุ่ม floating overlay มุมซ้ายบน\nกด → กลับไปหน้า Fortune Hub' },
       ]
     },
     'tarot': {
@@ -2252,11 +2988,55 @@
       ]
     },
     'wallpaper': {
-      title: 'วอลเปเปอร์เสริมดวง',
-      subtitle: 'Feature | DAIL-734',
+      title: 'วอลเปเปอร์',
+      subtitle: 'Main Tab | DAIL-734',
       cards: [
-        { badge: 'info', badgeLabel: 'info', title: 'วอลเปเปอร์', body: 'วอลเปเปอร์เสริมดวงประจำวัน\nเปลี่ยนตามราศี ธาตุ และสีมงคล' },
-        { badge: 'tap', badgeLabel: 'tap', title: 'เลือก + ดาวน์โหลด', body: 'กดเลือกวอลเปเปอร์ → Preview เต็มจอ\n→ กดบันทึกลงเครื่อง' },
+        { badge: 'info', badgeLabel: 'info', title: 'เมนูวอลเปเปอร์', body: 'แสดงคอลเลคชั่นวอลเปเปอร์ทั้งหมด\nแต่ละคอลเลคชั่นมีสไตล์และเทพเจ้าต่างกัน' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'เลือกคอลเลคชั่น', body: 'กดการ์ด → เปิด Preview Modal\n→ กด "ดูคอลเลคชั่น" → ไปหน้ารายละเอียด' },
+        { badge: 'note', badgeLabel: 'note', title: '5 คอลเลคชั่น', body: '• Stellar Essence — เฉพาะบุคคล (ทดลองฟรี 1 ครั้ง)\n• Divine Realism — ภาพเทพแนว Realistic\n• Sacred Line — ลายเส้นศักดิ์สิทธิ์\n• Gongbi Grace — เทพจีนสไตล์กงปี่\n• Baby God — เทพน้อยน่ารัก' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ไอคอนประวัติ (ขวาบน)', body: 'กด → ดูประวัติวอลเปเปอร์ที่ดาวน์โหลด' },
+      ]
+    },
+    'wp-collection': {
+      title: 'คอลเลคชั่นวอลเปเปอร์',
+      subtitle: 'Sub-screen | DAIL-734',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'หน้ารายละเอียดคอลเลคชั่น', body: 'แสดงวอลเปเปอร์ทั้งหมดในคอลเลคชั่นที่เลือก\nตัวอย่าง: Baby God — เทพน้อยน่ารัก' },
+        { badge: 'info', badgeLabel: 'info', title: 'แบนเนอร์คอลเลคชั่น', body: 'แสดงชื่อคอลเลคชั่น รายชื่อเทพ\nและรูปตัวอย่างด้านขวา' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'Category Tabs', body: 'กรองวอลเปเปอร์ตามหมวดหมู่:\nทั้งหมด / การเงิน / การงาน / ความรัก' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'เลือกวอลเปเปอร์', body: 'กดการ์ดเทพเจ้า → ไปหน้าเสริมพลังมงคล\n→ เลือกด้านที่ต้องการเสริม' },
+      ]
+    },
+    'wp-result': {
+      title: 'ดาวน์โหลด / แชร์วอลเปเปอร์',
+      subtitle: 'Sub-screen | DAIL-734',
+      cards: [
+        { badge: 'success', badgeLabel: 'done', title: 'สร้างสำเร็จ', body: 'แสดง badge "สร้างวอลเปเปอร์สำเร็จ!"\nพร้อม preview วอลเปเปอร์เต็มจอ\nรวม overlay ที่เลือกทั้งหมด' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'บันทึกลงเครื่อง', body: 'กด → บันทึกรูปลง Camera Roll\nแสดง toast "สำเร็จ!"' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'แชร์ LINE / ทั่วไป', body: 'แชร์ LINE → เปิด LINE share sheet\nแชร์ทั่วไป → เปิด iOS share sheet' },
+        { badge: 'info', badgeLabel: 'info', title: 'คำแนะนำ', body: 'แสดงข้อความแนะนำวิธีตั้งวอลเปเปอร์\n"บันทึกรูปแล้วไปตั้งค่า > วอลเปเปอร์"' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'กลับหน้าวอลเปเปอร์', body: 'ลิงก์ข้อความ → กลับไปหน้าเมนูวอลเปเปอร์' },
+      ]
+    },
+    'wp-customize': {
+      title: 'ตกแต่งวอลเปเปอร์',
+      subtitle: 'Sub-screen | DAIL-734',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'Live Preview', body: 'แสดง wallpaper preview แบบ real-time\nเปิด/ปิด element จะเห็นผลทันที\nบน preview card ด้านบน' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ชื่อ - นามสกุล', body: 'Toggle เปิด → ขยาย input field\nพิมพ์ชื่อ → อัปเดตบน preview ทันที\nจำกัด 30 ตัวอักษร + counter' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ดาวประจำราศี', body: 'Toggle เปิด/ปิด\nแสดงกลุ่มดาวราศีบน wallpaper' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ชุดเลขมงคลพุทธคุณ', body: 'Toggle เปิด/ปิด\nแสดงเลขมงคลบน wallpaper' },
+        { badge: 'note', badgeLabel: 'UX', title: 'UX Research', body: '• ใช้ checkbox ไม่ใช่ toggle switch\n  — ตรงกับ pattern ในแอปที่มี\n• Overlay fade 350ms + translateY\n  — สร้าง causal link ระหว่าง control กับ preview\n• Input expand 300ms ซิงค์กับ fade\n• Char counter เปลี่ยนสี: ปกติ→เหลือง(25)→แดง(30)\n• ปุ่มถัดไปสีม่วงเข้ม (#2D1B69)\n  — แยกจากปุ่มชมพูปกติ เพราะเป็น flow สร้าง' },
+      ]
+    },
+    'wp-enhance': {
+      title: 'เสริมพลังมงคล',
+      subtitle: 'Sub-screen | DAIL-734',
+      cards: [
+        { badge: 'info', badgeLabel: 'info', title: 'เลือกด้านเสริมดวง', body: 'เลือกได้ 1 อย่างจาก 4 หมวดหมู่:\nการงาน / การเงิน / ความรัก / สุขภาพ' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'Radio Selection', body: 'กดเลือกหมวด → การ์ดจะมีกรอบสีม่วง\nพร้อมเครื่องหมายถูก' },
+        { badge: 'tap', badgeLabel: 'tap', title: 'ปุ่ม "ถัดไป"', body: 'ปุ่ม disabled (จาง) จนกว่าจะเลือกหมวด\nกด → ไปสร้างวอลเปเปอร์ตามหมวดที่เลือก' },
+        { badge: 'note', badgeLabel: 'note', title: 'UX Pattern', body: 'ใช้ single-select radio pattern\nเพื่อความชัดเจนในการเลือก\nข้อมูลนี้ใช้กำหนดสัญลักษณ์ในวอลเปเปอร์' },
       ]
     },
     'qr-mu': {
@@ -2370,6 +3150,12 @@
       currentScreen = screenId;
     }
 
+    // Lazy-load & reload siam-si iframe on each visit
+    if (screenId === 'siamsi') {
+      const iframe = document.getElementById('siamsiFrame');
+      if (iframe) iframe.src = iframe.dataset.src + '?t=' + Date.now();
+    }
+
     // Scroll to top
     document.getElementById('mainScroll').scrollTop = 0;
 
@@ -2401,7 +3187,7 @@
     }
 
     // Show/hide tab bar for certain screens
-    const hideTabScreens = ['gate-lock', 'gate-quota', 'subscribe-sheet', 'success'];
+    const hideTabScreens = ['gate-lock', 'gate-quota', 'subscribe-sheet', 'success', 'siamsi'];
     const tabBar = document.getElementById('tabBar');
     tabBar.style.display = hideTabScreens.includes(screenId) ? 'none' : '';
 
@@ -2458,6 +3244,104 @@
   function closePhoneModal(id) {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
+  }
+
+  // Listen for iframe postMessage (siam-si back button)
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.action === 'navigateTo' && e.data.screen) {
+      navigateTo(e.data.screen);
+    }
+  });
+
+  // Notification tab switching
+  function switchNotiTab(el, tab) {
+    document.querySelectorAll('.noti-tab').forEach(t => {
+      const icon = t.querySelector('div[style*="border-radius:16px"]');
+      const label = t.querySelector('span');
+      if (t === el) {
+        if (tab === 'all') { icon.style.background = 'var(--pink)'; icon.querySelector('i').style.color = '#fff'; }
+        else if (tab === 'general') { icon.style.background = '#F59E0B'; icon.querySelector('i').style.color = '#fff'; }
+        else { icon.style.background = '#4285F4'; icon.querySelector('i').style.color = '#fff'; }
+        label.style.fontWeight = '700';
+        label.style.color = 'var(--fg)';
+      } else {
+        const origBg = t.dataset.tab === 'all' ? 'var(--pink-light)' : t.dataset.tab === 'general' ? '#FFF3E0' : '#E8F0FE';
+        const origColor = t.dataset.tab === 'all' ? 'var(--pink)' : t.dataset.tab === 'general' ? '#F59E0B' : '#4285F4';
+        icon.style.background = origBg;
+        icon.querySelector('i').style.color = origColor;
+        label.style.fontWeight = '500';
+        label.style.color = 'var(--fg-mid)';
+      }
+    });
+  }
+
+  // Wallpaper Customize toggles & live preview
+  const wpState = { name: true, zodiac: true, numbers: false };
+
+  function toggleWpOption(key) {
+    wpState[key] = !wpState[key];
+    const on = wpState[key];
+
+    // Update checkbox
+    const check = document.getElementById('wpCheck' + key.charAt(0).toUpperCase() + key.slice(1));
+    if (on) {
+      check.style.background = '#2D1B69';
+      check.style.border = 'none';
+      check.innerHTML = '<i class="fa-solid fa-check" style="font-size:13px; color:#fff;"></i>';
+    } else {
+      check.style.background = '#fff';
+      check.style.border = '2px solid #D0D0D8';
+      check.innerHTML = '';
+    }
+
+    // Update preview overlay
+    const overlayMap = { name: 'wpOverlayName', zodiac: 'wpOverlayZodiac', numbers: 'wpOverlayNumbers' };
+    const overlay = document.getElementById(overlayMap[key]);
+    if (overlay) {
+      overlay.style.opacity = on ? '1' : '0';
+      overlay.style.transform = on ? 'translateY(0)' : 'translateY(8px)';
+      overlay.style.pointerEvents = on ? 'auto' : 'none';
+    }
+
+    // Expand/collapse name input
+    if (key === 'name') {
+      const expand = document.getElementById('wpNameExpand');
+      expand.style.maxHeight = on ? '80px' : '0';
+      expand.style.padding = on ? '0 20px 14px' : '0 20px 0';
+    }
+  }
+
+  function updateWpName(input) {
+    const val = input.value;
+    const len = val.length;
+    document.getElementById('wpNameCount').textContent = len + '/30';
+    document.getElementById('wpNameDisplay').textContent = val || 'ชื่อ - นามสกุล';
+    // Color warning
+    const counter = document.getElementById('wpNameCount');
+    counter.style.color = len >= 30 ? '#EA244F' : len >= 25 ? '#F8C135' : 'var(--fg-low)';
+  }
+
+  // Wallpaper Enhance selection
+  function selectEnhance(el) {
+    // Deselect all
+    document.querySelectorAll('.wp-enhance-option').forEach(opt => {
+      opt.style.borderColor = 'transparent';
+      opt.style.background = 'rgba(255,255,255,0.85)';
+      const radio = opt.querySelector('.wp-enhance-radio');
+      radio.style.borderColor = '#D0D0D8';
+      radio.innerHTML = '';
+    });
+    // Select this one
+    el.style.borderColor = 'var(--purple)';
+    el.style.background = 'rgba(243,240,255,0.9)';
+    const radio = el.querySelector('.wp-enhance-radio');
+    radio.style.borderColor = 'var(--purple)';
+    radio.style.background = 'var(--purple)';
+    radio.innerHTML = '<i class="fa-solid fa-check" style="font-size:12px; color:#fff;"></i>';
+    // Enable button
+    const btn = document.getElementById('wpEnhanceBtn');
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
   }
 
   // ═══════════════════════════════════

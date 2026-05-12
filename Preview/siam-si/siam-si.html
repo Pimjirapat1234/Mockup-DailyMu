@@ -1332,8 +1332,10 @@ function bindEvents(){
     goTo('s-result');
   });
 
-  /* Fortune close → restart */
+  /* Fortune close → back to parent fortune-hub or restart */
   $('#fortune-close').addEventListener('click',()=>{
+    try{ window.parent.navigateTo('fortune-hub'); }catch(e){}
+    try{ window.parent.postMessage({action:'navigateTo',screen:'fortune-hub'},'*'); }catch(e){}
     resetAll();
     goTo('s-welcome');
   });
@@ -1352,7 +1354,8 @@ function bindEvents(){
 
   /* Welcome back (close app / go back) */
   $('#s-welcome .hdr-back').addEventListener('click',()=>{
-    /* In a real app, this would navigate back. For demo, do nothing or show alert */
+    try{ window.parent.navigateTo('fortune-hub'); }catch(e){}
+    try{ window.parent.postMessage({action:'navigateTo',screen:'fortune-hub'},'*'); }catch(e){}
     if(window.history.length>1)window.history.back();
   });
 }
