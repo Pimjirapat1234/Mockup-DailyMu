@@ -165,20 +165,6 @@
       font-size: 13px; color: var(--shell-fg-mid); line-height: 1.6;
     }
 
-    /* Document Hub Button */
-    .doc-hub-btn {
-      position: fixed; bottom: 24px; right: 24px; z-index: 500;
-      display: flex; align-items: center; gap: 8px;
-      padding: 12px 20px; border-radius: 12px;
-      background: var(--shell-surface); border: 1px solid var(--shell-border);
-      color: var(--shell-fg); font-family: var(--font);
-      font-size: 13px; font-weight: 600; cursor: pointer;
-      transition: all 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-    .doc-hub-btn:hover {
-      background: var(--shell-accent-bg); border-color: var(--shell-accent);
-      color: var(--shell-accent);
-    }
 
     /* ═══════════════════════════════════
        PHONE FRAME
@@ -2906,10 +2892,6 @@
   </div>
 </div>
 
-<!-- Document Hub button -->
-<button class="doc-hub-btn" onclick="navigateTo('today')">
-  <i class="fa-solid fa-arrow-left"></i> Document Hub
-</button>
 
 <script>
   // ═══════════════════════════════════
